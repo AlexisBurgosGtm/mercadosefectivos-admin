@@ -563,4 +563,69 @@ router.post('/rptrankingvendedores', async(req,res)=>{
 });
 
 
+//******************************* */
+// REPORTES DE SUPERVISOR
+//******************************* */
+
+
+// ranking de vendedores por sucursal y fecha
+router.post('/rptrankingvendedoressucursal', async(req,res)=>{
+    const {fecha,sucursal} = req.body;
+    let qry = `SELECT ME_Vendedores.NOMVEN, COUNT(ME_Documentos.CODDOC) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
+                FROM  ME_Documentos LEFT OUTER JOIN
+                ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.EMP_NIT = ME_Vendedores.EMP_NIT AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL
+                WHERE (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.DOC_FECHA = '${fecha}')
+                GROUP BY ME_Vendedores.NOMVEN
+                ORDER BY TOTALPRECIO DESC`;
+    
+    execute.Query(res,qry);
+});
+
+// reporte de marcas por fecha
+router.post('/reportemarcasfecha',async(req,res)=>{
+
+    const {sucursal,fecha} = req.body;
+
+    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+                FROM  ME_Productos LEFT OUTER JOIN
+                             ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT RIGHT OUTER JOIN
+                             ME_Docproductos ON ME_Productos.CODPROD = ME_Docproductos.CODPROD AND ME_Productos.EMP_NIT = ME_Docproductos.EMP_NIT RIGHT OUTER JOIN
+                             ME_Documentos ON ME_Docproductos.DOC_MES = ME_Documentos.DOC_MES AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT AND 
+                             ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
+                             ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+                WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.DOC_FECHA = '${fecha}')
+                GROUP BY ME_Marcas.DESMARCA`;
+
+                
+
+    execute.Query(res,qry);
+
+
+});
+
+// reporte de marcas por mes
+router.post('/reportemarcasmes',async(req,res)=>{
+
+    const {anio,mes,sucursal} = req.body;
+
+    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+                        FROM ME_Productos LEFT OUTER JOIN
+                             ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT RIGHT OUTER JOIN
+                             ME_Docproductos ON ME_Productos.CODPROD = ME_Docproductos.CODPROD AND ME_Productos.EMP_NIT = ME_Docproductos.EMP_NIT RIGHT OUTER JOIN
+                             ME_Documentos ON ME_Docproductos.DOC_MES = ME_Documentos.DOC_MES AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT AND 
+                             ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
+                             ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+                WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.DOC_ANO = ${anio}) AND 
+                             (ME_Documentos.CODSUCURSAL = '${sucursal}')
+                GROUP BY ME_Marcas.DESMARCA`;
+
+                
+
+    execute.Query(res,qry);
+
+
+});
+
 module.exports = router;

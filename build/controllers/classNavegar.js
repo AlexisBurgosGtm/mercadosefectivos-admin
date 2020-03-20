@@ -199,6 +199,9 @@ let classNavegar = {
     },
     inicioSupervisor : ()=>{
         let strMenu =  `
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorDashboard">
+                                <span>Dashboard</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorVendedores">
                                 <span>Vendedores</span>
                             </a>
@@ -208,9 +211,6 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorPrecios">
                                 <span>Precios</span>
                             </a>
-                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorLogro">
-                                <span>Logros</span>
-                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorNoticias">
                                 <span>Noticias</span>
                             </a>
@@ -218,6 +218,11 @@ let classNavegar = {
                     rootMenu.innerHTML = strMenu;
 
                      // handlers del menu
+                     let btnMenuSupervisorDashboard = document.getElementById('btnMenuSupervisorDashboard');
+                     btnMenuSupervisorDashboard.addEventListener('click',()=>{
+                         classNavegar.supervisorDashboard();
+                     });
+
                      let btnMenuSupervisorVendedores = document.getElementById('btnMenuSupervisorVendedores');
                      btnMenuSupervisorVendedores.addEventListener('click',()=>{
                          classNavegar.inicioSupervisor();
@@ -231,16 +236,20 @@ let classNavegar = {
                      btnMenuSupervisorPrecios.addEventListener('click',()=>{
                         classNavegar.supervisorPrecios(); 
                      });
-                     let btnMenuSupervisorLogro = document.getElementById('btnMenuSupervisorLogro');
-                     btnMenuSupervisorLogro.addEventListener('click',()=>{
-                         
-                     });
+                     
                      let btnMenuSupervisorNoticias = document.getElementById('btnMenuSupervisorNoticias');
                      btnMenuSupervisorNoticias.addEventListener('click',()=>{
                         classNavegar.noticias();     
                      });
 
-                     classNavegar.supervisorVendedores();
+                     classNavegar.supervisorDashboard();
+    },
+    supervisorDashboard:()=>{
+        funciones.loadScript('../views/supervisor/dashboard.js','root')
+        .then(()=>{
+            GlobalSelectedForm='SUPERVISORDASHBOARD';
+            InicializarVistaSupervisorDashboard();
+        });          
     },
     supervisorVendedores:()=>{
         funciones.loadScript('../views/supervisor/vendedores.js','root')

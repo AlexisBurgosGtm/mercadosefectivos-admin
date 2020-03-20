@@ -10,7 +10,7 @@ let api = {
                             </div>
                             
                         </div>
-                    <table class="table table-responsive table-hover table-striped table-bordered" id="tblCoronavirus">
+                    <table class="table table-responsive table-hover table-striped table-bordered" id="tblCovid">
                         <thead class="bg-trans-gradient text-white">
                             <tr>
                                 <td>País</td>
@@ -37,17 +37,20 @@ let api = {
                                 <td>${rows.critical}</td>
                             </tr>`
             })
+            
+                  
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+        })
+        .then(()=>{
             container.innerHTML = tblheader + strdata + tblfooter;
 
             let txtFiltrarCoronavirus = document.getElementById('txtFiltrarCoronavirus');
             txtFiltrarCoronavirus.addEventListener('keyup',()=>{
-                funciones.crearBusquedaTabla('tblCoronavirus','txtFiltrarCoronavirus');
+                funciones.crearBusquedaTabla('tblCovid','txtFiltrarCoronavirus');
             });
-
-        }, (error) => {
-            funciones.AvisoError('Error en la solicitud');
-            strdata = '';
-        });
+        })
 
         
         
@@ -940,6 +943,148 @@ let api = {
             strdata = '';
             container.innerHTML = '';
         });
+    },
+    supervisorRankingVendedores: (fecha,idContenedor, idLbTotal)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+            
+        let strdata = '';
+        let tblHead = `<table class="table table-responsive table-striped table-hover table-bordered">
+                        <thead class="bg-trans-gradient text-white">
+                            <tr>
+                                <td>Vendedor</td>
+                                <td>Venta</td>
+                                <td>Pedidos</td>
+                                <td>Promedio</td>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+        let tblFoot = `</tbody></table>`;
+
+        axios.post('/ventas/rptrankingvendedoressucursal', {
+            fecha:fecha,
+            sucursal: GlobalCodSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.TOTALPRECIO);
+                    let promedio = Number(rows.TOTALPRECIO) / Number(rows.PEDIDOS);
+                    strdata = strdata + `
+                    <tr>
+                        <td>${rows.NOMVEN}</td>
+                        <td>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                        <td>${rows.PEDIDOS}</td>
+                        <td>${funciones.setMoneda(promedio,'Q')}</td>
+                    </tr>
+                    `
+            })
+            container.innerHTML = tblHead + strdata + tblFoot;
+            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            lbTotal.innerText = 'Q 0.00'
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
+    supervisorMarcas: async(fecha,idContenedor,idLbTotal)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+
+        let strdata = '';
+        let tbl = `<table class="table table-responsive table-striped table-hover table-bordered">
+                        <thead class="bg-trans-gradient text-white">
+                        <tr>
+                            <td>Marca</td>
+                            <td>Importe</td>
+                        </tr>
+                        </thead>
+                        <tbody>`;
+
+        let tblfoot = `</tbody></table>`;
+
+        axios.post('/ventas/reportemarcasfecha', {
+            sucursal: GlobalCodSucursal,
+            fecha:fecha
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.TOTALPRECIO);
+                    strdata = strdata + `<tr>
+                                            <td>${rows.DESMARCA}</td>
+                                            <td>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                                        </tr>`
+            })
+            container.innerHTML = tbl + strdata + tblfoot;
+            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+           
+    },
+    supervisorMarcasMes: async(anio,mes,idContenedor,idLbTotal)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+
+        let strdata = '';
+        let tbl = `<table class="table table-responsive table-striped table-hover table-bordered">
+                        <thead class="bg-trans-gradient text-white">
+                            <tr>
+                                <td>Marca</td>
+                                <td>Importe</td>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        let tblfoot = `</tbody></table>`;
+
+        axios.post('/ventas/reportemarcasmes', {
+            sucursal: GlobalCodSucursal,
+            anio:anio,
+            mes:mes   
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.TOTALPRECIO);
+                    strdata = strdata + `<tr>
+                                            <td>
+                                                ${rows.DESMARCA}
+                                            </td>
+                                            <td>
+                                                ${funciones.setMoneda(rows.TOTALPRECIO,'Q')}
+                                            </td>
+                                        </tr>`
+            })
+            container.innerHTML = tbl + strdata + tblfoot;
+            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+           
     },
     productosSetStatus: (codprod,st)=>{
         return new Promise((resolve,reject)=>{
