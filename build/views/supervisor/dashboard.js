@@ -124,7 +124,7 @@ function Lmap(lat,long,nombre,telefono,horamin){
 
       L.marker([lat, long])
         .addTo(map)
-        .bindPopup(`${nombre} - Tel:${telefono} - Updated:${horamin}`)
+        .bindPopup(`${nombre} - Tel:${telefono} - Updated:${horamin}`, {closeOnClick: false, autoClose: false})
         .openPopup()
       return map;
 };

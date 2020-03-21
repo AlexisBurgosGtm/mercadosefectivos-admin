@@ -1160,7 +1160,8 @@ let api = {
                     }else{
                         L.marker([rows.LAT, rows.LONG])
                         .addTo(map)
-                        .bindPopup(`${rows.VENDEDOR} - Tel:${rows.TELEFONO} - Updated:${rows.HORAMIN}`)   
+                        .bindPopup(`${rows.VENDEDOR} - Tel:${rows.TELEFONO} - Updated:${rows.HORAMIN}`, {closeOnClick: false, autoClose: false})
+                        .openPopup()   
                     }
             })
           
