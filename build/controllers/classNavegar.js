@@ -225,7 +225,7 @@ let classNavegar = {
 
                      let btnMenuSupervisorVendedores = document.getElementById('btnMenuSupervisorVendedores');
                      btnMenuSupervisorVendedores.addEventListener('click',()=>{
-                         classNavegar.inicioSupervisor();
+                         classNavegar.supervisorVendedores();
                      });
                      let btnMenuSupervisorClientes = document.getElementById('btnMenuSupervisorClientes');
                      btnMenuSupervisorClientes.addEventListener('click',()=>{

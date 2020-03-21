@@ -993,6 +993,56 @@ let api = {
             container.innerHTML = '';
         });
     },
+    supervisorRankingVendedoresMes: (anio,mes,idContenedor, idLbTotal)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+            
+        let strdata = '';
+        let tblHead = `<table class="table table-responsive table-striped table-hover table-bordered">
+                        <thead class="bg-trans-gradient text-white">
+                            <tr>
+                                <td>Vendedor</td>
+                                <td>Venta</td>
+                                <td>Pedidos</td>
+                                <td>Promedio</td>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+        let tblFoot = `</tbody></table>`;
+
+        axios.post('/ventas/rptrankingvendedoressucursalmes', {
+            anio:anio,
+            mes:mes,
+            sucursal: GlobalCodSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.TOTALPRECIO);
+                    let promedio = Number(rows.TOTALPRECIO) / Number(rows.PEDIDOS);
+                    strdata = strdata + `
+                    <tr>
+                        <td>${rows.NOMVEN}</td>
+                        <td>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                        <td>${rows.PEDIDOS}</td>
+                        <td>${funciones.setMoneda(promedio,'Q')}</td>
+                    </tr>
+                    `
+            })
+            container.innerHTML = tblHead + strdata + tblFoot;
+            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            lbTotal.innerText = 'Q 0.00'
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
     supervisorMarcas: async(fecha,idContenedor,idLbTotal)=>{
 
         let container = document.getElementById(idContenedor);
@@ -1085,6 +1135,39 @@ let api = {
             lbTotal.innerText = 'Q 0.00';
         });
            
+    },
+    supervisorStatusGpsVentas: async(idContenedor)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+    
+        let tbl = `<div class="mapcontainer" id="mapcontainer"></div>`;        
+        
+        container.innerHTML = tbl;
+        
+        let mapcargado = 0;
+
+        axios.post('/empleados/statusempleado', {
+            sucursal: GlobalCodSucursal
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    if(mapcargado==0){
+                        map = Lmap(rows.LAT, rows.LONG, rows.VENDEDOR, rows.TELEFONO,rows.HORAMIN);
+                        mapcargado = 1;
+                    }else{
+                        L.marker([rows.LAT, rows.LONG])
+                        .addTo(map)
+                        .bindPopup(`${rows.VENDEDOR} - Tel:${rows.TELEFONO} - Updated:${rows.HORAMIN}`)   
+                    }
+            })
+          
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';
+        });
     },
     productosSetStatus: (codprod,st)=>{
         return new Promise((resolve,reject)=>{

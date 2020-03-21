@@ -128,6 +128,10 @@ io.on('connection', function(socket){
 	  io.emit('productos bloqueado', msg, usuario);
   });
 
+  socket.on('ventas nueva', (msg,usuario)=>{
+    io.emit('ventas nueva', msg,usuario);
+  })
+
 
   socket.on('chat msn', function(msg,user){
 	  io.emit('chat msn', msg, user);

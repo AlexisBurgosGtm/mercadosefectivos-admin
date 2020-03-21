@@ -2,6 +2,31 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+// ACTUALIZA LA UBICACIÓN GPS DEL USUARIO PARA REVISARLO EN UN MAPA
+router.put("/location",async(req,res)=>{
+
+    const {sucursal,codven,lat,long,horamin} = req.body;
+    
+    let qry ='';
+    qry = `UPDATE ME_USUARIOS SET LAT=${lat}, LONG=${long}, HORAMIN='${horamin}' WHERE CODSUCURSAL='${sucursal}' AND CODUSUARIO=${codven}`;
+    
+    execute.Query(res,qry);
+});
+
+// MANDA LA LATITUD Y LONGITUD DEL VENDEDOR
+router.post("/statusempleado",async(req,res)=>{
+
+    const {sucursal} = req.body;
+
+    
+    let qry ='';
+    qry = `SELECT CODUSUARIO AS CODIGO, NOMBRE AS VENDEDOR, TELEFONO, isnull(LAT,0) as LAT, isnull(LONG,0) as LONG, HORAMIN
+            FROM ME_USUARIOS 
+            WHERE CODSUCURSAL='${sucursal}' AND TIPO='VENDEDOR' `;
+    
+    execute.Query(res,qry);
+});
+
 router.post("/login",async(req,res)=>{
 
     const {app,codsucursal,user,pass} = req.body;

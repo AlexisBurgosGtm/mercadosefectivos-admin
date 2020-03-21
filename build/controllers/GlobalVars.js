@@ -26,6 +26,8 @@ let GlobalEmpNombre = 'MERCADOS EFECTIVOS';
 let GlobalSelectedForm = '';
 
 let map;
+let GlobalGpsLat = 0;
+let GlobalGpsLong = 0;
 let GlobalSelectedId;
 let GlobalSelectedCodigo;
 let GlobalSelectedFecha;

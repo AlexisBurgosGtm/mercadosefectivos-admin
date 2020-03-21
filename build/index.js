@@ -43,7 +43,6 @@ btnCerrarModalMenuLateral.addEventListener('click',()=>{
 
 classNavegar.login();
 
-
 //
 // DESHABILITA EL PULL TO REFRESH
 

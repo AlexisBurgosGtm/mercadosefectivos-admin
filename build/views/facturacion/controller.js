@@ -636,6 +636,8 @@ async function fcnFinalizarPedido(){
     let fecha = anio + '-' + mes + '-' + d; // CAMPO DOC_FECHA
     let dia = d;
 
+    
+
     let fe = new Date(document.getElementById('txtEntregaFecha').value);
     let ae = fe.getFullYear();
     let me = fe.getUTCMonth()+1;
@@ -692,7 +694,9 @@ async function fcnFinalizarPedido(){
                     document.getElementById('btnEntregaCancelar').click();
                     $('#ModalCobro').modal('hide');
         
-                    socket.emit('ordenes nueva',`Nueva Orden a nombre de ${ClienteNombre} por valor de ${GlobalTotalDocumento} quetzales`, GlobalSelectedForm);
+                    //socket.emit('ordenes nueva',`Nueva Orden a nombre de ${ClienteNombre} por valor de ${GlobalTotalDocumento} quetzales`, GlobalSelectedForm);
+                    socket.emit('ventas nueva',GlobalCodSucursal, GlobalSelectedForm);
+                    await classEmpleados.updateMyLocation();
                     fcnEliminarTempVentas(GlobalUsuario);
                     fcnNuevoPedido();
                 }

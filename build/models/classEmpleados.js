@@ -16,6 +16,40 @@ let classEmpleados = {
                 reject();
             });
         });
+    },
+    updateMyLocation : async ()=>{
+        let f = new Date();
+        let momento = `${f.getHours()}:${f.getMinutes()}` 
+        let gps = new Promise((resolve,reject)=>{
+            try {
+                navigator.geolocation.getCurrentPosition(function (location) {
+                    GlobalGpsLat = Number(location.coords.latitude)
+                    GlobalGpsLong = Number(location.coords.longitude);
+                })
+                resolve();
+            } catch (error) {
+                console.log("error en gps: " + error)
+                GlobalGpsLat = 0;
+                GlobalGpsLong = 0;
+                reject();
+            }
+        })
+        await gps 
+        .then(()=>{
+            axios.put('/empleados/location',{
+            sucursal : GlobalCodSucursal,
+            codven : GlobalCodUsuario,
+            lat : GlobalGpsLat,
+            long : GlobalGpsLong,
+            horamin:momento
+            })
+            .then((response) => {
+                console.log(response);
+            }, (error) => {
+               console.log(error);
+            });
+        })
+
     }
 
 }
