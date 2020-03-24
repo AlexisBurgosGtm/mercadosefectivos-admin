@@ -37,11 +37,11 @@ let classEmpleados = {
         await gps 
         .then(()=>{
             axios.put('/empleados/location',{
-            sucursal : GlobalCodSucursal,
-            codven : GlobalCodUsuario,
-            lat : GlobalGpsLat,
-            long : GlobalGpsLong,
-            horamin:momento
+                sucursal : GlobalCodSucursal,
+                codven : GlobalCodUsuario,
+                lat : GlobalGpsLat,
+                long : GlobalGpsLong,
+                horamin:momento
             })
             .then((response) => {
                 console.log(response);

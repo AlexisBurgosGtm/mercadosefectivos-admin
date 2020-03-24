@@ -235,12 +235,7 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
 
     let str = ""; 
     axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
-    //axios.get('/ventas/buscarproducto', {
-      //  empnit:GlobalEmpnit,
-      //  filtro:filtro,
-      //  app:GlobalSistema,
-      //  tipoprecio:cmbTipoPrecio.value
-    //})
+    
     .then((response) => {
         const data = response.data;        
         data.recordset.map((rows)=>{

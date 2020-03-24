@@ -1142,7 +1142,7 @@ let api = {
         container.innerHTML = GlobalLoader;
         
     
-        let tbl = `<div class="mapcontainer" id="mapcontainer"></div>`;        
+        let tbl = `<div class="mapcontainer2" id="mapcontainer"></div>`;        
         
         container.innerHTML = tbl;
         

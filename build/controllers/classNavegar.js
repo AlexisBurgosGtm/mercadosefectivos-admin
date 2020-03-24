@@ -59,7 +59,7 @@ let classNavegar = {
                 rootMenu.innerHTML = strMenu;
 
                 funciones.loadScript('../views/inicio/vendedor.js','root')
-                .then(()=>{
+                .then(async()=>{
                     GlobalSelectedForm='INICIO';
                     InicializarVista();
                     
@@ -80,6 +80,8 @@ let classNavegar = {
                     btnMenuVendedorNoticias.addEventListener('click',()=>{
                         classNavegar.noticias();
                     });
+                    //actualiza la ubicación del empleado
+                    await classEmpleados.updateMyLocation();
                 })          
     },
     inicioGerente: ()=>{
@@ -197,7 +199,7 @@ let classNavegar = {
             InicializarVista();
         })          
     },
-    inicioSupervisor : ()=>{
+    inicioSupervisor : async()=>{
         let strMenu =  `
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuSupervisorDashboard">
                                 <span>Dashboard</span>
@@ -242,7 +244,10 @@ let classNavegar = {
                         classNavegar.noticias();     
                      });
 
-                     classNavegar.supervisorDashboard();
+                     //actualiza la ubicación del empleado
+                    await classEmpleados.updateMyLocation();
+                    //carga el inicio del supervisor
+                    classNavegar.supervisorDashboard();
     },
     supervisorDashboard:()=>{
         funciones.loadScript('../views/supervisor/dashboard.js','root')

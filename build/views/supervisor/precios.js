@@ -13,11 +13,7 @@ function getView(){
                 </div>
                 <div class="card col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="card-header">
-                        <div class="form-group">
-                            <label>Buscar por Marca</label>
-                            <select class="form-control" id="cmbBuscarMarca">
-                            </select>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

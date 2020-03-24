@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/buscarproducto", async(req,res)=>{
     
     const {empnit,filtro,app,tipoprecio} = req.query;
-
+    // K= CAMBIO DE PRODUCTO
 
     let campoprecio = '';
 
@@ -25,6 +25,9 @@ router.get("/buscarproducto", async(req,res)=>{
             break;
         case 'A':
             campoprecio = 'ME_PRECIOS.OFERTA';
+            break;
+        case 'K':
+            campoprecio = '0.01'
             break;
         default:
             campoprecio = 'ME_PRECIOS.PRECIO';
