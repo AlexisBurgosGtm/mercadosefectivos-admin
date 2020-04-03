@@ -89,29 +89,33 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteInicio">
                                 <span>Inicio</span>
                             </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteTracking">
+                                <span>Tracking de Personal</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteVendedores">
                                 <span>Vendedores</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteProductos">
                                 <span>Productos</span>
                             </a>
-                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteLogro">
-                                <span>Logros</span>
-                            </a>
-                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteUsuarios">
+                            
+                            <a class="dropdown-item hidden" data-toggle="dropdown" id="btnMenuGerenteUsuarios">
                                 <span>Usuarios</span>
                             </a>
-                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteNoticias">
+                            <a class="dropdown-item hidden" data-toggle="dropdown" id="btnMenuGerenteNoticias">
                                 <span>Noticias</span>
                             </a>
                             `
                     rootMenu.innerHTML = strMenu;
                        
-                    
                      // handlers del menu
                     let btnMenuGerenteInicio = document.getElementById('btnMenuGerenteInicio');
                     btnMenuGerenteInicio.addEventListener('click',()=>{
                         classNavegar.inicioGerente();
+                    });
+                    let btnMenuGerenteTracking = document.getElementById('btnMenuGerenteTracking');
+                    btnMenuGerenteTracking.addEventListener('click',()=>{
+                       classNavegar.gerenteTracking(); 
                     });
                     let btnMenuGerenteVendedores = document.getElementById('btnMenuGerenteVendedores');
                     btnMenuGerenteVendedores.addEventListener('click',()=>{
@@ -125,19 +129,14 @@ let classNavegar = {
                     btnMenuGerenteUsuarios.addEventListener('click',()=>{
                         
                     });
-                    let btnMenuGerenteLogro = document.getElementById('btnMenuGerenteLogro');
-                    btnMenuGerenteLogro.addEventListener('click',()=>{
-                        
-                    });
+                    
                     let btnMenuGerenteNoticias = document.getElementById('btnMenuGerenteNoticias');
                     btnMenuGerenteNoticias.addEventListener('click',()=>{
                         
                     });
-        funciones.loadScript('../views/gerente/inicio.js','root')
-        .then(()=>{
-            GlobalSelectedForm='GERENTE';
-            InicializarVistaGerente();
-        })
+
+                    classNavegar.gerenteIniciar(); 
+        
     },
     inicioDigitador : ()=>{
         console.log('inicio digitador');
@@ -318,6 +317,20 @@ let classNavegar = {
         .then(()=>{
             GlobalSelectedForm='NOTICIAS';
             inicializarVistaNoticias();
+        })
+    },
+    gerenteIniciar: ()=>{
+        funciones.loadScript('../views/gerente/inicio.js','root')
+        .then(()=>{
+            GlobalSelectedForm='GERENTE';
+            InicializarVistaGerente();
+        });
+    },
+    gerenteTracking: ()=>{
+        funciones.loadScript('../views/gerente/tracking.js','root')
+        .then(()=>{
+            GlobalSelectedForm='GERENTETRACKING';
+            InicializarVistaGerenteTracking();
         })
     },
     gerenteVendedores: ()=>{

@@ -16,13 +16,13 @@ router.put("/location",async(req,res)=>{
 // MANDA LA LATITUD Y LONGITUD DEL VENDEDOR
 router.post("/statusempleado",async(req,res)=>{
 
-    const {sucursal} = req.body;
+    const {sucursal,tipoempleado} = req.body;
 
     
     let qry ='';
     qry = `SELECT CODUSUARIO AS CODIGO, NOMBRE AS VENDEDOR, TELEFONO, isnull(LAT,0) as LAT, isnull(LONG,0) as LONG, HORAMIN
             FROM ME_USUARIOS 
-            WHERE CODSUCURSAL='${sucursal}' AND TIPO='VENDEDOR' AND LAT<>0`;
+            WHERE CODSUCURSAL='${sucursal}' AND TIPO='${tipoempleado}' AND LAT<>0`;
     
     execute.Query(res,qry);
 });

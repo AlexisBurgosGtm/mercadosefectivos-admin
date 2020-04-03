@@ -24,6 +24,31 @@ let funciones = {
       });
 
     },
+    GetDataNIS: async (NIS,idTxtPropietario,idTxtDireccion)=>{
+
+      return new Promise((resolve, reject) => {
+        
+        let url = 'https://oficinavirtual.energuate.com/mifactura/GetHistorial?nisrad=' + NIS;
+        
+        axios.get(url)
+        .then((response) => {
+            let json = response.data.dataPersonBill;
+            //console.log(response.data.dataPersonBill);
+            
+            //document.getElementById(idTxtPropietario).value = json.TITULAR_SERVICIO;
+            //document.getElementById(idTxtDireccion).value = json.DIRECCION_SERVICIO;    
+  
+            resolve(json);
+        }, (error) => {
+            console.log(error);
+            reject(error);
+        });
+  
+  
+  
+      });
+
+    },
     instalationHandlers: (idBtnInstall)=>{
       //INSTALACION APP
       let btnInstalarApp = document.getElementById(idBtnInstall);
@@ -106,6 +131,18 @@ let funciones = {
             num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
         return (((sign) ? '' : '-') + signo + ' ' + num + ((cents == "00") ? '' : '.' + cents)).toString();
     },
+    setMargen: function(num,signo) {
+      num = num.toString().replace(/\$|\,/g, '');
+      if (isNaN(num)) num = "0";
+      let sign = (num == (num = Math.abs(num)));
+      num = Math.floor(num * 100 + 0.50000000001);
+      let cents = num % 100;
+      num = Math.floor(num / 100).toString();
+      if (cents < 10) cents = "0" + cents;
+      for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+          num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+      return ( ((sign) ? '' : '-') +  num + ((cents == "00") ? '' : '.' + cents) + ' ' + signo  ).toString();
+  },
     loadScript: function(url, idContainer) {
         return new Promise((resolve, reject) => {
           var script = document.createElement('script');
@@ -944,6 +981,15 @@ let funciones = {
       <option value="22">Quetzaltenango</option>      
       `
       container.innerHTML = str;
+    },
+    getComboTipoEmpleados: (idcontainer)=>{
+      let str = `
+        <option value="VENDEDOR">VENDEDORES</option>
+        <option value="SUPERVISOR">SUPERVISOR</option>
+        <option value="REPARTIDOR">REPARTIDORES</option>
+      `
+      document.getElementById(idcontainer).innerHTML = str;
+
     }
 };
 

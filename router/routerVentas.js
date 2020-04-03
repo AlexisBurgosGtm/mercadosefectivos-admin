@@ -602,7 +602,7 @@ router.post('/reportemarcasfecha',async(req,res)=>{
 
     const {sucursal,fecha} = req.body;
 
-    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
                 FROM  ME_Productos LEFT OUTER JOIN
                              ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT RIGHT OUTER JOIN
                              ME_Docproductos ON ME_Productos.CODPROD = ME_Docproductos.CODPROD AND ME_Productos.EMP_NIT = ME_Docproductos.EMP_NIT RIGHT OUTER JOIN
@@ -625,7 +625,7 @@ router.post('/reportemarcasmes',async(req,res)=>{
 
     const {anio,mes,sucursal} = req.body;
 
-    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO,SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
                 FROM ME_Documentos LEFT OUTER JOIN
                              ME_Docproductos ON ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.DOC_MES = ME_Docproductos.DOC_MES AND ME_Documentos.DOC_ANO = ME_Docproductos.DOC_ANO AND 
                              ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT AND ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO LEFT OUTER JOIN
