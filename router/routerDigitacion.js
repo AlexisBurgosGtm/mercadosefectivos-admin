@@ -125,6 +125,15 @@ router.post("/embarquespendientes", async(req,res)=>{
     execute.Query(res,qry);
 });
 
+router.post("/embarquesrepartidor", async(req,res)=>{
+    const {sucursal,codrepartidor} = req.body;
+
+   let qry = `SELECT CODIGO AS CODEMBARQUE, NOMRUTA AS RUTA FROM ME_EMBARQUES 
+                WHERE STATUS='PENDIENTE' AND CODSUCURSAL='${sucursal}' AND CODCHOFER=${codrepartidor}`;
+   
+   execute.Query(res,qry);
+});
+
 // ENVIA LOS DOCUMENTOS DE UN PICKING
 router.post('/pickingdocumentos',async (req,res)=>{
 

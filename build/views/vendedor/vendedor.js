@@ -62,6 +62,60 @@ function getView(){
                     </div>
             `
         },
+        tabsClientes :()=>{
+            return `
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <ul class="nav nav-pills nav-justified" role="tablist">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#panelNoVisitados">No visitados</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#panelVisitados">Visitados</a></li>
+                    </ul>
+                    <div class="tab-content py-3">
+
+                        <div class="tab-pane fade active show" id="panelNoVisitados" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-responsive table-striped table-hover table-bordered" id="tblLista">
+                                    <thead class="bg-trans-gradient text-white">
+                                        <tr>
+                                            <td>Nombre/Código</td>
+                                            <td>Dirección</td>
+                                            <td>
+                                                <i class="fal fa-cog"></i>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblClientes">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="panelVisitados" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-responsive table-striped table-hover table-bordered" id="tblLista">
+                                    <thead class="bg-trans-gradient text-white">
+                                        <tr>
+                                            <td>Nombre/Código</td>
+                                            <td>Dirección</td>
+                                            <td>
+                                                <i class="fal fa-cog"></i>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblClientesVisitados">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            `
+        },
         modalMenuCliente: ()=>{
             return `<div class="card">
                         <div class="card-header bg-trans-gradient text-white text-center">
@@ -117,14 +171,14 @@ function getView(){
                         
                         <br>
                         <div class="row">
-                            <button class="btn btn-lg btn-warning btn-rounded col-12" id="btnNoVentaCliente">
+                            <button class="btn btn-lg btn-warning btn-rounded col-12" id="btnTiendaCerrada">
                                 <i class="fal fa-credit-card-front"></i>
                                 TIENDA CERRADA
                             </button>
                         </div>
                         <br>
                         <div class="row">
-                            <button class="btn btn-lg btn-secondary col-12" id="btnNoVentaCliente">
+                            <button class="btn btn-lg btn-secondary col-12" id="btnNoDinero">
                                 <i class="fal fa-credit-card-front"></i>
                                 NO DINERO
                             </button>
@@ -143,7 +197,7 @@ function getView(){
         }
     }
 
-    root.innerHTML = view.encabezado() + view.listaclientes();
+    root.innerHTML = view.encabezado() + view.tabsClientes(); // view.listaclientes();
     rootMenuLateral.innerHTML = view.modalMenuCliente();
 };
 
@@ -188,7 +242,7 @@ async function addListeners(){
     cmbDiaVisita.innerHTML = funciones.ComboSemana("LETRAS");
        
     cmbDiaVisita.addEventListener('change',async()=>{
-        await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes')
+        await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
     })
     
     let f = new Date();
@@ -200,10 +254,46 @@ async function addListeners(){
         hideMenuLateral()
     });
 
-    let btnNoVentaCliente = document.getElementById('btnNoVentaCliente');
-    btnNoVentaCliente.addEventListener('click',()=>{
-        hideMenuLateral();
-        funciones.Aviso('Acá indicaremos el motivo por el cual el cliente no compró en esta visita');
+    let btnTiendaCerrada = document.getElementById('btnTiendaCerrada');
+    btnTiendaCerrada.addEventListener('click',()=>{
+        funciones.Confirmacion('Se marcará este cliente como CERRADA. ¿Está seguro?')
+        .then((value)=>{
+            if(value==true){
+                api.updateClientesLastSale(GlobalSelectedCodCliente,'CERRADO')
+                .then(async()=>{
+                    funciones.Aviso('TIENDA CERRADA');
+                    await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
+                })
+                .catch(()=>{
+                    funciones.AvisoError('No se marcar esta tienda. Inténtelo de nuevo')
+                })
+                
+                hideMenuLateral();
+            }
+        })
+        
+        
+    });
+
+    let btnNoDinero = document.getElementById('btnNoDinero');
+    btnNoDinero.addEventListener('click',()=>{
+        funciones.Confirmacion('Se marcará este cliente como SIN DINERO. ¿Está seguro?')
+        .then(async(value)=>{
+            if(value==true){
+                api.updateClientesLastSale(GlobalSelectedCodCliente,'NODINERO')
+                .then(async()=>{
+                    funciones.Aviso('TIENDA SIN DINERO');
+                    await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
+                })
+                .catch(()=>{
+                    funciones.AvisoError('No se marcar esta tienda. Inténtelo de nuevo')
+                })
+
+                hideMenuLateral();
+            }
+        })
+        
+        
     });
 
 
@@ -218,7 +308,7 @@ async function addListeners(){
         funciones.FiltrarTabla('tblLista','txtFiltrarCliente');
     });
 
-    await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes')
+    await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
 
 };
 

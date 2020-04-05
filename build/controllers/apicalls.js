@@ -92,12 +92,14 @@ let api = {
         });
 
     },
-    clientesVendedor: async(sucursal,codven,dia,idContenedor)=>{
+    clientesVendedor: async(sucursal,codven,dia,idContenedor,idContenedorVisitados)=>{
     
         let container = document.getElementById(idContenedor);
         container.innerHTML = GlobalLoader;
+
+        let containerVisitados = document.getElementById(idContenedorVisitados);
         
-        let strdata = '';
+        let strdata = ''; let strdataVisitados = '';
 
         axios.post('/clientes/listavendedor', {
             app:GlobalSistema,
@@ -109,11 +111,48 @@ let api = {
             const data = response.data.recordset;
             
             data.map((rows)=>{
-                
-                    strdata = strdata + `<tr>
+                    let f = rows.LASTSALE.toString().replace('T00:00:00.000Z','');
+                    let stClassClie = ''; let stNomStatus='';
+                    if(f==funciones.getFecha()){
+                        switch (rows.STVISITA) {
+                            case 'VENTA':
+                                stClassClie='bg-success text-white';
+                                stNomStatus= 'VENDIDO';
+                                break;
+                            case 'CERRADO':
+                                stClassClie='bg-warning';
+                                stNomStatus= 'CERRADO';        
+                                break;
+                            case 'NODINERO':
+                                stClassClie='bg-secondary text-white';
+                                stNomStatus= 'SIN DINERO';
+                                break;
+                        
+                            default:
+                                
+                                break;
+                        };
+
+                        strdataVisitados = strdataVisitados + `<tr class='${stClassClie}'>
+                        <td>${rows.NOMCLIE}
+                            <br>
+                            <small>Cod: ${rows.CODIGO} - St:${stNomStatus}</small>
+                        </td>
+                        <td>${rows.DIRCLIE}
+                            <br>
+                            <small>${rows.DESMUNI}</small>
+                        </td>
+                        <td>
+                            <button class="btn btn-info btn-sm btn-circle" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
+                                +
+                            </button>
+                        </td>
+                    </tr>`    
+                    }else{
+                        strdata = strdata + `<tr class=''>
                                 <td>${rows.NOMCLIE}
                                     <br>
-                                    <small>Cod: ${rows.CODIGO}</small>
+                                    <small>Cod: ${rows.CODIGO} - St:SN</small>
                                 </td>
                                 <td>${rows.DIRCLIE}
                                     <br>
@@ -125,11 +164,18 @@ let api = {
                                     </button>
                                 </td>
                             </tr>`
+                    }
+                    
+                    
             })
             container.innerHTML = strdata;
+            containerVisitados.innerHTML = strdataVisitados;
+
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
             strdata = '';
+            containerVisitados.innerHTML = 'No se pudo cargar la lista';
+            container.innerHTML = 'No se pudo cargar la lista';
         });
         
         
@@ -675,6 +721,68 @@ let api = {
                             </tr>`        
         */
     },
+    tblVendedoresPill : (sucursal,idContainer)=>{
+        let container = document.getElementById(idContainer);
+        container.innerHTML = GlobalLoader;
+        
+        let strHead = `<div class="d-flex">`
+        let strFoot = `</div>`
+        let str = '';
+
+        axios.post('/empleados/vendedores', {
+            sucursal: sucursal,
+            user:GlobalUsuario
+        })
+        .then((response) => {
+            //style="width: 15rem;"
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                str = str + `
+                
+                <div class="rounded-pill bg-white shadow-sm p-2 border-faded mr-3 d-flex flex-row align-items-center justify-content-center">
+                    <img src="img/favicon.png" alt="${rows.NOMBRE}" class="img-thumbnail img-responsive rounded-circle" style="width:5rem; height: 5rem;">
+                        <div class="ml-2 mr-3">
+                            <h5 class="m-0">
+                                ${rows.NOMBRE}
+                                <small class="m-0 fw-300">
+                                    Vendedor
+                                </small>
+                            </h5>
+                            <a href="https://api.whatsapp.com/send?phone=502${rows.TELEFONO}&text=${rows.NOMBRE.replace(' ','%20')}" target="blank">${rows.TELEFONO}</a>
+                            <div class="text-right">
+                                <button class="btn btn-info btn-circle btn-lg" onclick="getGerenciaVendedorLogro(${rows.CODIGO},'${rows.NOMBRE}');">
+                                +
+                                </button>
+                            </div>                            
+                    </div>
+                </div>`        
+            })
+            container.innerHTML = strHead + str + strFoot;
+
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = 'No se pudo cargar la lista';
+        });
+
+
+        /*
+        str = str + `<tr>
+                                <td>
+                                    ${rows.NOMBRE}<br>
+                                    <small>
+                                        Tel:<b class="text-danger">${rows.TELEFONO}</b> - 
+                                        Cod:${rows.CODIGO} - 
+                                        
+                                    </small>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-circle btn-sm" onclick="getGerenciaVendedorLogro(${rows.CODIGO},'${rows.NOMBRE}');">
+                                        +
+                                    </button>
+                                </td>
+                            </tr>`        
+        */
+    },
     comboVendedores : (sucursal,idContainer)=>{
         let container = document.getElementById(idContainer);
         let str = '';
@@ -944,8 +1052,6 @@ let api = {
             container.innerHTML = '';
         });
     },
-
-
     gerenteRankingVendedores: (fecha,idContenedor, idLbTotal)=>{
         
         let container = document.getElementById(idContenedor);
@@ -1207,8 +1313,6 @@ let api = {
             container.innerHTML = '';
         });
     },
-
-
     supervisorRankingVendedores: (fecha,idContenedor, idLbTotal)=>{
         
         let container = document.getElementById(idContenedor);
@@ -2016,6 +2120,35 @@ let api = {
         
                 })
     },
+    repartidorComboEmbarques : async(idContainer)=>{
+        
+            let container = document.getElementById(idContainer);
+                
+            let strdata = '<option value="">SELECCIONE EMBARQUE</option>';
+    
+            axios.post('/digitacion/embarquesrepartidor', {
+                sucursal: GlobalCodSucursal,
+                codrepartidor:GlobalCodUsuario
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                data.map((rows)=>{
+                    strdata = strdata + `
+                                <option value='${rows.CODEMBARQUE}'>
+                                    ${rows.CODEMBARQUE}-${rows.RUTA}
+                                </option>
+                                `
+                })
+                container.innerHTML = strdata;
+        
+            }, (error) => {
+                funciones.AvisoError('Error en la solicitud');
+                container.innerHTML = '';            
+        
+            });
+
+        
+    },
     usuariosGetListado: (tipo,idContenedor)=>{
         
         let container = document.getElementById(idContenedor);
@@ -2117,5 +2250,21 @@ let api = {
             });
         });
 
+    },
+    updateClientesLastSale:(nitclie,visita)=>{
+        return new Promise((resolve,reject)=>{
+            axios.post('/clientes/lastsale',{
+                sucursal:GlobalCodSucursal,
+                nitclie:nitclie,
+                fecha:funciones.getFecha(),
+                visita:visita
+            })
+            .then((response) => {               
+                socket.emit('clientes ultimaventa',GlobalCodSucursal, GlobalSelectedForm);
+                resolve();             
+            }, (error) => {
+                reject();
+            });
+        });
     }
 }

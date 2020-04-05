@@ -24,3 +24,7 @@ socket.on('noticias nueva', (msg,user)=>{
     funciones.NotificacionPersistent(msg,'Noticias !!')
 })
 
+socket.on('clientes ultimaventa',(msg,user)=>{
+    
+})
+

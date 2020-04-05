@@ -63,6 +63,7 @@ let classTipoDocumentos = {
             });
                
         }, (error) => {
+            container.innerHTML = '';
             console.log(error);
             reject();
         });

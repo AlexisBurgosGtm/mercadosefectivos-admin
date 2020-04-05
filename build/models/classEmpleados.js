@@ -44,9 +44,9 @@ let classEmpleados = {
                 horamin:momento
             })
             .then((response) => {
-                console.log(response);
+                //console.log(response);
             }, (error) => {
-               console.log(error);
+               //console.log(error);
             });
         })
 

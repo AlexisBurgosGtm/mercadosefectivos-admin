@@ -60,6 +60,12 @@ function addListeners(){
 function InicializarVista(){
    getView();
    addListeners();
-   classTipoDocumentos.getSucursales('cmbSucursal');
+   
+   classTipoDocumentos.getSucursales('cmbSucursal')
+   .then(async()=>{
+       console.log('hola mundo...')
+   })
+
+
    
 };

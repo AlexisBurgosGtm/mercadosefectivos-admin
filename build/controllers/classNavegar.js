@@ -58,7 +58,7 @@ let classNavegar = {
                             `
                 rootMenu.innerHTML = strMenu;
 
-                funciones.loadScript('../views/inicio/vendedor.js','root')
+                funciones.loadScript('../views/vendedor/vendedor.js','root')
                 .then(async()=>{
                     GlobalSelectedForm='INICIO';
                     InicializarVista();
@@ -192,11 +192,32 @@ let classNavegar = {
                 })            
     },
     inicioRepartidor : ()=>{
-        funciones.loadScript('../views/inicio/repartidor.js','root')
-        .then(()=>{
-            GlobalSelectedForm='INICIO';
-            InicializarVista();
-        })          
+        let strMenu =  `
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteInicio">
+                                <span>Pickings</span>
+                            </a>
+                            
+                            <a class="dropdown-item hidden" data-toggle="dropdown" id="btnMenuGerenteNoticias">
+                                <span>Noticias</span>
+                            </a>
+                            `
+                    rootMenu.innerHTML = strMenu;
+                       
+                     // handlers del menu
+                    let btnMenuGerenteInicio = document.getElementById('btnMenuGerenteInicio');
+                    btnMenuGerenteInicio.addEventListener('click',()=>{
+                        classNavegar.inicioGerente();
+                    });
+                    
+                    
+                    let btnMenuGerenteNoticias = document.getElementById('btnMenuGerenteNoticias');
+                    btnMenuGerenteNoticias.addEventListener('click',()=>{
+                        
+
+                    });
+
+                    classNavegar.repartidorIniciar();
+
     },
     inicioSupervisor : async()=>{
         let strMenu =  `
@@ -276,16 +297,21 @@ let classNavegar = {
             inicializarVistaClientesSupervisor();
         })
     },
+    repartidorIniciar:()=>{
+        funciones.loadScript('../views/repartidor/inicio.js','root')
+        .then(()=>{
+            GlobalSelectedForm='REPARTIDORINICIO';
+            iniciarVistaRepartidor();
+        });            
+    },
     ventas: async(nit,nombre,direccion)=>{
-        funciones.loadView('../views/facturacion/index.html','root')
-        .then(()=>{            
-            funciones.loadScript('./views/facturacion/controller.js','root')
+        
+            funciones.loadScript('./views/vendedor/facturacion.js','root')
             .then(()=>{
                 GlobalSelectedForm ='VENTAS';
-                //controllerventa.iniciarVistaVentas(nit,nombre,direccion);
                 iniciarVistaVentas(nit,nombre,direccion);
             })
-        })
+          
     },
     pedidos: async ()=>{
         funciones.loadScript('../views/pedidos/vendedor.js','root')
