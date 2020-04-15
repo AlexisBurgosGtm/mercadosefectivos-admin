@@ -22,13 +22,14 @@ router.post("/listado", async(req,res)=>{
 // ELIMINA UN USUARIOS
 router.post("/eliminar", async(req,res)=>{
     
-    const {sucursal,id} = req.body;
+    const {sucursal,id, codven} = req.body;
         
-    let qry ='';
+    let qry =''; let qryVendedor = '';
 
-    qry = `DELETE FROM ME_USUARIOS WHERE CODSUCURSAL='${sucursal}'AND ID=${id}`;     
-  
-    execute.Query(res,qry);
+    qry = `DELETE FROM ME_USUARIOS WHERE CODSUCURSAL='${sucursal}'AND ID=${id};`;     
+    qryVendedor = `DELETE FROM ME_VENDEDORES WHERE CODSUCURSAL='${sucursal}' AND CODVEN=${codven};`
+
+    execute.Query(res, qry + qryVendedor);
 
 });
 
@@ -37,13 +38,18 @@ router.post("/nuevo", async(req,res)=>{
     
     const {sucursal,tipo,codusuario,usuario,clave,coddoc,telefono} = req.body;
         
-    let qry ='';
+    let qry ='';let qryV ='';
 
     qry = `INSERT INTO ME_USUARIOS 
         (CODUSUARIO,NOMBRE,PASS,TIPO,TELEFONO,CODDOC,CODSUCURSAL) VALUES
-        (${codusuario},'${usuario}','${clave}','${tipo}','${telefono}','${coddoc}','${sucursal}')`;     
+        (${codusuario},'${usuario}','${clave}','${tipo}','${telefono}','${coddoc}','${sucursal}');`;     
+        
 
-    execute.Query(res,qry);
+    qryV = `INSERT INTO ME_VENDEDORES 
+            (EMP_NIT,CODVEN,NOMVEN,ACTIVO,CODDOC,CODSUCURSAL) VALUES
+            ('1034261-3',${codusuario},'${usuario}','SI','${coddoc}','${sucursal}');`;    
+
+    execute.Query(res,qry + qryV);
 
 });
 
@@ -52,7 +58,7 @@ router.post("/editar", async(req,res)=>{
     
     const {id,sucursal,tipo,codusuario,usuario,clave,coddoc,telefono} = req.body;
         
-    let qry ='';
+    let qry =''; let qryV ='';
 
     qry = `UPDATE ME_USUARIOS SET 
             CODUSUARIO=${codusuario},
@@ -61,9 +67,11 @@ router.post("/editar", async(req,res)=>{
             TIPO='${tipo}',
             TELEFONO='${telefono}',
             CODDOC='${coddoc}'
-            WHERE ID=${id} AND CODSUCURSAL='${sucursal}'`;     
+            WHERE ID=${id} AND CODSUCURSAL='${sucursal}';`;     
+
+    qryV = `UPDATE ME_VENDEDORES SET NOMVEN='${usuario}', CODDOC='${coddoc}' WHERE CODSUCURSAL='${sucursal}' AND CODVEN=${codusuario};`
   
-    execute.Query(res,qry);
+    execute.Query(res,qry + qryV);
 
 });
 

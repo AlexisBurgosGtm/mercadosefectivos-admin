@@ -2234,16 +2234,22 @@ let api = {
         });
 
     },
-    usuariosEliminar:(id)=>{
+    usuariosEliminar:(id,codigo)=>{
         
         return new Promise((resolve,reject)=>{
             axios.post('/usuarios/eliminar',{
                 sucursal:GlobalCodSucursal,
-                id:id
+                id:id,
+                codven:codigo
             })
             .then((response) => {
-                
-               resolve();             
+                let data = response.data;
+                if(Number(data.rowsAffected[0])>0){
+                    resolve();             
+                }else{
+                    reject();
+                }
+               
             }, (error) => {
                 
                 reject();

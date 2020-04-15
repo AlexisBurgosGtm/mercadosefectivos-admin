@@ -9,6 +9,7 @@ const router = express.Router();
 router.get("/buscarproducto", async(req,res)=>{
     
     const {empnit,filtro,app,tipoprecio} = req.query;
+    // app= sucusal
     // K= CAMBIO DE PRODUCTO
 
     let campoprecio = '';
@@ -34,8 +35,8 @@ router.get("/buscarproducto", async(req,res)=>{
             break;
     }
     let qry ='';
-    
-            qry = `SELECT ME_PRODUCTOS.CODPROD, ME_PRODUCTOS.DESPROD, ME_PRECIOS.CODMEDIDA, ME_PRECIOS.EQUIVALE, ME_PRECIOS.COSTO, ${campoprecio} AS PRECIO, ME_MARCAS.DESMARCA, 0 as EXENTO
+    let qryOld
+            qryOld = `SELECT ME_PRODUCTOS.CODPROD, ME_PRODUCTOS.DESPROD, ME_PRECIOS.CODMEDIDA, ME_PRECIOS.EQUIVALE, ME_PRECIOS.COSTO, ${campoprecio} AS PRECIO, ME_MARCAS.DESMARCA, 0 as EXENTO
             FROM ME_PRODUCTOS LEFT OUTER JOIN
             ME_PRECIOS ON ME_PRODUCTOS.CODPROD = ME_PRECIOS.CODPROD AND 
             ME_PRODUCTOS.EMP_NIT = ME_PRECIOS.EMP_NIT LEFT OUTER JOIN
@@ -47,6 +48,13 @@ router.get("/buscarproducto", async(req,res)=>{
             OR (ME_PRODUCTOS.EMP_NIT = '${empnit}') 
             AND (ME_PRODUCTOS.CODPROD='${filtro}') 
             AND (ME_PRODUCTOS.NOHABILITADO=0)` 
+
+            qry = `SELECT ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, ME_Precios.EQUIVALE, ME_Precios.COSTO, ${campoprecio} AS PRECIO, ME_Marcas.DESMARCA, 0 AS EXENTO
+                        FROM ME_Productos LEFT OUTER JOIN
+                                     ME_Precios ON ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.CODPROD = ME_Precios.CODPROD AND ME_Productos.EMP_NIT = ME_Precios.EMP_NIT LEFT OUTER JOIN
+                                     ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA
+                        WHERE (ME_Productos.DESPROD LIKE '%${filtro}%') AND (ME_Productos.NOHABILITADO = 0) AND (ME_Productos.CODSUCURSAL = '${app}') 
+                        OR (ME_Productos.NOHABILITADO = 0) AND (ME_Productos.CODPROD = '${filtro}') AND (ME_Productos.CODSUCURSAL = '${app}')` 
     
     
     execute.Query(res,qry);

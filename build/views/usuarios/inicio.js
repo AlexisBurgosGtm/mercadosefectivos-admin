@@ -97,9 +97,10 @@ function addListeners(tipo){
         funciones.Confirmacion('¿Está seguro que Desea ELIMINAR este Usuario?')
         .then((value)=>{
             if(value==true){
-                api.usuariosEliminar(GlobalSelectedId)
+                api.usuariosEliminar(GlobalSelectedId,GlobalSelectedCodCliente)
                 .then(()=>{
                     funciones.Aviso('Usuario Eliminado Exitosamente!!');
+                    $("#modalMenu").modal('hide');
                     api.usuariosGetListado(tipo,'tblListado');
                 })
                 .catch(()=>{
@@ -165,6 +166,7 @@ function insertUser(){
             clave = document.getElementById('txtUsuarioClave').value;
             coddoc = document.getElementById('txtUsuarioCoddoc').value;
             telefono = document.getElementById('txtUsuarioTelefono').value;
+            if(telefono==''){telefono='00000000'}
 
             // recarga la lista de usuarios
             api.usuariosNuevo(codigo,usuario,clave,coddoc,telefono,GlobalSelectedCodigo)
@@ -191,6 +193,7 @@ function editUser(ID,CODIGO,USUARIO,CLAVE,CODDOC,TELEFONO) {
     document.getElementById('btnUsuariosEliminar').style="visibility:visible";
 
     GlobalSelectedId = ID;
+    GlobalSelectedCodCliente = CODIGO;
     lbMenuTitulo.innerText = 'Edición del Usuario ' + USUARIO;
     
     document.getElementById('txtUsuarioCodigo').value = CODIGO;
