@@ -8,12 +8,10 @@ router.post("/listavendedor", async(req,res)=>{
     const {app,sucursal,codven,dia}  = req.body;
 
     let qry = '';
-    qry = `SELECT ME_Clientes.NITCLIE AS CODIGO, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Municipios.DESMUNI, ME_Clientes.TELCLIE AS TELEFONO, 
-            isnull(ME_Clientes.LATITUD,0) AS LAT, 
-            isnull(ME_Clientes.LONGITUD,0) AS LONG,
-            ME_Clientes.FECHAINGRESO AS LASTSALE, ME_Clientes.FAXCLIE AS STVISITA
+    qry = `SELECT ME_Clientes.NITCLIE AS CODIGO, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Municipios.DESMUNI, ME_Clientes.TELCLIE AS TELEFONO, ISNULL(ME_Clientes.LATITUD, 0) AS LAT, 
+    ISNULL(ME_Clientes.LONGITUD, 0) AS LONG, ME_Clientes.FECHAINGRESO AS LASTSALE, ME_Clientes.FAXCLIE AS STVISITA
             FROM ME_Clientes LEFT OUTER JOIN
-            ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.EMP_NIT = ME_Municipios.EMP_NIT AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
+    ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
             WHERE (ME_Clientes.CODSUCURSAL = '${sucursal}') 
             AND (ME_Clientes.VISITA = '${dia}') 
             AND (ME_Clientes.CODVEN = ${codven})
@@ -30,12 +28,12 @@ router.post('/clientesvendedor',async(req,res)=>{
     const {sucursal,codven} = req.body;
     
     let qry = `SELECT ME_Clientes.NITCLIE AS CODIGO, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Clientes.CODMUNI, ME_Municipios.DESMUNI, ME_Clientes.CODDEPTO, ME_Departamentos.DESDEPTO, 
-    ME_Clientes.TELCLIE AS TELEFONO, ME_Clientes.CODVEN, ME_Vendedores.NOMVEN, ME_Clientes.LATITUD AS LAT, ME_Clientes.LONGITUD AS LONG, ME_Clientes.VISITA, ME_Clientes.CODCLIE AS ACTIVO, ME_Clientes.CODSUCURSAL, ME_Clientes.FECHAINGRESO AS LASTSALE
-    FROM ME_Clientes LEFT OUTER JOIN
-    ME_Vendedores ON ME_Clientes.CODVEN = ME_Vendedores.CODVEN AND ME_Clientes.EMP_NIT = ME_Vendedores.EMP_NIT AND ME_Clientes.CODSUCURSAL = ME_Vendedores.CODSUCURSAL LEFT OUTER JOIN
-    ME_Departamentos ON ME_Clientes.EMP_NIT = ME_Departamentos.EMP_NIT AND ME_Clientes.CODSUCURSAL = ME_Departamentos.CODSUCURSAL AND 
-    ME_Clientes.CODDEPTO = ME_Departamentos.CODDEPTO LEFT OUTER JOIN
-    ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.EMP_NIT = ME_Municipios.EMP_NIT AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
+    ME_Clientes.TELCLIE AS TELEFONO, ME_Clientes.CODVEN, ME_Vendedores.NOMVEN, ME_Clientes.LATITUD AS LAT, ME_Clientes.LONGITUD AS LONG, ME_Clientes.VISITA, ME_Clientes.CODCLIE AS ACTIVO, 
+    ME_Clientes.CODSUCURSAL, ME_Clientes.FECHAINGRESO AS LASTSALE
+        FROM            ME_Clientes LEFT OUTER JOIN
+    ME_Vendedores ON ME_Clientes.CODVEN = ME_Vendedores.CODVEN AND ME_Clientes.CODSUCURSAL = ME_Vendedores.CODSUCURSAL LEFT OUTER JOIN
+    ME_Departamentos ON ME_Clientes.CODSUCURSAL = ME_Departamentos.CODSUCURSAL AND ME_Clientes.CODDEPTO = ME_Departamentos.CODDEPTO LEFT OUTER JOIN
+    ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
     WHERE (ME_Clientes.CODSUCURSAL = '${sucursal}') AND (ME_Clientes.CODVEN=${codven})
     ORDER BY ME_Clientes.FECHAINGRESO,ME_Clientes.VISITA,ME_Clientes.NOMCLIE`;
 
@@ -74,20 +72,20 @@ router.put('/reactivar',async(req,res)=>{
 
 })
 
+
 // BUSCA CLIENTE POR NOMBRE
 router.get("/buscarcliente", async(req,res)=>{
     const {app,empnit,filtro} = req.query;
         
     let qry ='';
 
-            qry = `SELECT ME_Clientes.NITCLIE AS CODCLIE, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Clientes.CODMUNI AS CODMUNICIPIO, ME_Municipios.DESMUNI AS DESMUNICIPIO, ME_Clientes.CODDEPTO, 
-            ME_Departamentos.DESDEPTO, ME_Clientes.LISTA AS PRECIO, 0 AS SALDO, 
-            ISNULL(ME_Clientes.LATITUD,0) AS LAT, 
-            ISNULL(ME_Clientes.LONGITUD,0) AS LONG
-        FROM ME_Clientes LEFT OUTER JOIN
-        ME_Departamentos ON ME_Clientes.CODDEPTO = ME_Departamentos.CODDEPTO AND ME_Clientes.EMP_NIT = ME_Departamentos.EMP_NIT LEFT OUTER JOIN
-        ME_Municipios ON ME_Clientes.EMP_NIT = ME_Municipios.EMP_NIT AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
+            qry = `SELECT ME_Clientes.NITCLIE AS CODCLIE, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Clientes.CODMUNI AS CODMUNICIPIO, ME_Municipios.DESMUNI AS DESMUNICIPIO, 
+            ME_Clientes.CODDEPTO, ME_Departamentos.DESDEPTO, ME_Clientes.LISTA AS PRECIO, 0 AS SALDO, ISNULL(ME_Clientes.LATITUD, 0) AS LAT, ISNULL(ME_Clientes.LONGITUD, 0) AS LONG
+            FROM ME_Clientes LEFT OUTER JOIN
+            ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI LEFT OUTER JOIN
+            ME_Departamentos ON ME_Clientes.CODSUCURSAL = ME_Departamentos.CODSUCURSAL AND ME_Clientes.CODDEPTO = ME_Departamentos.CODDEPTO
         WHERE (ME_Clientes.EMP_NIT = '${empnit}') 
+        AND (ME_Clientes.CODSUCURSAL = '${app}') 
         AND (ME_Clientes.NOMCLIE LIKE '%${filtro}%')
         AND (ME_Clientes.CODCLIE=0)`     
     
@@ -133,7 +131,7 @@ router.get("/municipios", async(req,res)=>{
     const {app,empnit} = req.query;
     let qry ='';
 
-    qry = `SELECT CODMUNI AS CODMUNICIPIO, DESMUNI AS DESMUNICIPIO FROM ME_MUNICIPIOS WHERE EMP_NIT='${empnit}' ORDER BY PRIMERO DESC`         
+    qry = `SELECT CODMUNI AS CODMUNICIPIO, DESMUNI AS DESMUNICIPIO FROM ME_MUNICIPIOS WHERE CODSUCURSAL='${app}' ORDER BY PRIMERO DESC`         
 
     execute.Query(res,qry);
 });
@@ -143,7 +141,7 @@ router.get("/departamentos", async(req,res)=>{
     const {app,empnit} = req.query;
     let qry ='';
 
-    qry = `SELECT CODDEPTO, DESDEPTO FROM ME_DEPARTAMENTOS WHERE EMP_NIT='${empnit}' ORDER BY PRIMERO DESC`         
+    qry = `SELECT CODDEPTO, DESDEPTO FROM ME_DEPARTAMENTOS WHERE CODSUCURSAL='${app}' ORDER BY PRIMERO DESC`         
 
     execute.Query(res,qry);
     

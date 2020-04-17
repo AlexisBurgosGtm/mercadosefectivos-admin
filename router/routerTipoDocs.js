@@ -8,7 +8,7 @@ router.get("/tipo", async(req,res)=>{
         
     let qry ='';
 
-    qry = `SELECT CODDOC,CORRELATIVO FROM ME_TIPODOCUMENTOS WHERE EMP_NIT='${empnit}' AND TIPODOC='${tipo}'`     
+    qry = `SELECT CODDOC,CORRELATIVO FROM ME_TIPODOCUMENTOS WHERE CODSUCURSAL='${app}' AND TIPODOC='${tipo}'`     
   
     execute.Query(res,qry);
 
@@ -20,7 +20,7 @@ router.get("/correlativodoc", async(req,res)=>{
         
     let qry ='';
 
-    qry = `SELECT CODDOC,CORRELATIVO FROM ME_TIPODOCUMENTOS WHERE EMP_NIT='${empnit}' AND TIPODOC='${tipo}' AND CODDOC='${coddoc}'`     
+    qry = `SELECT CODDOC,CORRELATIVO FROM ME_TIPODOCUMENTOS WHERE CODSUCURSAL='${app}' AND TIPODOC='${tipo}' AND CODDOC='${coddoc}'`     
     
     execute.Query(res,qry);
 

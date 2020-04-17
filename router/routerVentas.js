@@ -50,9 +50,9 @@ router.get("/buscarproducto", async(req,res)=>{
             AND (ME_PRODUCTOS.NOHABILITADO=0)` 
 
             qry = `SELECT ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, ME_Precios.EQUIVALE, ME_Precios.COSTO, ${campoprecio} AS PRECIO, ME_Marcas.DESMARCA, 0 AS EXENTO
-                        FROM ME_Productos LEFT OUTER JOIN
-                                     ME_Precios ON ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.CODPROD = ME_Precios.CODPROD AND ME_Productos.EMP_NIT = ME_Precios.EMP_NIT LEFT OUTER JOIN
-                                     ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA
+                    FROM ME_Productos LEFT OUTER JOIN
+                                     ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA LEFT OUTER JOIN
+                                     ME_Precios ON ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.CODPROD = ME_Precios.CODPROD
                         WHERE (ME_Productos.DESPROD LIKE '%${filtro}%') AND (ME_Productos.NOHABILITADO = 0) AND (ME_Productos.CODSUCURSAL = '${app}') 
                         OR (ME_Productos.NOHABILITADO = 0) AND (ME_Productos.CODPROD = '${filtro}') AND (ME_Productos.CODSUCURSAL = '${app}')` 
     
@@ -72,7 +72,7 @@ router.get("/tempVentastotal", async(req,res)=>{
 
             qry = `SELECT COUNT(CODPROD) AS TOTALITEMS, SUM(TOTALCOSTO) AS TOTALCOSTO, SUM(TOTALPRECIO) AS TOTALPRECIO, SUM(EXENTO) AS TOTALEXENTO
             FROM ME_TEMP_VENTAS
-            WHERE (EMPNIT = '${empnit}') AND (USUARIO = '${usuario}')`        
+            WHERE (CODSUCURSAL = '${app}') AND (USUARIO = '${usuario}')`        
 
     execute.Query(res,qry);
     
@@ -97,7 +97,7 @@ router.get("/tempVentas", async(req,res)=>{
             ME_TEMP_VENTAS.PRECIO, 
             ME_TEMP_VENTAS.TOTALPRECIO
                 FROM ME_TEMP_VENTAS 
-            WHERE (ME_TEMP_VENTAS.EMPNIT = '${empnit}') AND (ME_TEMP_VENTAS.USUARIO = '${usuario}')
+            WHERE (ME_TEMP_VENTAS.CODSUCURSAL = '${app}') AND (ME_TEMP_VENTAS.USUARIO = '${usuario}')
             ORDER BY ME_TEMP_VENTAS.ID DESC`
 
        
@@ -180,15 +180,16 @@ router.delete("/tempVentas", async(req,res)=>{
 
 // elimina un item de la venta todos 
 router.post("/tempVentastodos", async(req,res)=>{
-    const{empnit,usuario} = req.body;
+    const{empnit,usuario,app} = req.body;
     let qry = "";
    
-    qry = `DELETE FROM ME_TEMP_VENTAS WHERE EMPNIT='${empnit}' AND USUARIO='${usuario}'`
+    qry = `DELETE FROM ME_TEMP_VENTAS WHERE CODSUCURSAL='${app}' AND USUARIO='${usuario}'`
 
     execute.Query(res,qry);
 
 });
 
+// SIN USAR
 // VENTAS BUSCAR CLIENTE POR NIT O CODIGO
 router.get("/buscarcliente", async(req,res)=>{
     
@@ -202,7 +203,7 @@ router.get("/buscarcliente", async(req,res)=>{
 
 });
 
-// INSERTA EL ENCABEZADO DEL PEDIDO
+// INSERTA UN PEDIDO EN LAS TABLAS DE DOCUMENTOS Y DOCPRODUCTOS
 router.post("/documentos", async (req,res)=>{
     const {app,empnit,anio,mes,dia,coddoc,fecha,fechaentrega,formaentrega,codcliente,nomclie,codbodega,totalcosto,totalprecio,nitclie,dirclie,obs,direntrega,usuario,codven,lat,long} = req.body;
     
@@ -348,53 +349,12 @@ router.post("/documentos", async (req,res)=>{
                   0,0,'SN',0,'',0,'',0,0,COSTO,0,TOTALCOSTO,0,0,0,0,'','',0,0,0,'','','',0,0,'',0,0,'','',0,'',TIPOPRECIO,'${app}'
                   FROM ME_TEMP_VENTAS   
                   WHERE EMPNIT='${empnit}' AND USUARIO='${usuario}';`
-            qrycorrelativo =`UPDATE ME_TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE EMP_NIT='${empnit}' AND CODDOC='${coddoc}'`
+            qrycorrelativo =`UPDATE ME_TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE CODSUCURSAL='${app}' AND CODDOC='${coddoc}'`
             
  
     execute.Query(res,qry + qrydoc + qrycorrelativo);
     
 });
-
-// DESPACHO - BODEGA
-/////////////////////////////////////////////////////
-
-// DESPACHO PEDIDOS PENDIENTES
-router.get("/pedidospendientes", async(req,res)=>{
-    
-    const {empnit, app} = req.query;
-    
-    let qry = '';
-
-    qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_FECHA AS FECHA, DOC_NOMREF AS NOMCLIE, DOC_OBS AS OBS, DOC_DIRENTREGA AS DIRENTREGA, DOC_TOTALVENTA AS IMPORTE FROM ME_DOCUMENTOS WHERE EMP_NIT='${empnit}' AND DOC_FENTREGA='NO' ORDER BY DOC_FECHA, DOC_NUMERO`         
-
-    execute.Query(res,qry);
-
-});
-
-// DESPACHO PEDIDO DESPACHADO EN BODEGA
-router.post("/pedidodespachado", async(req,res)=>{
-    
-    const {empnit, coddoc,correlativo, app} = req.body;
-    
-    let qry = '';
-
-    qry = `UPDATE ME_DOCUMENTOS SET DOC_FENTREGA='SI' WHERE EMP_NIT='${empnit}' AND DOC_FENTREGA='NO' AND CODDOC='${coddoc}' AND DOC_NUMERO='${correlativo}'`         
-
-    execute.Query(res,qry);
-});
-
-// DETALLE DEL PEDIDO SELECCIONADO
-router.post("/pedidodetalle", async(req,res)=>{
-    
-    const {empnit, coddoc,correlativo, app} = req.body;
-    
-    let qry = '';
-
-    qry = `SELECT CODPROD,DESCRIPCION AS DESPROD, CODMEDIDA, CANTIDAD, CANTIDADINV AS TOTALUNIDADES, TOTALPRECIO FROM ME_DOCPRODUCTOS WHERE EMP_NIT='${empnit}' AND CODDOC='${coddoc}' AND DOC_NUMERO='${correlativo}'`         
-
-    execute.Query(res,qry);
-});
-
 
 
 //******************************* */
@@ -422,12 +382,11 @@ router.post('/reporteproductosdia', async(req,res)=>{
 
     let qry = `SELECT ME_Docproductos.CODPROD, ME_Productos.DESPROD, SUM(ME_Docproductos.CANTIDADINV) AS TOTALUNIDADES, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) 
     AS TOTALPRECIO
-    FROM ME_Docproductos RIGHT OUTER JOIN
+FROM            ME_Docproductos LEFT OUTER JOIN
+    ME_Productos ON ME_Docproductos.CODSUCURSAL = ME_Productos.CODSUCURSAL AND ME_Docproductos.CODPROD = ME_Productos.CODPROD RIGHT OUTER JOIN
     ME_Documentos ON ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO AND ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND 
     ME_Docproductos.CODSUCURSAL = ME_Documentos.CODSUCURSAL AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT LEFT OUTER JOIN
-    ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
-    ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT LEFT OUTER JOIN
-    ME_Productos ON ME_Docproductos.CODPROD = ME_Productos.CODPROD AND ME_Docproductos.EMP_NIT = ME_Productos.EMP_NIT
+    ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
             WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_FECHA = '${fecha}') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.DOC_ESTATUS<>'A')
             GROUP BY ME_Docproductos.CODPROD, ME_Productos.DESPROD`;
     
@@ -440,14 +399,13 @@ router.post('/reportemarcasdia',async(req,res)=>{
 
     const {fecha,sucursal,codven} = req.body;
 
-    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
-                        FROM ME_Productos LEFT OUTER JOIN
-                             ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT RIGHT OUTER JOIN
-                             ME_Docproductos ON ME_Productos.CODPROD = ME_Docproductos.CODPROD AND ME_Productos.EMP_NIT = ME_Docproductos.EMP_NIT RIGHT OUTER JOIN
+    let qry = `SELECT       ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    FROM            ME_Productos LEFT OUTER JOIN
+                             ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA RIGHT OUTER JOIN
+                             ME_Docproductos ON ME_Productos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Productos.CODPROD = ME_Docproductos.CODPROD RIGHT OUTER JOIN
                              ME_Documentos ON ME_Docproductos.DOC_MES = ME_Documentos.DOC_MES AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT AND 
                              ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO LEFT OUTER JOIN
-                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
-                             ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
                 WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.DOC_FECHA = '${fecha}') AND 
                              (ME_Documentos.CODSUCURSAL = '${sucursal}')
                 GROUP BY ME_Marcas.DESMARCA`;
@@ -462,9 +420,9 @@ router.post("/reportedinero", async (req,res)=>{
 
     const {anio,mes,sucursal,codven} = req.body;
 
-    let qry = `SELECT ME_Documentos.DOC_FECHA AS FECHA, COUNT(ME_Documentos.DOC_FECHA) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALVENTA
-                FROM ME_Documentos LEFT OUTER JOIN
-                             ME_Tipodocumentos ON ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+    let qry = `SELECT       ME_Documentos.DOC_FECHA AS FECHA, COUNT(ME_Documentos.DOC_FECHA) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALVENTA
+    FROM            ME_Documentos LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
                 WHERE (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Tipodocumentos.TIPODOC = 'PED') AND 
                              (ME_Documentos.DOC_ESTATUS <> 'A')
                 GROUP BY ME_Documentos.DOC_FECHA`;
@@ -480,12 +438,11 @@ router.post('/reporteproductos', async(req,res)=>{
 
     let qry = `SELECT       ME_Docproductos.CODPROD, ME_Productos.DESPROD, SUM(ME_Docproductos.CANTIDADINV) AS TOTALUNIDADES, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) 
     AS TOTALPRECIO
-FROM            ME_Docproductos RIGHT OUTER JOIN
+FROM            ME_Docproductos LEFT OUTER JOIN
+    ME_Productos ON ME_Docproductos.CODSUCURSAL = ME_Productos.CODSUCURSAL AND ME_Docproductos.CODPROD = ME_Productos.CODPROD RIGHT OUTER JOIN
     ME_Documentos ON ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO AND ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND 
     ME_Docproductos.CODSUCURSAL = ME_Documentos.CODSUCURSAL AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT LEFT OUTER JOIN
-    ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
-    ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT LEFT OUTER JOIN
-    ME_Productos ON ME_Docproductos.CODPROD = ME_Productos.CODPROD AND ME_Docproductos.EMP_NIT = ME_Productos.EMP_NIT
+    ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
             WHERE (ME_Documentos.DOC_ESTATUS<>'A') AND (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.CODVEN = ${codven})
             GROUP BY ME_Docproductos.CODPROD, ME_Productos.DESPROD`;
     
@@ -493,19 +450,21 @@ FROM            ME_Docproductos RIGHT OUTER JOIN
 
 });
 
+
+
 // reporte de marcas por vendedor y mes
 router.post('/reportemarcas',async(req,res)=>{
 
     const {anio,mes,sucursal,codven} = req.body;
 
-    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
-                        FROM ME_Productos LEFT OUTER JOIN
-                             ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT RIGHT OUTER JOIN
-                             ME_Docproductos ON ME_Productos.CODPROD = ME_Docproductos.CODPROD AND ME_Productos.EMP_NIT = ME_Docproductos.EMP_NIT RIGHT OUTER JOIN
-                             ME_Documentos ON ME_Docproductos.DOC_MES = ME_Documentos.DOC_MES AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT AND 
-                             ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO LEFT OUTER JOIN
-                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
-                             ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+    let qry = `SELECT       ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    FROM            ME_Marcas RIGHT OUTER JOIN
+                             ME_Productos ON ME_Marcas.CODSUCURSAL = ME_Productos.CODSUCURSAL AND ME_Marcas.CODMARCA = ME_Productos.CODMARCA RIGHT OUTER JOIN
+                             ME_Documentos LEFT OUTER JOIN
+                             ME_Docproductos ON ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.DOC_MES = ME_Docproductos.DOC_MES AND ME_Documentos.DOC_ANO = ME_Docproductos.DOC_ANO AND 
+                             ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT AND ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO ON 
+                             ME_Productos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Productos.CODPROD = ME_Docproductos.CODPROD LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
                 WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.DOC_ANO = ${anio}) AND 
                              (ME_Documentos.CODSUCURSAL = '${sucursal}')
                 GROUP BY ME_Marcas.DESMARCA`;
@@ -564,7 +523,7 @@ router.post('/rptrankingvendedores', async(req,res)=>{
     const {anio,mes} = req.body;
     let qry = `SELECT ME_Vendedores.NOMVEN, ME_Sucursales.NOMBRE AS SUCURSAL, SUM(ME_Documentos.DOC_TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
                 FROM ME_Documentos LEFT OUTER JOIN
-                ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.EMP_NIT = ME_Vendedores.EMP_NIT AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL LEFT OUTER JOIN
+                ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL LEFT OUTER JOIN
                 ME_Sucursales ON ME_Vendedores.CODSUCURSAL = ME_Sucursales.CODSUCURSAL
                 WHERE (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.DOC_MES = ${mes})
                 GROUP BY ME_Vendedores.NOMVEN, ME_Sucursales.NOMBRE
@@ -582,9 +541,9 @@ router.post('/rptrankingvendedores', async(req,res)=>{
 // ranking de vendedores por sucursal y fecha
 router.post('/rptrankingvendedoressucursal', async(req,res)=>{
     const {fecha,sucursal} = req.body;
-    let qry = `SELECT ME_Vendedores.NOMVEN, COUNT(ME_Documentos.CODDOC) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
-                FROM  ME_Documentos LEFT OUTER JOIN
-                ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.EMP_NIT = ME_Vendedores.EMP_NIT AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL
+    let qry = `SELECT       ME_Vendedores.NOMVEN, COUNT(ME_Documentos.CODDOC) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
+    FROM            ME_Documentos LEFT OUTER JOIN
+                             ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL
                 WHERE (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.DOC_FECHA = '${fecha}')
                 GROUP BY ME_Vendedores.NOMVEN
                 ORDER BY TOTALPRECIO DESC`;
@@ -595,9 +554,9 @@ router.post('/rptrankingvendedoressucursal', async(req,res)=>{
 // ranking de vendedores por sucursal y fecha
 router.post('/rptrankingvendedoressucursalmes', async(req,res)=>{
     const {anio,mes,sucursal} = req.body;
-    let qry = `SELECT ME_Vendedores.NOMVEN, COUNT(ME_Documentos.CODDOC) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
-                FROM  ME_Documentos LEFT OUTER JOIN
-                ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.EMP_NIT = ME_Vendedores.EMP_NIT AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL
+    let qry = `SELECT       ME_Vendedores.NOMVEN, COUNT(ME_Documentos.CODDOC) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
+    FROM            ME_Documentos LEFT OUTER JOIN
+                             ME_Vendedores ON ME_Documentos.CODVEN = ME_Vendedores.CODVEN AND ME_Documentos.CODSUCURSAL = ME_Vendedores.CODSUCURSAL
                 WHERE (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.DOC_MES = ${mes})
                 GROUP BY ME_Vendedores.NOMVEN
                 ORDER BY TOTALPRECIO DESC`;
@@ -610,14 +569,15 @@ router.post('/reportemarcasfecha',async(req,res)=>{
 
     const {sucursal,fecha} = req.body;
 
-    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
-                FROM  ME_Productos LEFT OUTER JOIN
-                             ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT RIGHT OUTER JOIN
-                             ME_Docproductos ON ME_Productos.CODPROD = ME_Docproductos.CODPROD AND ME_Productos.EMP_NIT = ME_Docproductos.EMP_NIT RIGHT OUTER JOIN
-                             ME_Documentos ON ME_Docproductos.DOC_MES = ME_Documentos.DOC_MES AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT AND 
-                             ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO LEFT OUTER JOIN
-                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
-                             ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+    let qry = `SELECT       ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    FROM            ME_Documentos LEFT OUTER JOIN
+                             ME_Docproductos LEFT OUTER JOIN
+                             ME_Productos LEFT OUTER JOIN
+                             ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA ON ME_Docproductos.CODSUCURSAL = ME_Productos.CODSUCURSAL AND 
+                             ME_Docproductos.CODPROD = ME_Productos.CODPROD ON ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.DOC_MES = ME_Docproductos.DOC_MES AND 
+                             ME_Documentos.DOC_ANO = ME_Docproductos.DOC_ANO AND ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT AND ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND 
+                             ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
                 WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.DOC_FECHA = '${fecha}')
                 GROUP BY ME_Marcas.DESMARCA`;
 
@@ -633,15 +593,15 @@ router.post('/reportemarcasmes',async(req,res)=>{
 
     const {anio,mes,sucursal} = req.body;
 
-    let qry = `SELECT ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO,SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
-                FROM ME_Documentos LEFT OUTER JOIN
-                             ME_Docproductos ON ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.DOC_MES = ME_Docproductos.DOC_MES AND ME_Documentos.DOC_ANO = ME_Docproductos.DOC_ANO AND 
-                             ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT AND ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO LEFT OUTER JOIN
+    let qry = `SELECT       ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    FROM            ME_Documentos LEFT OUTER JOIN
+                             ME_Docproductos LEFT OUTER JOIN
                              ME_Productos LEFT OUTER JOIN
-                             ME_Marcas ON ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT ON ME_Docproductos.CODPROD = ME_Productos.CODPROD AND 
-                             ME_Docproductos.EMP_NIT = ME_Productos.EMP_NIT LEFT OUTER JOIN
-                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
-                             ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+                             ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA ON ME_Docproductos.CODSUCURSAL = ME_Productos.CODSUCURSAL AND 
+                             ME_Docproductos.CODPROD = ME_Productos.CODPROD ON ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.DOC_MES = ME_Docproductos.DOC_MES AND 
+                             ME_Documentos.DOC_ANO = ME_Docproductos.DOC_ANO AND ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT AND ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND 
+                             ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO LEFT OUTER JOIN
+                             ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
                 WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_ESTATUS <> 'A') AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.DOC_ANO = ${anio}) AND 
                              (ME_Documentos.CODSUCURSAL = '${sucursal}')
                 GROUP BY ME_Marcas.DESMARCA`;
