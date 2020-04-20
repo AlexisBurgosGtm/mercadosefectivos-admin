@@ -43,7 +43,8 @@ function getView(){
                     </div>
                     <div class="form-group">
                         <label>Documento:</label>
-                        <input type="text" maxlength="5" class="form-control col-6" id="txtUsuarioCoddoc" autocomplete="false">
+                        <select class="form-control col-6" id="txtUsuarioCoddoc"></select>
+                        
                     </div>
                     <div class="form-group">
                         <label>Teléfono:</label>
@@ -81,7 +82,7 @@ function getView(){
             `
         }
     };
-
+//<input type="text" maxlength="5" class="form-control col-6" id="txtUsuarioCoddoc" autocomplete="false">
     root.innerHTML = view.listado() +  view.btnNuevo();
     rootMenuLateral.innerHTML = view.formUsuario();
 
@@ -116,6 +117,10 @@ function addListeners(tipo){
         newUser();
     });
 
+    classTipoDocumentos.comboboxTipodoc('PED','txtUsuarioCoddoc')
+    .then(()=>{
+        console.log('tipo docs cargados...')
+    })
 
 
 };

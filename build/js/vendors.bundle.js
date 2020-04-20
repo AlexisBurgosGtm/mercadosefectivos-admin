@@ -17708,6 +17708,8 @@ function applyStyle(data) {
  */
 function applyStyleOnLoad(reference, popper, options, modifierOptions, state) {
   // compute reference element offsets
+  
+
   var referenceOffsets = getReferenceOffsets(state, popper, reference, options.positionFixed);
 
   // compute auto placement, store placement inside the data object,

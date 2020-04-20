@@ -41,8 +41,17 @@ let GlobalSelectedCodCliente;
 let GlobalSelectedNomCliente;
 let GlobalSelectedDirCliente;
 
-let GlobalSelectedCodprod;
-let GlobalSelectedDesprod;
+// global vars para cantidad producto
+let GlobalSelectedCodprod = '';
+let GlobalSelectedDesprod = '';
+let GlobalSelectedCodmedida = '';
+let GlobalSelectedEquivale = 0;
+let GlobalSelectedCantidad = 0;
+let GlobalSelectedExento = 0;
+let GlobalSelectedCosto = 0;
+let GlobalSelectedPrecio = 0;
+// global vars para cantidad producto
+
 let GlobalSelectedStatus=0;
 let GlobalSelectedCoddoc = '';
 let GlobalSelectedCorrelativo = '';

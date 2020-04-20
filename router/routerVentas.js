@@ -134,6 +134,7 @@ router.put("/tempVentasRow", async(req,res)=>{
 
 // inserta un nuevo registro en temp ventas   
 router.post("/tempVentas", async(req,res)=>{
+        
     let empnit = req.body.empnit;
     let usuario = req.body.usuario;
     let token = req.body.token;
@@ -162,7 +163,7 @@ router.post("/tempVentas", async(req,res)=>{
             (EMPNIT,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,EXENTO,USUARIO,TIPOPRECIO,CODSUCURSAL) 
     VALUES ('${empnit}','${codprod}','${desprod}','${codmedida}',${cantidad},${equivale},${totalunidades},${costo},${precio},${totalcosto},${totalprecio},${exento},'${usuario}','${tipoprecio}','${app}')`        
      
-    
+        
    execute.Query(res,qry);
 
 });

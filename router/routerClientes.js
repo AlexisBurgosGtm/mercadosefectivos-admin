@@ -9,7 +9,7 @@ router.post("/listavendedor", async(req,res)=>{
 
     let qry = '';
     qry = `SELECT ME_Clientes.NITCLIE AS CODIGO, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Municipios.DESMUNI, ME_Clientes.TELCLIE AS TELEFONO, ISNULL(ME_Clientes.LATITUD, 0) AS LAT, 
-    ISNULL(ME_Clientes.LONGITUD, 0) AS LONG, ME_Clientes.FECHAINGRESO AS LASTSALE, ME_Clientes.FAXCLIE AS STVISITA
+    ISNULL(ME_Clientes.LONGITUD, 0) AS LONG, ISNULL(ME_Clientes.FECHAINGRESO,'2020-04-15') AS LASTSALE, ME_Clientes.FAXCLIE AS STVISITA
             FROM ME_Clientes LEFT OUTER JOIN
     ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
             WHERE (ME_Clientes.CODSUCURSAL = '${sucursal}') 

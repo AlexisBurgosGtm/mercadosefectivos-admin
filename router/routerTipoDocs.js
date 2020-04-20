@@ -14,6 +14,17 @@ router.get("/tipo", async(req,res)=>{
 
 });
 
+router.get("/tipopedido", async(req,res)=>{
+    const {app,empnit,tipo} = req.query;
+        
+    let qry ='';
+
+    qry = `SELECT CODDOC,CORRELATIVO FROM ME_TIPODOCUMENTOS WHERE CODSUCURSAL='${app}' AND TIPODOC='PED'`     
+  
+    execute.Query(res,qry);
+
+});
+
 // VENTAS BUSCAR PRODUCTO POR DESCRIPCION
 router.get("/correlativodoc", async(req,res)=>{
     const {app,empnit,tipo,coddoc} = req.query;
