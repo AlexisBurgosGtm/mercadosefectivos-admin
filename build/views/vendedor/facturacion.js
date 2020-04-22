@@ -3,7 +3,7 @@ function getView(){
     let view = {
         encabezadoClienteDocumento :()=>{
             return `
-        <div class="row hidden-md-down">
+        <div class="row">
             
             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div id="panel-2" class="panel col-12">
@@ -20,8 +20,8 @@ function getView(){
                             <div class="">
                                 <div class="input-group">
                                     <input id="txtNit" type="text" ref="txtNit" class="form-control" placeholder="Código del cliente.." aria-label="" aria-describedby="button-addon4" />
-                                    <div class="hidden input-group-prepend">
-                                        <button class="btn btn-info waves-effect waves-themed" type="button" id="btnBusquedaClientes">
+                                    <div class="input-group-prepend">
+                                        <button class="hidden btn btn-info waves-effect waves-themed" type="button" id="btnBusquedaClientes">
                                             <i class="fal fa-search"></i>
                                         </button>
                                         <div class="card"></div>
@@ -39,7 +39,7 @@ function getView(){
                 </div>
             </div>
             
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="hidden-md-down col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div id="panel-3" class="panel col-12">
                     <div class="panel-hdr">
                         <h2>Datos del Documento</h2>
@@ -53,8 +53,8 @@ function getView(){
                         <div class="panel-content">
                             <div class="row">
                                 <div class="col-6">
-                                    <select class="form-control input-sm" id="cmbCoddoc">
-                                    </select>
+                                    <input type="text" class="form-control input-sm" id="cmbCoddoc">
+                                    
                                 </div>
                                 <div class="col-6">
                                     <input type="text" class="form-control" value="0" id="txtCorrelativo" readonly="true">
@@ -66,7 +66,7 @@ function getView(){
                                 </div>
                                 <div class="col-6">
                                     Vendedor:
-                                    <select class="form-control" id="cmbVendedor"></select>
+                                    <input type="text" class="form-control" id="cmbVendedor">
                                 </div>
                             </div>
                             
@@ -77,6 +77,8 @@ function getView(){
 
         </div>
             `
+            //<select class="form-control input-sm" id="cmbCoddoc"></select>
+            //<select class="form-control" id="cmbVendedor"></select>
         },
         cajabusquedaproducto :()=>{
             return `
@@ -741,7 +743,9 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     });
 
     let cmbCoddoc = document.getElementById('cmbCoddoc');
-    classTipoDocumentos.comboboxTipodoc('PED','cmbCoddoc');
+    //classTipoDocumentos.comboboxTipodoc('PED','cmbCoddoc');
+    cmbCoddoc.value = GlobalCoddoc;
+
     cmbCoddoc.addEventListener('change',async ()=>{
        await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
     });
@@ -813,7 +817,7 @@ async function iniciarVistaVentas(nit,nombre,direccion){
 
     // carga el grid
    
-    
+    /*
     classTipoDocumentos.comboboxTipodoc('PED','cmbCoddoc')
         .then(async()=>{
             cmbCoddoc.value = GlobalCoddoc;
@@ -823,13 +827,18 @@ async function iniciarVistaVentas(nit,nombre,direccion){
             await fcnCargarGridTempVentas('tblGridTempVentas');
             await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
         })
-    
-    await fcnGetMunicipios('cmbClienteMunicipio');
-    await fcnGetDepartamentos('cmbClienteDepartamento');
-    await classEmpleados.comboboxVendedores('cmbVendedor')
-            .then(()=>{
+     */
+    await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
+    await fcnCargarGridTempVentas('tblGridTempVentas');
+    await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+
+    //para crear clientes nuevos
+    //await fcnGetMunicipios('cmbClienteMunicipio');
+    //await fcnGetDepartamentos('cmbClienteDepartamento');
+    //await classEmpleados.comboboxVendedores('cmbVendedor')
+         //   .then(()=>{
                 cmbVendedor.value = GlobalCodUsuario;
-            })
+           // })
 
     fcnCargarComboTipoPrecio();
 

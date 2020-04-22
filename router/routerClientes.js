@@ -84,10 +84,9 @@ router.get("/buscarcliente", async(req,res)=>{
             FROM ME_Clientes LEFT OUTER JOIN
             ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI LEFT OUTER JOIN
             ME_Departamentos ON ME_Clientes.CODSUCURSAL = ME_Departamentos.CODSUCURSAL AND ME_Clientes.CODDEPTO = ME_Departamentos.CODDEPTO
-        WHERE (ME_Clientes.EMP_NIT = '${empnit}') 
-        AND (ME_Clientes.CODSUCURSAL = '${app}') 
+        WHERE (ME_Clientes.CODSUCURSAL = '${app}') 
         AND (ME_Clientes.NOMCLIE LIKE '%${filtro}%')
-        AND (ME_Clientes.CODCLIE=0)`     
+        `     
     
     execute.Query(res,qry);
 
