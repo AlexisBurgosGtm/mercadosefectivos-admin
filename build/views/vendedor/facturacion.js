@@ -1,4 +1,3 @@
-
 function getView(){
     let view = {
         encabezadoClienteDocumento :()=>{
@@ -21,7 +20,7 @@ function getView(){
                                 <div class="input-group">
                                     <input id="txtNit" type="text" ref="txtNit" class="form-control" placeholder="Código del cliente.." aria-label="" aria-describedby="button-addon4" />
                                     <div class="input-group-prepend">
-                                        <button class="hidden btn btn-info waves-effect waves-themed" type="button" id="btnBusquedaClientes">
+                                        <button class="btn btn-info waves-effect waves-themed" type="button" id="btnBusquedaClientes">
                                             <i class="fal fa-search"></i>
                                         </button>
                                         <div class="card"></div>
@@ -226,13 +225,10 @@ function getView(){
                                         </button>
                                     </div>
                             </div>
-                        <table class="table table-responsive table-striped table-hover">
+                        <table class="table table-responsive table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
                                     <td>Nombre</td>
-                                    <td>Dirección</td>
-                                    <td>Municipio</td>
-                                    <td>Saldo</td>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -661,7 +657,8 @@ function getView(){
             `
         }
     }
-//+ view.cajabusquedaproducto()  antes de gridtempventas
+
+    //+ view.cajabusquedaproducto()  antes de gridtempventas
     root.innerHTML = view.encabezadoClienteDocumento() 
                 + view.gridTempVenta() 
                 + view.btnCobrar() 
@@ -672,7 +669,7 @@ function getView(){
                 + view.modalTerminar() 
                 + view.modalCantidadCalculadora();
 
-}
+};
 
 async function iniciarVistaVentas(nit,nombre,direccion){
     //inicializa la vista
@@ -869,7 +866,7 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     
 
     fcnIniciarModalCantidadProductos();
-}
+};
 
 function fcnIniciarModalCantidadProductos(){
 
@@ -914,7 +911,7 @@ function fcnIniciarModalCantidadProductos(){
         
     })
 
-}
+};
 
 function iniciarModalCantidad(){
     let total = document.getElementById('lbCalcTotal');
@@ -954,7 +951,7 @@ function iniciarModalCantidad(){
         total.innerText = "";
     })
 
-}
+};
 
 async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
     
@@ -999,7 +996,7 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
         console.log(error);
     });
 
-}
+};
 
 //gestiona la apertura de la cantidad
 function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
@@ -1025,7 +1022,7 @@ function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,total
     $("#ModalCantidadProducto").modal('show');
 
 
-}
+};
 
 // agrega el producto a temp_ventas
 async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
@@ -1095,8 +1092,35 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
 
 };
 
-
 async function fcnBuscarCliente(idNit,idNombre,idDireccion){
+    
+    let nit = document.getElementById(idNit);
+    let nombre = document.getElementById(idNombre);
+    let direccion = document.getElementById(idDireccion);
+
+    axios.get('/ventas/buscarcliente?empnit=' + GlobalEmpnit + '&nit=' + nit.value  + '&app=' + GlobalSistema)
+    .then((response) => {
+        const data = response.data;
+        if (data.rowsAffected[0]==0){
+            funciones.AvisoError('No existe un cliente con este código')
+            nit.value = '';
+            nombre.value = '';
+            direccion.value = '';
+        }else{
+            data.recordset.map((rows)=>{
+                GlobalSelectedCodCliente= nit.value;
+                nombre.value = rows.NOMCLIENTE;
+                direccion.value = rows.DIRCLIENTE;
+            });
+        }
+        
+                
+    }, (error) => {
+        console.log(error);
+    });
+};
+
+async function fcnBuscarClienteOLD(idNit,idNombre,idDireccion){
     
     let nit = document.getElementById(idNit);
     let nombre = document.getElementById(idNombre);
@@ -1146,7 +1170,8 @@ async function fcnBuscarCliente(idNit,idNombre,idDireccion){
     }, (error) => {
         console.log(error);
     });
-}
+};
+
 async function fcnBusquedaCliente(idFiltro,idTablaResultado){
     
     let filtro = document.getElementById(idFiltro).value;
@@ -1163,15 +1188,11 @@ async function fcnBusquedaCliente(idFiltro,idTablaResultado){
                         <td>
                             ${rows.NOMCLIE}
                             <br>
-                            <small>Código: ${rows.CODCLIE} / Nit: ${rows.NIT}</small>
-                        </td>
-                        <td>${rows.DIRCLIE}</td>
-                        <td>
-                            ${rows.DESMUNICIPIO}
+                            <small class="bg-warning">Código: ${rows.CODCLIE} / Nit: ${rows.NIT}</small>
                             <br>
-                            <small>${rows.DESDEPTO}</small>
+                            <small>${rows.DIRCLIE},${rows.DESMUNICIPIO}</small>
                         </td>
-                        <td>${funciones.setMoneda(rows.SALDO,'Q')}</td>
+                        
                         <td>
                             <button class="btn btn-sm btn-success btn-circle text-white" 
                             onclick="fcnAgregarClienteVenta('${rows.CODCLIE}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}')">
@@ -1186,14 +1207,17 @@ async function fcnBusquedaCliente(idFiltro,idTablaResultado){
         console.log(error);
     });
 
-}
+};
+
 async function fcnAgregarClienteVenta(codigo,nit,nombre,direccion){
+    GlobalSelectedCodCliente = codigo;
     document.getElementById('tblResultadoBusquedaCliente').innerHTML = '';
-    document.getElementById('txtNit').value = nit;
+    document.getElementById('txtNit').value = codigo; //nit;
     document.getElementById('txtNombre').value = nombre;
     document.getElementById('txtDireccion').value = direccion;
     $('#ModalBusquedaCliente').modal('hide');  
-}
+};
+
 async function fcnGuardarNuevoCliente(form){
     
     let nit = form[0].value;
@@ -1254,7 +1278,8 @@ async function fcnGuardarNuevoCliente(form){
     });
 
 
-}
+};
+
 async function fcnEliminarItem(id){
     
     try {        
@@ -1291,7 +1316,8 @@ async function fcnEliminarItem(id){
         } catch (error) {
 
         }
-}
+};
+
 async function fcnCargarGridTempVentas(idContenedor){
     let tabla = document.getElementById(idContenedor);
 
@@ -1340,7 +1366,8 @@ async function fcnCargarGridTempVentas(idContenedor){
         console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
         tabla.innerHTML = 'No se logró cargar la lista...';
     }
-}
+};
+
 // CARGA DE PRODUCTOS TEMP ANTERIOR
 async function fcnCargarGridTempVentas_OLD(idContenedor){
     let tabla = document.getElementById(idContenedor);
@@ -1384,14 +1411,15 @@ async function fcnCargarGridTempVentas_OLD(idContenedor){
         console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
         tabla.innerHTML = 'No se logró cargar la lista...';
     }
-}
+};
 
 async function fcnCambiarCantidad(id){
     
     GlobalSelectedId = id;
     $('#ModalCantidad').modal('show');
     
-}
+};
+
 async function fcnCargarTotal(idContenedor,idContenedor2){
     let container = document.getElementById(idContenedor);
     let container2 = document.getElementById(idContenedor2);
@@ -1427,7 +1455,7 @@ async function fcnCargarTotal(idContenedor,idContenedor2){
     }else{
         socket.emit('ordenes escribiendo', 'Se está generando una nueva orden',GlobalSelectedForm)
     }
-}
+};
 
 async function fcnFinalizarPedido(){
     
@@ -1523,7 +1551,7 @@ async function fcnFinalizarPedido(){
             
         }
     })
-}
+};
 
 async function fcnEliminarTempVentas(usuario){
     let coddoc = document.getElementById('cmbCoddoc').value;
@@ -1543,12 +1571,14 @@ async function fcnEliminarTempVentas(usuario){
     }, (error) => {
         console.log(error);
     });
-}
+};
+
 async function fcnNuevoPedido(){
     
     classNavegar.inicio(GlobalTipoUsuario);
     
-}
+};
+
 async function fcnUpdateTempRow(id,cantidad){
     
     let costo = 0; let precio = 0; let equivale = 0; let exento = 0;
@@ -1605,7 +1635,8 @@ async function fcnUpdateTempRow(id,cantidad){
             reject();
         });
     
-}
+};
+
 async function fcnGetMunicipios(idContainer){
     let container = document.getElementById(idContainer);
     container.innerHTML = GlobalLoader;
@@ -1623,7 +1654,8 @@ async function fcnGetMunicipios(idContainer){
         console.log(error);
         container.innerHTML = '';
     });
-}
+};
+
 async function fcnGetDepartamentos(idContainer){
     let container = document.getElementById(idContainer);
     container.innerHTML = GlobalLoader;
@@ -1641,7 +1673,8 @@ async function fcnGetDepartamentos(idContainer){
         console.log(error);
         container.innerHTML = '';
     });
-}
+};
+
 async function fcnCargarComboTipoPrecio(){
    let cmbp = document.getElementById('cmbClienteTipoPrecio');
    if(GlobalSistema=='ISC'){
@@ -1654,4 +1687,4 @@ async function fcnCargarComboTipoPrecio(){
                      <option value="A">MAYORISTA A</option>`;
    }
    
-}
+};
