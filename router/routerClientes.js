@@ -22,6 +22,28 @@ router.post("/listavendedor", async(req,res)=>{
 
 })
 
+router.post("/listaajenosvendedor", async(req,res)=>{
+
+    const {app,sucursal,filtro}  = req.body;
+
+    let qry = '';
+    qry = `SELECT ME_Clientes.NITCLIE AS CODIGO, ME_Clientes.NITFACTURA AS NIT, ME_Clientes.NOMCLIE, ME_Clientes.DIRCLIE, ME_Municipios.DESMUNI, ME_Clientes.TELCLIE AS TELEFONO, ISNULL(ME_Clientes.LATITUD, 0) AS LAT, 
+    ISNULL(ME_Clientes.LONGITUD, 0) AS LONG, ISNULL(ME_Clientes.FECHAINGRESO,'2020-04-15') AS LASTSALE, ME_Clientes.FAXCLIE AS STVISITA
+            FROM ME_Clientes LEFT OUTER JOIN
+    ME_Municipios ON ME_Clientes.CODSUCURSAL = ME_Municipios.CODSUCURSAL AND ME_Clientes.CODMUNI = ME_Municipios.CODMUNI
+            WHERE (ME_Clientes.CODSUCURSAL = '${sucursal}') 
+            AND (ME_Clientes.NOMCLIE LIKE '%${filtro}%') 
+            AND (ME_Clientes.CODCLIE=0) 
+            OR
+            (ME_Clientes.CODSUCURSAL = '${sucursal}') 
+            AND (ME_Clientes.NITCLIE= '${filtro}') 
+            AND (ME_Clientes.CODCLIE=0)
+            ORDER BY ME_Clientes.FECHAINGRESO,ME_Clientes.NOMCLIE`
+    
+    execute.Query(res,qry);
+
+})
+
 //LISTADO DE CLIENTES POR SUCURSAL
 router.post('/clientesvendedor',async(req,res)=>{
 

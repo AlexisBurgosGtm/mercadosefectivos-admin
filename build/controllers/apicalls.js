@@ -180,6 +180,52 @@ let api = {
         
         
     },
+    clientesAjenosVendedor: async(sucursal,filtro,idContenedor)=>{
+    
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+                
+        let strdata = ''; 
+
+        axios.post('/clientes/listaajenosvendedor', {
+            app:GlobalSistema,
+            sucursal: sucursal,
+            filtro: filtro
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            
+            data.map((rows)=>{                    
+                        strdata = strdata + `<tr class=''>
+                        <td>${rows.NOMCLIE}
+                            <br>
+                            <small>Cod: ${rows.CODIGO}</small>
+                        </td>
+                        <td>${rows.DIRCLIE}
+                            <br>
+                            <small>${rows.DESMUNI}</small>
+                        </td>
+                        <td>
+                            <button class="btn btn-info btn-sm btn-circle" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
+                                +
+                            </button>
+                        </td>
+                    </tr>`    
+                    
+                    
+                    
+            })
+            container.innerHTML = strdata;
+            
+
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = 'No se pudo cargar la lista';
+        });
+        
+        
+    },
     pedidosVendedor: async(sucursal,codven,fecha,idContenedor,idLbTotal)=>{
 
         let container = document.getElementById(idContenedor);

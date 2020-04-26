@@ -10,7 +10,17 @@ function getView(){
                             <div class="row">
 
                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                    <select class="form-control" id="cmbDiaVisita"></select>
+                                        
+                                        <div class="input-group">               
+                                            <select class="form-control" id="cmbDiaVisita"></select>
+                                            <div class="input-group-append">
+                                                <select class="form-control" id="cmbTipoLista">
+                                                    <option value="CLIENTES">Clientes</option>
+                                                    <option value="MAPA">Mapa</option>
+                                                </select>            
+                                            </div>
+                                        </div>                            
+                                    
                                 </div>
                                 <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 text-right">
                                     <br>
@@ -21,14 +31,7 @@ function getView(){
                                 <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 text-right">
                                     <br>
                                 </div>                                        
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                    
-                                    <select class="form-control" id="cmbTipoLista">
-                                        <option value="CLIENTES">Clientes</option>
-                                        <option value="MAPA">Mapa</option>
-                                    </select>
-                                </div>
-
+                                
                             </div> 
                         </div>
 
@@ -69,6 +72,7 @@ function getView(){
                     <ul class="nav nav-pills nav-justified" role="tablist">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#panelNoVisitados">No visitados</a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#panelVisitados">Visitados</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
                     </ul>
                     <div class="tab-content py-3">
 
@@ -109,6 +113,37 @@ function getView(){
                                 </table>
                             </div>
 
+                        </div>
+
+                        <div class="tab-pane fade" id="panelAjenos" role="tabpanel">
+                            
+                            <div class="form-group">
+                                <div class="input-group">               
+                                    <input type="text" class="form-control" id="txtClientesAjenosBuscar" placeholder="Escriba para buscar cliente...">    
+                                    <div class="input-group-append">
+                                        <button class="btn btn-md btn-icon btn-round btn-info" id="btnClientesAjenosBuscar">
+                                            <i class="fal fa-search"></i>
+                                        </button>    
+                                    </div>
+                                </div>                            
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-responsive table-striped table-hover table-bordered" id="">
+                                    <thead class="bg-trans-gradient text-white">
+                                        <tr>
+                                            <td>Nombre/Código</td>
+                                            <td>Dirección</td>
+                                            <td>
+                                                <i class="fal fa-cog"></i>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblClientesAjenos">
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                     </div>
@@ -310,6 +345,11 @@ async function addListeners(){
 
     await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
 
+    let btnClientesAjenosBuscar = document.getElementById('btnClientesAjenosBuscar');
+    btnClientesAjenosBuscar.addEventListener('click', async ()=>{
+        let txtClientesAjenosBuscar = document.getElementById('txtClientesAjenosBuscar');
+        await api.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar.value,'tblClientesAjenos')
+    })
 };
 
 function inicializarVista(){
