@@ -4,7 +4,7 @@ function getView(){
             return `
         <div class="row">
             
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="hidden-md-down col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div id="panel-2" class="panel col-12">
                     <div class="panel-hdr">
                         <h2>Datos del Cliente</h2>
@@ -185,10 +185,8 @@ function getView(){
                             <thead>
                                 <tr>
                                     <td>Producto</td>
-                                    <td>Medida</td>
                                     <td>Precio</td>                         
                                     <td></td>
-                                    <td>Marca</td>
                                 </tr>
                             </thead>
                             <tbody id="tblResultadoBusqueda">
@@ -954,6 +952,56 @@ function iniciarModalCantidad(){
 };
 
 async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
+    
+    let cmbTipoPrecio = document.getElementById(idTipoPrecio);
+
+    let filtro = document.getElementById(idFiltro).value;
+    let tabla = document.getElementById(idTablaResultado);
+    tabla.innerHTML = GlobalLoader;
+
+
+    let str = ""; 
+    axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
+    
+    .then((response) => {
+        const data = response.data;        
+        data.recordset.map((rows)=>{
+            let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
+            if(Number(rows.EXISTENCIA<=0)){strC='bg-danger text-white'}else{strC='bg-success text-white'};
+            let totalexento = 0;
+            if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
+            str += `<tr id="${rows.CODPROD}">
+            <td>
+                ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
+                <br>
+                <small class="text-danger"><b>${rows.CODPROD}</b></small>
+                <br>
+                <b class"bg-danger text-white">${rows.CODMEDIDA}</b>
+                <small>(${rows.EQUIVALE})</small>
+            </td>
+            <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}
+                <br>
+                <small class="${strC}">E:${funciones.setMoneda(exist,'')}</small>
+            </td>
+            
+            <td>
+                <button class="btn btn-sm btn-success btn-circle text-white" 
+                onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento});">
+                    +
+                </button>
+            <td>
+            
+        </tr>`
+        })
+        tabla.innerHTML= str;
+        
+    }, (error) => {
+        console.log(error);
+    });
+
+};
+
+async function fcnBusquedaProducto2(idFiltro,idTablaResultado,idTipoPrecio){
     
     let cmbTipoPrecio = document.getElementById(idTipoPrecio);
 
