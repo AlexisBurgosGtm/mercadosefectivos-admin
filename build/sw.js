@@ -1,11 +1,38 @@
 
-var CACHE = 'mercadosefectivosv2';
-const staticAssets = [
-  './',
+var CACHE = 'mercadosefectivosv5';
+const staticAssets = [  
+  './css/vendors.bundle.css',
+  './css/app.bundle.css',
+  './css/.../styles.css',
+  '././css/btn.css',
+  './libs/leaflet/leaflet.css',
+  './libs/noty/noty.min.css',
   './manifest.json',
+  './js/vendors.bundle.js',
+  './js/app.bundle.js',
+  './js/../script.js',
+  './libs/noty/noty.min.js',
+  './libs/chartjs.min.js',
+  './libs/socket.io.js',
+  './libs/sweetalert.min.js',
+  './libs/axios.min.js',
+  './libs/leaflet/leaflet.js',
+  './libs/JsStore.min.js',
+  './libs/funciones.js',
+  './controllers/classNavegar.js',
+  './controllers/GlobalVars.js',
+  './controllers/classDb.js',
+  './models/classEmpleados.js',
+  './models/classTipoDocumentos.js',
+  './controllers/apicalls.js',
+  './index.js',
+  './controllers/socketHandler.js',
   './favicon.png',
   './index.html',
    './sw.js',
+   './views/vendedor/facturacion.js',
+   './views/vendedor/vendedor.js',
+   './views/login/index.js'
 ];
 
 self.addEventListener('install', function(evt) {
@@ -18,6 +45,35 @@ self.addEventListener('install', function(evt) {
 });
 
 self.addEventListener('fetch', async event => {
+  /**
+  event.respondWith(
+    caches.open(CACHE).then(function(cache) {
+      return cache.match(event.request).then(function (response) {
+        return response || fetch(event.request).then(function(response) {
+          cache.put(event.request, response.clone());
+          return response;
+        });
+      });
+    })
+  );
+   */
+  
+//carga caché y lo actualiza.. hay que evitar las solicitudes del socket.io
+/*
+  event.respondWith(
+    caches.open(CACHE).then(function(cache) {
+      return cache.match(event.request).then(function(response) {
+        
+        var fetchPromise = fetch(event.request).then(function(networkResponse) {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        })
+        return response || fetchPromise;
+      })
+    })
+  );
+*/
+  
   /* 
   event.respondWith(
     caches.open(cacheName)

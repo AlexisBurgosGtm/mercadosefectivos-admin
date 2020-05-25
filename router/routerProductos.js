@@ -92,7 +92,7 @@ router.post('/listado', async(req,res)=>{
 
     let qry = `SELECT ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Productos.EQUIVALEINV, isnull(ME_Productos.PRECIOMONEDA,0) AS COSTO, ME_Productos.NOHABILITADO, ME_Marcas.DESMARCA, ME_Productos.LASTUPDATE
                 FROM ME_Productos LEFT OUTER JOIN ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA AND ME_Productos.EMP_NIT = ME_Marcas.EMP_NIT
-                WHERE (ME_Productos.DESPROD LIKE '%${filtro}%')`;
+                WHERE (ME_Productos.DESPROD LIKE '%${filtro}%') AND (ME_PRODUCTOS.CODSUCURSAL='GENERAL')`;
 
 
     
@@ -106,7 +106,7 @@ router.put('/detalles',async(req,res)=>{
     let qry = `
     UPDATE ME_PRODUCTOS SET 
     DESPROD='${desprod}', EQUIVALEINV=${uxc},CODCLAUNO='${codclaseuno}',CODCLADOS='${codclasedos}',CODCLATRES='${codclasetres}',CODMARCA='${codmarca}',LASTUPDATE='${lastupdate}' 
-    WHERE CODPROD='${codprod}'`;
+    WHERE CODPROD='${codprod}' AND (ME_PRODUCTOS.CODSUCURSAL='GENERAL')`;
 
     execute.Query(res,qry);
     
@@ -118,7 +118,7 @@ router.post('/detalles',async(req,res)=>{
     
     let qry = `
     SELECT DESPROD, EQUIVALEINV,CODMARCA,CODCLAUNO,CODCLADOS,CODCLATRES FROM ME_PRODUCTOS
-    WHERE CODPROD='${codprod}'`;
+    WHERE CODPROD='${codprod}' AND CODSUCURSAL='GENERAL'`;
 
     execute.Query(res,qry);
     
@@ -134,7 +134,7 @@ router.put('/status',async(req,res)=>{
         st=0;
     }
 
-    let qry = `UPDATE ME_PRODUCTOS SET NOHABILITADO=${st} WHERE CODPROD='${codprod}'`;
+    let qry = `UPDATE ME_PRODUCTOS SET NOHABILITADO=${st} WHERE CODPROD='${codprod}' AND CODSUCURSAL='GENERAL'`;
     execute.Query(res,qry);
     
 }); 

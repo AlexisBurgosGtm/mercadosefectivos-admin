@@ -362,6 +362,22 @@ router.post("/documentos", async (req,res)=>{
 // REPORTES DE VENDEDORES
 //******************************* */
 
+router.post('/historialcliente',async (req,res)=>{
+    const {sucursal,codcliente} = req.body;
+    let qry = `
+    SELECT ME_Documentos.CODDOC, ME_Documentos.DOC_NUMERO AS CORRELATIVO, ME_Documentos.DOC_FECHA AS FECHA, ME_Documentos.NITCLIE, ME_Docproductos.CODPROD, ME_Docproductos.DESCRIPCION AS DESPROD,
+                          ME_Docproductos.CODMEDIDA, ME_Docproductos.CANTIDAD, ME_Docproductos.PRECIO, ME_Docproductos.TOTALPRECIO
+    FROM ME_Documentos LEFT OUTER JOIN
+                         ME_Docproductos ON ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO AND ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND 
+                         ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT LEFT OUTER JOIN
+                         ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND 
+                         ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
+    WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.NITCLIE = '${codcliente}') ORDER BY ME_Documentos.DOC_FECHA DESC
+    `;
+
+    execute.Query(res,qry);
+})
+
 // UNA FECHA (DIA)
 // LISTA DE PEDIDOS POR UNA FECHA
 router.post("/listapedidos", async(req,res)=>{

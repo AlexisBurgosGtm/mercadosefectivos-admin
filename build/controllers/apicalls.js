@@ -144,7 +144,12 @@ let api = {
                         </td>
                         <td>
                             <button class="btn btn-info btn-sm btn-circle" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
-                                +
+                                <i class="fal fa-shopping-cart"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm btn-circle" onclick="getHistorialCliente('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}');">
+                                <i class="fal fa-book"></i>
                             </button>
                         </td>
                     </tr>`    
@@ -160,9 +165,16 @@ let api = {
                                 </td>
                                 <td>
                                     <button class="btn btn-info btn-sm btn-circle" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
-                                        +
+                                        <i class="fal fa-shopping-cart"></i>
                                     </button>
                                 </td>
+                                
+                                <td>
+                                    <button class="btn btn-warning btn-sm btn-circle" onclick="getHistorialCliente('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}');">
+                                        <i class="fal fa-book"></i>
+                                    </button>
+                                </td>
+                                
                             </tr>`
                     }
                     
@@ -207,13 +219,55 @@ let api = {
                         </td>
                         <td>
                             <button class="btn btn-info btn-sm btn-circle" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
-                                +
+                                <i class="fal fa-shopping-cart"></i>
+                            </button>
+                        </td>
+                                
+                        <td>
+                            <button class="btn btn-warning btn-sm btn-circle" onclick="getHistorialCliente('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}');">
+                                <i class="fal fa-book"></i>
                             </button>
                         </td>
                     </tr>`    
                     
                     
                     
+            })
+            container.innerHTML = strdata;
+            
+
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = 'No se pudo cargar la lista';
+        });
+        
+        
+    },
+    vendedorHistorialCliente: async(codcliente,idContenedor)=>{
+    
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+                
+        let strdata = ''; 
+
+        axios.post('/ventas/historialcliente', {
+            sucursal:GlobalSistema,
+            codcliente: codcliente
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            
+            data.map((rows)=>{                    
+                        strdata = strdata + `
+                        <tr>
+                        <td class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</td>
+                        <td>${rows.DESPROD}<br>
+                            <small><b>${rows.CODMEDIDA} - ${rows.CANTIDAD}</b></small>
+                        </td>
+                        <td>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                        </tr>
+                        `    
             })
             container.innerHTML = strdata;
             

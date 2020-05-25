@@ -52,7 +52,10 @@ function getView(){
                                             <td>Nombre/Código</td>
                                             <td>Dirección</td>
                                             <td>
-                                                <i class="fal fa-cog"></i>
+                                                <i class="fal fa-shopping-car"></i>
+                                            </td>
+                                            <td>
+                                                
                                             </td>
                                         </tr>
                                     </thead>
@@ -86,6 +89,7 @@ function getView(){
                                             <td>
                                                 <i class="fal fa-cog"></i>
                                             </td>
+                                            <td></td>
                                         </tr>
                                     </thead>
                                     <tbody id="tblClientes">
@@ -105,6 +109,7 @@ function getView(){
                                             <td>
                                                 <i class="fal fa-cog"></i>
                                             </td>
+                                            <td></td>
                                         </tr>
                                     </thead>
                                     <tbody id="tblClientesVisitados">
@@ -137,6 +142,7 @@ function getView(){
                                             <td>
                                                 <i class="fal fa-cog"></i>
                                             </td>
+                                            <td></td>
                                         </tr>
                                     </thead>
                                     <tbody id="tblClientesAjenos">
@@ -229,12 +235,44 @@ function getView(){
 
                     </div>
                             `
+        },
+        modalHistorialCliente: ()=>{
+            return `
+            <div class="modal fade" id="ModalHistorialCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-right" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <label class="modal-title text-danger h3" id="">Historial de Compras del Cliente</label>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="table-reponsive">
+                                <table class="table table-responsive table-hover table-striped table-bordered">
+                                    <thead>
+                                        <td>Fecha</td>
+                                        <td>Producto</td>
+                                        <td>Importe</td>
+                                    </thead>
+                                    <tbody id="tblHistorial"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    
+                    </div>
+                </div>
+            </div>
+            `
         }
     }
 
-    root.innerHTML = view.encabezado() + view.tabsClientes(); // view.listaclientes();
+    root.innerHTML = view.encabezado() + view.tabsClientes() + view.modalHistorialCliente(); // view.listaclientes();
     rootMenuLateral.innerHTML = view.modalMenuCliente();
 };
+
 
 function Lmap(lat,long,nombre,telefono){
     //INICIALIZACION DEL MAPA
@@ -253,6 +291,7 @@ function Lmap(lat,long,nombre,telefono){
 
 function getMenuCliente(codigo,nombre,direccion,telefono,lat,long,nit){
     
+    
     //map.remove()
     //map = Lmap(lat,long,nombre,telefono);
 
@@ -269,6 +308,14 @@ function getMenuCliente(codigo,nombre,direccion,telefono,lat,long,nit){
     showMenuLateral('Opciones del Cliente');
 
 };
+
+async function getHistorialCliente(codigo,nit,nombre){
+    
+    await api.vendedorHistorialCliente(codigo,'tblHistorial');
+
+    $('#ModalHistorialCliente').modal('show')
+
+}
 
 async function addListeners(){
 
