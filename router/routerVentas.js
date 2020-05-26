@@ -4,7 +4,14 @@ const router = express.Router();
 
 // VENTANA DE VENTAS
 ///////////////////////////////////////
+router.get("/json", async(req,res)=>{
+    let qry = `SELECT       ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, ME_Precios.EQUIVALE, ME_Precios.COSTO, ME_Precios.PRECIO
+    FROM            ME_Productos INNER JOIN
+                             ME_Precios ON ME_Productos.EMP_NIT = ME_Precios.EMP_NIT AND ME_Productos.CODPROD = ME_Precios.CODPROD AND ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL
+    WHERE        (ME_Productos.CODSUCURSAL = 'ME-IZABAL') FOR XML AUTO`
+    execute.Query(res,qry);
 
+})
 // VENTAS BUSCAR PRODUCTO POR DESCRIPCION
 router.get("/buscarproducto", async(req,res)=>{
     
@@ -36,7 +43,7 @@ router.get("/buscarproducto", async(req,res)=>{
     }
     let qry ='';
     let qryOld
-            qryOld = `SELECT ME_PRODUCTOS.CODPROD, ME_PRODUCTOS.DESPROD, ME_PRECIOS.CODMEDIDA, ME_PRECIOS.EQUIVALE, ME_PRECIOS.COSTO, ${campoprecio} AS PRECIO, ME_MARCAS.DESMARCA, 0 as EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
+            qryOld = `SELECT TOP 20  ME_PRODUCTOS.CODPROD, ME_PRODUCTOS.DESPROD, ME_PRECIOS.CODMEDIDA, ME_PRECIOS.EQUIVALE, ME_PRECIOS.COSTO, ${campoprecio} AS PRECIO, ME_MARCAS.DESMARCA, 0 as EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
             FROM ME_PRODUCTOS LEFT OUTER JOIN
             ME_PRECIOS ON ME_PRODUCTOS.CODPROD = ME_PRECIOS.CODPROD AND 
             ME_PRODUCTOS.EMP_NIT = ME_PRECIOS.EMP_NIT LEFT OUTER JOIN
@@ -49,7 +56,7 @@ router.get("/buscarproducto", async(req,res)=>{
             AND (ME_PRODUCTOS.CODPROD='${filtro}') 
             AND (ME_PRODUCTOS.NOHABILITADO=0)` 
 
-            qry = `SELECT ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, ME_Precios.EQUIVALE, ME_Precios.COSTO, ${campoprecio} AS PRECIO, ME_Marcas.DESMARCA, 0 AS EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
+            qry = `SELECT TOP 20 ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, ME_Precios.EQUIVALE, ME_Precios.COSTO, ${campoprecio} AS PRECIO, ME_Marcas.DESMARCA, 0 AS EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
                     FROM ME_Productos LEFT OUTER JOIN
                                      ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA LEFT OUTER JOIN
                                      ME_Precios ON ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.CODPROD = ME_Precios.CODPROD

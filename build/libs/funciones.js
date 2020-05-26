@@ -190,36 +190,7 @@ let funciones = {
             });
       
           });
-    },
-    loadViewOLD: (url, idContainer)=> {
-      return new Promise((resolve, reject) => {
-          
-          let contenedor = document.getElementById(idContainer);
-
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', url);
-          xhr.responseType = 'text';
-          xhr.onload = function(e) {
-    
-            if (this.status == 200) {
-                             
-              var view = xhr.response;
-              contenedor.innerHTML ='';
-              contenedor.innerHTML = view;
-              
-              resolve();
-    
-            } else {
-    
-              reject();
-    
-            }
-          }
-    
-          xhr.send();
-    
-        });
-    },
+    },   
     hablar: function(msn){
         var utterance = new SpeechSynthesisUtterance(msn);
         return window.speechSynthesis.speak(utterance); 
@@ -990,7 +961,18 @@ let funciones = {
       `
       document.getElementById(idcontainer).innerHTML = str;
 
-    }
+    },
+    showToast: (text)=>{
+      //depente de la libreria noty
+      new Noty({
+        type: 'info',
+        layout: 'topRight',
+        timeout: '500',
+        theme: 'metroui',
+        progressBar: false,
+        text,
+      }).show();
+    } 
 };
 
 //export default funciones;

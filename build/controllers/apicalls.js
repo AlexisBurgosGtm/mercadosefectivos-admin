@@ -269,9 +269,9 @@ let api = {
                         </tr>
                         `    
             })
+            
             container.innerHTML = strdata;
             
-
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
             strdata = '';

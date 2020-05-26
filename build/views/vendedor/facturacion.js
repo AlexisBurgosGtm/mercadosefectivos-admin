@@ -986,7 +986,7 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
             
             <td>
                 <button class="btn btn-sm btn-success btn-circle text-white" 
-                onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento});">
+                onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});">
                     +
                 </button>
             <td>
@@ -1031,7 +1031,7 @@ async function fcnBusquedaProducto2(idFiltro,idTablaResultado,idTipoPrecio){
             
             <td>
                 <button class="btn btn-sm btn-success btn-circle text-white" 
-                onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento});">
+                onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${rows.EXISTENCIA});">
                     +
                 </button>
             <td>
@@ -1047,33 +1047,39 @@ async function fcnBusquedaProducto2(idFiltro,idTablaResultado,idTipoPrecio){
 };
 
 //gestiona la apertura de la cantidad
-function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
+function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento,existencia){
+    console.log('existencia: ' + existencia);
 
-    GlobalSelectedCodprod = codprod;
-    GlobalSelectedDesprod = desprod;
-    GlobalSelectedCodmedida = codmedida;
-    GlobalSelectedEquivale = parseInt(equivale);
-    GlobalSelectedCosto = parseFloat(costo);
-    GlobalSelectedPrecio = parseFloat(precio);
-    console.log('total exento: ' +  exento)
-    GlobalSelectedExento = parseInt(exento);
-    
-
-    //modal para la cantidad del producto
-    document.getElementById('txtDesProducto').innerText = desprod; //label
-    document.getElementById('txtCodMedida').innerText = codmedida; //label
-    document.getElementById('txtPrecioProducto').innerText = funciones.setMoneda(precio,'Q'); //label
-    document.getElementById('txtSubTotal').innerText = funciones.setMoneda(precio,'Q'); //label
+    if(parseInt(existencia)>0){
+        GlobalSelectedCodprod = codprod;
+        GlobalSelectedDesprod = desprod;
+        GlobalSelectedCodmedida = codmedida;
+        GlobalSelectedEquivale = parseInt(equivale);
+        GlobalSelectedCosto = parseFloat(costo);
+        GlobalSelectedPrecio = parseFloat(precio);
         
-    document.getElementById('txtCantidad').value = 1;
-
-    $("#ModalCantidadProducto").modal('show');
+        GlobalSelectedExento = parseInt(exento);
+        GlobalSelectedExistencia = parseInt(existencia);
+    
+        //modal para la cantidad del producto
+        document.getElementById('txtDesProducto').innerText = desprod; //label
+        document.getElementById('txtCodMedida').innerText = codmedida; //label
+        document.getElementById('txtPrecioProducto').innerText = funciones.setMoneda(precio,'Q'); //label
+        document.getElementById('txtSubTotal').innerText = funciones.setMoneda(precio,'Q'); //label
+            
+        document.getElementById('txtCantidad').value = 1;
+    
+        $("#ModalCantidadProducto").modal('show');    
+    }else{
+        funciones.AvisoError('Producto SIN EXISTENCIA')
+    }
 
 
 };
 
 // agrega el producto a temp_ventas
 async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
+   
     
     document.getElementById('tblResultadoBusqueda').innerHTML = '';
     let cmbTipoPrecio = document.getElementById('cmbTipoPrecio');
@@ -1133,10 +1139,10 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
                       }
                   )
         
-                } catch (error) {
+        } catch (error) {
           
-                }
-                
+        }
+   
 
 };
 
@@ -1352,6 +1358,7 @@ async function fcnEliminarItem(id){
                     console.log(id.toString());
                     document.getElementById(id.toString()).remove();
                     //await fcnCargarGridTempVentas('tblGridTempVentas');
+                    funciones.showToast('item eliminado');
                     await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
                 }
               })

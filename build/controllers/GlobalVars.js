@@ -50,6 +50,7 @@ let GlobalSelectedCantidad = 0;
 let GlobalSelectedExento = 0;
 let GlobalSelectedCosto = 0;
 let GlobalSelectedPrecio = 0;
+let GlobalSelectedExistencia = 0;
 // global vars para cantidad producto
 
 let GlobalSelectedStatus=0;
