@@ -2226,7 +2226,7 @@ let api = {
                 
             let strdata = '<option value="">SELECCIONE EMBARQUE</option>';
     
-            axios.post('/digitacion/embarquesrepartidor', {
+            axios.post('/repartidor/embarquesrepartidor', {
                 sucursal: GlobalCodSucursal,
                 codrepartidor:GlobalCodUsuario
             })
@@ -2234,8 +2234,8 @@ let api = {
                 const data = response.data.recordset;
                 data.map((rows)=>{
                     strdata = strdata + `
-                                <option value='${rows.CODEMBARQUE}'>
-                                    ${rows.CODEMBARQUE}-${rows.RUTA}
+                                <option value='${rows.CODIGO}'>
+                                    ${rows.CODIGO}-${rows.RUTA}-${rows.FECHA.toString().replace('T00:00:00.000Z','')}
                                 </option>
                                 `
                 })
@@ -2248,6 +2248,169 @@ let api = {
             });
 
         
+    },
+    repartidorPicking : async(embarque,idContenedor,idLbTotal)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+        let tblhead = `
+            <table class="table table-responsive table-hover table-striped" id="tblListado">
+                <thead class="bg-trans-gradient text-white">
+                    <tr>
+                        <td>Vendedor</td>
+                        <td>Pedido</td>
+                        <td>Cliente</td>
+                        <td>Importe</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        let totalpedidos = 0;
+        axios.post('/repartidor/embarque', {
+            sucursal: GlobalCodSucursal,
+            codembarque:embarque
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.IMPORTE);
+                    totalpedidos = totalpedidos + 1;
+                    
+                    strdata = strdata + `
+                            <tr>
+                                <td>${rows.VENDEDOR}</td>
+                                <td>
+                                    ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                    <br>
+                                    <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                                </td>
+                                <td>${rows.CLIENTE}
+                                    <br>
+                                    <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
+                                </td>
+                                <td>
+                                    <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}')">
+                                        <i class="fal fa-book"></i>
+                                    </button>
+                                </td>
+                            </tr>`
+            })
+            container.innerHTML = tblhead + strdata + '</tbody></table>';
+            lbTotal.innerText = `${funciones.setMoneda(total,'Q ')} - Peds:${totalpedidos} - Prom:${funciones.setMoneda((Number(total)/Number(totalpedidos)),'Q')}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+    },
+    repartidorDetallePedido: async(coddoc,correlativo,idContenedor,idLbTotal)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+
+        GlobalSelectedCoddoc = coddoc;
+        GlobalSelectedCorrelativo = correlativo;
+
+        axios.post('/repartidor/detallepedido', {
+            sucursal: GlobalCodSucursal,
+            coddoc:coddoc,
+            correlativo:correlativo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.IMPORTE);
+                    strdata = strdata + `
+                            <tr id='${rows.DOC_ITEM}'>
+                                <td>${rows.DESPROD}
+                                    <br>
+                                    <small class="text-danger">${rows.CODPROD}</small>
+                                </td>
+                                <td>${rows.CODMEDIDA}</td>
+                                <td>${rows.CANTIDAD}</td>
+                                <td>${rows.PRECIO}</td>
+                                <td>${rows.IMPORTE}</td>
+                                <td>
+                                    <button class="btn btn-info btn-md btn-circle" onclick="getModalCantidad('${rows.DOC_ITEM}');">
+                                        +
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-md btn-circle"
+                                     onclick="checkProductoPedido('${rows.DOC_ITEM}','${GlobalSelectedCoddoc}','${GlobalSelectedCorrelativo}',${rows.IMPORTE},${rows.TOTALCOSTO})">
+                                        <i class="fal fa-double-check"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            `
+            })
+            container.innerHTML = strdata;
+            lbTotal.innerText = `${funciones.setMoneda(total,'Q')}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q0.00';
+        });
+           
+    },
+    repartidorMapaEmbarque: async(embarque,idContenedor,idLbTotal)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+
+        let tbl = `<div class="mapcontainer" id="mapcontainer"></div>`;        
+        
+        container.innerHTML = tbl;
+        
+        let mapcargado = 0;
+
+        axios.post('/repartidor/mapaembarque', {
+            sucursal: GlobalCodSucursal,
+            embarque:embarque
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                total = total + Number(rows.TOTALVENTA);
+                    if(mapcargado==0){
+                        map = Lmap(rows.LAT, rows.LONG, rows.CLIENTE, rows.IMPORTE);
+                        mapcargado = 1;
+                    }else{
+                        L.marker([rows.LAT, rows.LONG])
+                        .addTo(map)
+                        .bindPopup(rows.CLIENTE + ' - '  + rows.IMPORTE)   
+                    }
+            })
+            //container.innerHTML = tbl;
+            lbTotal.innerText = funciones.setMoneda(total,'Q ');
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';
+            lbTotal.innerText = 'Q 0.00';
+        });
+           
     },
     usuariosGetListado: (tipo,idContenedor)=>{
         
