@@ -2393,14 +2393,14 @@ let api = {
             const data = response.data.recordset;
             let total =0;
             data.map((rows)=>{
-                total = total + Number(rows.TOTALVENTA);
+                total = total + Number(rows.IMPORTE);
                     if(mapcargado==0){
                         map = Lmap(rows.LAT, rows.LONG, rows.CLIENTE, rows.IMPORTE);
                         mapcargado = 1;
                     }else{
                         L.marker([rows.LAT, rows.LONG])
                         .addTo(map)
-                        .bindPopup(rows.CLIENTE + ' - '  + rows.IMPORTE)   
+                        .bindPopup(`${rows.CLIENTE} - ${funciones.setMoneda(rows.IMPORTE,'Q ')}<br><small>${rows.DIRECCION},${rows.MUNICIPIO}</small><br><small>${rows.VENDEDOR}</small>` )   
                     }
             })
             //container.innerHTML = tbl;

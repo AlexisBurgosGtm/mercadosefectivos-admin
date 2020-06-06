@@ -45,11 +45,11 @@ router.post("/detallepedido", async(req,res)=>{
 
 router.post("/mapaembarque", async(req,res)=>{
     
-    const { sucursal, coddoc,correlativo} = req.body;
+    const { sucursal, embarque} = req.body;
             
     let qry ='';
 
-    qry = `SELECT CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,PRECIO,TOTALPRECIO AS IMPORTE FROM ME_REPARTO_DOCPRODUCTOS WHERE CODDOC='${coddoc}' AND CORRELATIVO='${correlativo}' AND CODSUCURSAL='${sucursal}' `;     
+    qry = `SELECT CODDOC, CORRELATIVO, NIT, CLIENTE, DIRECCION, MUNICIPIO, LAT, LONG, IMPORTE, VENDEDOR FROM ME_REPARTO_DOCUMENTOS WHERE CODSUCURSAL='${sucursal}' AND CODEMBARQUE='${embarque}'`;     
   
     execute.Query(res,qry);
 

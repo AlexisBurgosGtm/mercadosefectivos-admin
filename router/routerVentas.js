@@ -423,7 +423,9 @@ router.post('/reportemarcasdia',async(req,res)=>{
 
     const {fecha,sucursal,codven} = req.body;
 
-    let qry = `SELECT       ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    let qry = `SELECT  ISNULL(ME_Marcas.DESMARCA, 'SN') AS DESMARCA, 
+    ISNULL(SUM(ME_Docproductos.TOTALCOSTO),0) AS TOTALCOSTO, 
+    ISNULL(SUM(ME_Docproductos.TOTALPRECIO),0) AS TOTALPRECIO
     FROM            ME_Productos LEFT OUTER JOIN
                              ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA RIGHT OUTER JOIN
                              ME_Docproductos ON ME_Productos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Productos.CODPROD = ME_Docproductos.CODPROD RIGHT OUTER JOIN
@@ -481,7 +483,9 @@ router.post('/reportemarcas',async(req,res)=>{
 
     const {anio,mes,sucursal,codven} = req.body;
 
-    let qry = `SELECT       ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    let qry = `SELECT       ISNULL(ME_Marcas.DESMARCA,0) AS DESMARCA, 
+        ISNULL(SUM(ME_Docproductos.TOTALCOSTO),0) AS TOTALCOSTO, 
+        ISNULL(SUM(ME_Docproductos.TOTALPRECIO),0) AS TOTALPRECIO
     FROM            ME_Marcas RIGHT OUTER JOIN
                              ME_Productos ON ME_Marcas.CODSUCURSAL = ME_Productos.CODSUCURSAL AND ME_Marcas.CODMARCA = ME_Productos.CODMARCA RIGHT OUTER JOIN
                              ME_Documentos LEFT OUTER JOIN

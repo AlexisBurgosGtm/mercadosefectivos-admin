@@ -191,7 +191,7 @@ let classNavegar = {
                     });
                 })            
     },
-    inicioRepartidor : ()=>{
+    inicioRepartidor : async()=>{
         let strMenu =  `
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteInicio">
                                 <span>Pickings</span>
@@ -215,6 +215,9 @@ let classNavegar = {
                         
 
                     });
+
+                    //actualiza la ubicación del empleado
+                    await classEmpleados.updateMyLocation();
 
                     classNavegar.repartidorIniciar();
 

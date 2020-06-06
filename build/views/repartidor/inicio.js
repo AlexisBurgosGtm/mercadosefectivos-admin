@@ -86,6 +86,7 @@ function getView(){
 };
 
 async function addListeners(){
+
     let cmbPicking = document.getElementById('cmbPicking');
     cmbPicking.addEventListener('change',async ()=>{
         await api.repartidorPicking(cmbPicking.value,'containerRepartidor','txtTotalPicking')
@@ -95,8 +96,11 @@ async function addListeners(){
     
     let cmbTipoListado = document.getElementById('cmbTipoListado')
     cmbTipoListado.addEventListener('change',()=>{
-        api.repartidorMapaEmbarque(cmbPicking.value,'tblReport','lbTotal');
+        api.repartidorMapaEmbarque(cmbPicking.value,'containerRepartidor','txtTotalPicking');
     })
+
+    
+
 };
 
 function Lmap(lat,long,nombre,importe){
