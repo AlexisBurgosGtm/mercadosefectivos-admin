@@ -2278,13 +2278,32 @@ let api = {
         })
         .then((response) => {
             const data = response.data.recordset;
+            let strC ='';
             let total =0;
             data.map((rows)=>{
                     total = total + Number(rows.IMPORTE);
                     totalpedidos = totalpedidos + 1;
-                    
+                    switch (rows.ST) {
+                        case 'A': //ACTIVO O PENDIENTE
+                            strC='';            
+                            break;
+
+                        case 'E': //ENTREGADO
+                            strC='bg-success text-white';
+                            break;
+                        case 'P': // PARCIAL
+                            strC='bg-warning';
+                            break;
+                        case 'R': //RECHAZADO
+                            strC='bg-danger text-white';
+                            break;
+                        default:
+                            strC='';
+                            break;
+                    }
+
                     strdata = strdata + `
-                            <tr>
+                            <tr class='${strC}'>
                                 <td>${rows.VENDEDOR}</td>
                                 <td>
                                     ${rows.CODDOC + '-' + rows.CORRELATIVO}
@@ -2347,17 +2366,7 @@ let api = {
                                 <td>${rows.CANTIDAD}</td>
                                 <td>${rows.PRECIO}</td>
                                 <td>${rows.IMPORTE}</td>
-                                <td>
-                                    <button class="btn btn-info btn-md btn-circle" onclick="getModalCantidad('${rows.DOC_ITEM}');">
-                                        +
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-primary btn-md btn-circle"
-                                     onclick="checkProductoPedido('${rows.DOC_ITEM}','${GlobalSelectedCoddoc}','${GlobalSelectedCorrelativo}',${rows.IMPORTE},${rows.TOTALCOSTO})">
-                                        <i class="fal fa-double-check"></i>
-                                    </button>
-                                </td>
+                       
                             </tr>
                             `
             })

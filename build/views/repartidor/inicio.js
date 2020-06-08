@@ -38,12 +38,18 @@ function getView(){
               
 
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <button class="btn btn-md btn-danger" id="btnPedidoBloquear">
+                    <button class="btn btn-md btn-danger" id="btnPedidoRechazado">
                         <i class="fal fa-globe"></i>
                         RECHAZADO
                     </button>
-                    <button class="btn btn-md btn-success" id="btnPedidoConfirmar">
+                    
+                    <button class="btn btn-md btn-warning" id="btnPedidoParcial">
                         <i class="fal fa-bell"></i>
+                        PARCIAL
+                    </button>
+
+                    <button class="btn btn-md btn-success" id="btnPedidoEntregado">
+                        <i class="fal fa-check"></i>
                         ENTREGADO
                     </button>
                 </div>
@@ -59,8 +65,6 @@ function getView(){
                             <td>Cant</td>
                             <td>Precio</td>
                             <td>Subtotal</td>
-                            <td></td>
-                            <td></td>
                         </tr>
                     </thead>
                     <tbody id="tblDetallePedido"></tbody>
@@ -96,10 +100,38 @@ async function addListeners(){
     
     let cmbTipoListado = document.getElementById('cmbTipoListado')
     cmbTipoListado.addEventListener('change',()=>{
-        api.repartidorMapaEmbarque(cmbPicking.value,'containerRepartidor','txtTotalPicking');
+
+        if(cmbTipoListado.value == "PEDIDOS"){
+            api.repartidorPicking(cmbPicking.value,'containerRepartidor','txtTotalPicking')
+        }else{
+            api.repartidorMapaEmbarque(cmbPicking.value,'containerRepartidor','txtTotalPicking');
+        }
+        
     })
 
-    
+    let btnPedidoRechazado = document.getElementById('btnPedidoRechazado');
+    btnPedidoRechazado.addEventListener('click',()=>{
+        funciones.Confirmacion('Marcar este pedido como RECHAZADO, ¿desea continuar?')
+        .then(()=>{
+
+        })
+    })
+
+    let btnPedidoParcial = document.getElementById('btnPedidoParcial');
+    btnPedidoParcial.addEventListener('click',()=>{
+        funciones.Confirmacion('Marcar este pedido como DEVOLUCIÓN PARCIAL, ¿desea continuar?')
+        .then(()=>{
+            
+        })
+    })
+
+    let btnPedidoEntregado = document.getElementById('btnPedidoEntregado');
+    btnPedidoEntregado.addEventListener('click',()=>{
+        funciones.Confirmacion('Marcar este pedido como ENTREGADO, ¿desea continuar?')
+        .then(()=>{
+            
+        })
+    })
 
 };
 
