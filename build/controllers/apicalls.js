@@ -2421,6 +2421,25 @@ let api = {
         });
            
     },
+    repartidorMarcarPedido: async(st,coddoc,correlativo,embarque)=>{
+        return new Promise((resolve,reject)=>{
+            axios.post('/repartidor/marcarpedido',{
+                sucursal:GlobalCodSucursal,
+                coddoc:coddoc,
+                correlativo:correlativo,
+                st:st,
+                embarque:embarque
+            })
+            .then((response) => {
+                
+               resolve(response);             
+            }, (error) => {
+                
+                reject(error);
+            });
+
+        })
+    },
     usuariosGetListado: (tipo,idContenedor)=>{
         
         let container = document.getElementById(idContenedor);

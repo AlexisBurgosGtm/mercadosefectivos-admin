@@ -93,6 +93,7 @@ async function addListeners(){
 
     let cmbPicking = document.getElementById('cmbPicking');
     cmbPicking.addEventListener('change',async ()=>{
+        GlobalSelectedCodEmbarque = cmbPicking.value;
         await api.repartidorPicking(cmbPicking.value,'containerRepartidor','txtTotalPicking')
     })
 
@@ -101,11 +102,7 @@ async function addListeners(){
     let cmbTipoListado = document.getElementById('cmbTipoListado')
     cmbTipoListado.addEventListener('change',()=>{
 
-        if(cmbTipoListado.value == "PEDIDOS"){
-            api.repartidorPicking(cmbPicking.value,'containerRepartidor','txtTotalPicking')
-        }else{
-            api.repartidorMapaEmbarque(cmbPicking.value,'containerRepartidor','txtTotalPicking');
-        }
+        fcnCargarGrid();
         
     })
 
@@ -113,7 +110,15 @@ async function addListeners(){
     btnPedidoRechazado.addEventListener('click',()=>{
         funciones.Confirmacion('Marcar este pedido como RECHAZADO, ¿desea continuar?')
         .then(()=>{
-
+            api.repartidorMarcarPedido('R',GlobalSelectedCoddoc,GlobalSelectedCorrelativo,GlobalSelectedCodEmbarque)
+            .then(()=>{
+                funciones.Aviso('El pedido se marcó como RECHAZADO');
+                fcnCargarGrid();
+                hideMenuLateral();
+            })
+            .catch(()=>{
+                funciones.AvisoError('Error al marcar el pedido')
+            })
         })
     })
 
@@ -121,7 +126,15 @@ async function addListeners(){
     btnPedidoParcial.addEventListener('click',()=>{
         funciones.Confirmacion('Marcar este pedido como DEVOLUCIÓN PARCIAL, ¿desea continuar?')
         .then(()=>{
-            
+            api.repartidorMarcarPedido('P',GlobalSelectedCoddoc,GlobalSelectedCorrelativo,GlobalSelectedCodEmbarque)
+            .then(()=>{
+                funciones.Aviso('El pedido se marcó como PARCIAL');
+                fcnCargarGrid();
+                hideMenuLateral();
+            })
+            .catch(()=>{
+                funciones.AvisoError('Error al marcar el pedido')
+            })
         })
     })
 
@@ -129,11 +142,27 @@ async function addListeners(){
     btnPedidoEntregado.addEventListener('click',()=>{
         funciones.Confirmacion('Marcar este pedido como ENTREGADO, ¿desea continuar?')
         .then(()=>{
-            
+            api.repartidorMarcarPedido('E',GlobalSelectedCoddoc,GlobalSelectedCorrelativo,GlobalSelectedCodEmbarque)
+            .then(()=>{
+                funciones.Aviso('El pedido CONFIRMÓ');
+                fcnCargarGrid();
+                hideMenuLateral();
+            })
+            .catch(()=>{
+                funciones.AvisoError('Error al marcar el pedido')
+            })
         })
     })
 
 };
+
+async function fcnCargarGrid(){
+    if(cmbTipoListado.value == "PEDIDOS"){
+        await api.repartidorPicking(cmbPicking.value,'containerRepartidor','txtTotalPicking')
+    }else{
+        await api.repartidorMapaEmbarque(cmbPicking.value,'containerRepartidor','txtTotalPicking');
+    }
+}
 
 function Lmap(lat,long,nombre,importe){
     //INICIALIZACION DEL MAPA            
@@ -156,6 +185,9 @@ function iniciarVistaRepartidor(){
 
 
 function getDetalleFactura(coddoc,correlativo,cliente){
+    GlobalSelectedCoddoc = coddoc;
+    GlobalSelectedCorrelativo = correlativo;
+
     api.repartidorDetallePedido(coddoc,correlativo,'tblDetallePedido','lbTotalDetallePedido')
     showMenuLateral('CLIENTE: ' + cliente);
 

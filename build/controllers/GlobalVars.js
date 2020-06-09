@@ -53,6 +53,7 @@ let GlobalSelectedPrecio = 0;
 let GlobalSelectedExistencia = 0;
 // global vars para cantidad producto
 
+let GlobalSelectedCodEmbarque ='';
 let GlobalSelectedStatus=0;
 let GlobalSelectedCoddoc = '';
 let GlobalSelectedCorrelativo = '';

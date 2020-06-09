@@ -55,5 +55,16 @@ router.post("/mapaembarque", async(req,res)=>{
 
 });
 
+router.post("/marcarpedido", async(req,res)=>{
+    
+    const { sucursal, embarque, coddoc, correlativo, st} = req.body;
+            
+    let qry ='';
+
+    qry = `UPDATE ME_REPARTO_DOCUMENTOS SET ST='${st}' WHERE CODSUCURSAL='${sucursal}' AND CODEMBARQUE='${embarque}' AND CODDOC='${coddoc}' AND CORRELATIVO='${correlativo}' `;     
+  
+    execute.Query(res,qry);
+
+});
 
 module.exports = router;
