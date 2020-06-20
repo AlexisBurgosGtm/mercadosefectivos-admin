@@ -37,6 +37,12 @@ function getView(){
 
             <div class="col-md-4 col-sm-12 col-lg-4 col-lx-4"></div>
             `
+        },
+        hablar:()=>{
+            return `<div class="row">
+                <input class="form-control" type="text" id="txtHablar">
+                <button class="btn btn-danger" onclick="funciones.hablar(document.getElementById('txtHablar').value);">Hablar</button>
+            </div>` 
         }
     };
 

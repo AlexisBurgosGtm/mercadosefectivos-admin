@@ -2,6 +2,39 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+// EMBARQUES DEL VENDEDOR
+router.post("/embarquesvendedor", async(req,res)=>{
+    
+    const { sucursal, codvendedor} = req.body;
+            
+    let qry ='';
+
+    qry = `SELECT ME_REPARTO_EMBARQUES.FECHA, ME_REPARTO_EMBARQUES.CODEMBARQUE AS CODIGO, ME_REPARTO_EMBARQUES.RUTA
+                FROM ME_REPARTO_DOCUMENTOS LEFT OUTER JOIN
+                     ME_REPARTO_EMBARQUES ON ME_REPARTO_DOCUMENTOS.CODEMBARQUE = ME_REPARTO_EMBARQUES.CODEMBARQUE AND 
+                     ME_REPARTO_DOCUMENTOS.CODSUCURSAL = ME_REPARTO_EMBARQUES.CODSUCURSAL
+                WHERE (ME_REPARTO_DOCUMENTOS.CODVEN = ${codvendedor}) AND (ME_REPARTO_DOCUMENTOS.CODSUCURSAL = '${sucursal}')
+                GROUP BY ME_REPARTO_EMBARQUES.FECHA, ME_REPARTO_EMBARQUES.CODEMBARQUE, ME_REPARTO_EMBARQUES.RUTA`;     
+  
+    execute.Query(res,qry);
+
+});
+
+// PEDIDOS EN EMBARQUE DEL VENDEDOR
+router.post("/facturasvendedor", async(req,res)=>{
+    
+    const { sucursal, codembarque, codven} = req.body;
+            
+    let qry ='';
+
+    qry = `SELECT FECHA, CODDOC, CORRELATIVO, NIT, CLIENTE, DIRECCION, MUNICIPIO, LAT, LONG, IMPORTE, DIRENTREGA, OBS,CODVEN,VENDEDOR,ST
+    FROM ME_REPARTO_DOCUMENTOS
+    WHERE (CODEMBARQUE = '${codembarque}') AND (CODSUCURSAL = '${sucursal}') AND (CODVEN=${codven})`;     
+  
+    execute.Query(res,qry);
+
+});
+
 // EMBARQUES DEL REPARTIDOR
 router.post("/embarquesrepartidor", async(req,res)=>{
     

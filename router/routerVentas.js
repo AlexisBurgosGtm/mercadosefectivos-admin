@@ -213,6 +213,7 @@ router.get("/buscarcliente", async(req,res)=>{
 
 // INSERTA UN PEDIDO EN LAS TABLAS DE DOCUMENTOS Y DOCPRODUCTOS
 router.post("/documentos", async (req,res)=>{
+    
     const {app,empnit,anio,mes,dia,coddoc,fecha,fechaentrega,formaentrega,codcliente,nomclie,codbodega,totalcosto,totalprecio,nitclie,dirclie,obs,direntrega,usuario,codven,lat,long} = req.body;
     
 
@@ -357,10 +358,10 @@ router.post("/documentos", async (req,res)=>{
                   0,0,'SN',0,'',0,'',0,0,COSTO,0,TOTALCOSTO,0,0,0,0,'','',0,0,0,'','','',0,0,'',0,0,'','',0,'',TIPOPRECIO,'${app}'
                   FROM ME_TEMP_VENTAS   
                   WHERE EMPNIT='${empnit}' AND USUARIO='${usuario}';`
-            qrycorrelativo =`UPDATE ME_TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE CODSUCURSAL='${app}' AND CODDOC='${coddoc}'`
+            qrycorrelativo =`UPDATE ME_TIPODOCUMENTOS SET CORRELATIVO=${nuevocorrelativo} WHERE CODSUCURSAL='${app}' AND CODDOC='${coddoc}';`
             
  
-    execute.Query(res,qry + qrydoc + qrycorrelativo);
+    execute.Query(res,qrycorrelativo + qry + qrydoc);
     
 });
 

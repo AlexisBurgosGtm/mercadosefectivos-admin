@@ -1,3 +1,5 @@
+https://www.google.com/maps?q=23.135249,-82.359685
+
 https://corona.lmao.ninja/countries
 GET
 [{"country":"China","cases":80778,"todayCases":24,"deaths":3158,"todayDeaths":22,"recovered":61481,"critical":4492},{"country":"Italy","cases":10149,"todayCases":977,"deaths":631,"todayDeaths":168,"recovered":1004,"critical":877},

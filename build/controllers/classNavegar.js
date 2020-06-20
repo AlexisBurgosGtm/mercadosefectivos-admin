@@ -46,6 +46,9 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorClientes">
                                 <span>VENDER</span>
                             </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorReparto">
+                                <span>REPARTO</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorPedidos">
                                 <span>LOGRO DIA</span>
                             </a>
@@ -67,6 +70,10 @@ let classNavegar = {
                     let btnMenuVendedorClientes = document.getElementById('btnMenuVendedorClientes');
                     btnMenuVendedorClientes.addEventListener('click',()=>{
                         classNavegar.inicio('VENDEDOR');
+                    });
+                    let btnMenuVendedorReparto = document.getElementById('btnMenuVendedorReparto');
+                    btnMenuVendedorReparto.addEventListener('click',()=>{
+                        classNavegar.vendedorReparto();
                     });
                     let btnMenuVendedorPedidos = document.getElementById('btnMenuVendedorPedidos');
                     btnMenuVendedorPedidos.addEventListener('click',()=>{
@@ -315,6 +322,15 @@ let classNavegar = {
                 iniciarVistaVentas(nit,nombre,direccion);
             })
           
+    },
+    vendedorReparto: async()=>{
+        
+        funciones.loadScript('./views/vendedor/reparto.js','root')
+        .then(()=>{
+            GlobalSelectedForm ='VENDEDORREPARTO';
+            iniciarVistaVendedorReparto();
+        })
+      
     },
     pedidos: async ()=>{
         funciones.loadScript('../views/pedidos/vendedor.js','root')
