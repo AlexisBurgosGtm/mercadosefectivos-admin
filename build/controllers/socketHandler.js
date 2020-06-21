@@ -28,3 +28,24 @@ socket.on('clientes ultimaventa',(msg,user)=>{
     
 })
 
+socket.on('reparto pedidomarcado', (msg,status,vendedor)=>{
+    console.log('status: ' + status);
+    console.log('vendedor: ' + vendedor)
+    if(GlobalCodUsuario==vendedor){
+        switch (status) {
+            case 'ENTREGADO':
+                funciones.showToast('Pedido ENTREGADO');
+                break;
+            case 'RECHAZADO':
+                funciones.showToast(`RECHAZO, cliente: ${msg}`);
+                funciones.NotificacionPersistent('PEDIDO RECHAZADO',msg);
+                break;
+            case 'PARCIAL':
+                funciones.showToast(`PARCIAL, cliente: ${msg}`);
+                funciones.NotificacionPersistent('DEVOLUCION PARCIAL',msg);
+                break;
+        };
+    };
+
+})
+

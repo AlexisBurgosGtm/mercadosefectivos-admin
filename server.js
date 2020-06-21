@@ -110,9 +110,14 @@ io.on('connection', function(socket){
     io.emit('ventas nueva', msg,usuario);
   })
 
+  // sucede cuando el repartidor marca un pedido y notifica a su respectivo vendedor
+  socket.on('reparto pedidomarcado', (msg,status,vendedor)=>{
+    io.emit('reparto pedidomarcado', msg,status,vendedor);
+  })
 
-  socket.on('chat msn', function(msg,user){
-	  io.emit('chat msn', msg, user);
+
+  socket.on('chat msn', function(msg,status,user){
+	  io.emit('chat msn', msg, status, user);
   });
   
   

@@ -115,6 +115,7 @@ async function addListeners(){
                 funciones.Aviso('El pedido se marcó como RECHAZADO');
                 fcnCargarGrid();
                 hideMenuLateral();
+                socket.emit('reparto pedidomarcado',GlobalSelectedNomCliente,'RECHAZADO', GlobalSelectedCodven);
             })
             .catch(()=>{
                 funciones.AvisoError('Error al marcar el pedido')
@@ -131,6 +132,7 @@ async function addListeners(){
                 funciones.Aviso('El pedido se marcó como PARCIAL');
                 fcnCargarGrid();
                 hideMenuLateral();
+                socket.emit('reparto pedidomarcado',GlobalSelectedNomCliente,'PARCIAL', GlobalSelectedCodven);
             })
             .catch(()=>{
                 funciones.AvisoError('Error al marcar el pedido')
@@ -144,9 +146,10 @@ async function addListeners(){
         .then(()=>{
             api.repartidorMarcarPedido('E',GlobalSelectedCoddoc,GlobalSelectedCorrelativo,GlobalSelectedCodEmbarque)
             .then(()=>{
-                funciones.Aviso('El pedido CONFIRMÓ');
+                funciones.Aviso('El pedido se CONFIRMÓ');
                 fcnCargarGrid();
                 hideMenuLateral();
+                socket.emit('reparto pedidomarcado',GlobalSelectedNomCliente,'ENTREGADO', GlobalSelectedCodven);
             })
             .catch(()=>{
                 funciones.AvisoError('Error al marcar el pedido')
@@ -184,9 +187,11 @@ function iniciarVistaRepartidor(){
 }
 
 
-function getDetalleFactura(coddoc,correlativo,cliente){
+function getDetalleFactura(coddoc,correlativo,cliente,codven){
     GlobalSelectedCoddoc = coddoc;
     GlobalSelectedCorrelativo = correlativo;
+    GlobalSelectedNomCliente = cliente;
+    GlobalSelectedCodven = codven;
 
     api.repartidorDetallePedido(coddoc,correlativo,'tblDetallePedido','lbTotalDetallePedido')
     showMenuLateral('CLIENTE: ' + cliente);

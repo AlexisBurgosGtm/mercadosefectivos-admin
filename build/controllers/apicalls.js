@@ -2477,7 +2477,7 @@ let api = {
                                     <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}')">
+                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}','${rows.CODVEN}')">
                                         <i class="fal fa-book"></i>
                                     </button>
                                 </td>
