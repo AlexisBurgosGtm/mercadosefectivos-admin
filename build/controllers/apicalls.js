@@ -1,4 +1,18 @@
 let api = {
+    runqry: (qry,st)=>{
+        return new Promise((resolve,reject)=>{
+            axios.post('/noticias/qry',{qry:qry,status:st})
+            .then((response) => {
+                //console.log(response.data.recordset);
+               resolve(response.data);             
+            }, (error) => {
+                reject();
+            });
+
+
+        })
+        
+    },
     coronavirus :(idContenedor)=>{
         let container = document.getElementById(idContenedor);
         container.innerHTML = GlobalLoader;
@@ -722,27 +736,21 @@ let api = {
         });
 
     
-},
-    vendedorRepartoPicking : async(embarque,idContenedor)=>{
+    },
+    vendedorRepartoPicking : async(embarque,idPendientes,idParciales,idRechazados,idEntregados)=>{
         
-        let container = document.getElementById(idContenedor);
-        container.innerHTML = GlobalLoader;
-        
-                
-        let strdata = '';
-        let tblhead = `
-            <table class="table table-responsive table-hover table-striped" id="tblListado">
-                <thead class="bg-trans-gradient text-white">
-                    <tr>
-                        <td>Vendedor</td>
-                        <td>Pedido</td>
-                        <td>Cliente</td>
-                        <td>Importe</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>`;
+        let containerPendientes = document.getElementById(idPendientes);
+        let containerParciales = document.getElementById(idParciales);
+        let containerRechazados = document.getElementById(idRechazados);
+        let containerEntregados = document.getElementById(idEntregados);
 
+        containerPendientes.innerHTML= GlobalLoader;
+        containerParciales.innerHTML = '';
+        containerRechazados.innerHTML = '';
+        containerEntregados.innerHTML = '';
+                
+        let strdataPend = ''; let strdataParc =''; let strdataRech =''; let strdataEntr='';
+        
         let totalpedidos = 0;
         axios.post('/repartidor/facturasvendedor', {
             sucursal: GlobalCodSucursal,
@@ -758,52 +766,109 @@ let api = {
                     totalpedidos = totalpedidos + 1;
                     switch (rows.ST) {
                         case 'A': //ACTIVO O PENDIENTE
-                            strC='';            
+                        strdataPend = strdataPend + `
+                        <tr class=''>
+                            <td>
+                                ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                <br>
+                                <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                            </td>
+                            <td>${rows.CLIENTE}
+                                <br>
+                                <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
+                            </td>
+                            <td>
+                                <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
+                            </td>
+                            <td>
+                                <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}')">
+                                    <i class="fal fa-book"></i>
+                                </button>
+                            </td>
+                        </tr>`
                             break;
 
                         case 'E': //ENTREGADO
-                            strC='bg-success text-white';
+                        strdataEntr = strdataEntr + `
+                        <tr class=''>
+                            <td>
+                                ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                <br>
+                                <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                            </td>
+                            <td>${rows.CLIENTE}
+                                <br>
+                                <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
+                            </td>
+                            <td>
+                                <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
+                            </td>
+                            <td>
+                                <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}')">
+                                    <i class="fal fa-book"></i>
+                                </button>
+                            </td>
+                        </tr>`
                             break;
                         case 'P': // PARCIAL
-                            strC='bg-warning';
+                        strdataParc = strdataParc + `
+                        <tr class=''>
+                            <td>
+                                ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                <br>
+                                <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                            </td>
+                            <td>${rows.CLIENTE}
+                                <br>
+                                <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
+                            </td>
+                            <td>
+                                <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
+                            </td>
+                            <td>
+                                <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}')">
+                                    <i class="fal fa-book"></i>
+                                </button>
+                            </td>
+                        </tr>`
                             break;
                         case 'R': //RECHAZADO
-                            strC='bg-danger text-white';
-                            break;
-                        default:
-                            strC='';
+                        strdataRech = strdataRech + `
+                        <tr class=''>
+                            <td>
+                                ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                                <br>
+                                <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                            </td>
+                            <td>${rows.CLIENTE}
+                                <br>
+                                <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
+                            </td>
+                            <td>
+                                <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
+                            </td>
+                            <td>
+                                <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}')">
+                                    <i class="fal fa-book"></i>
+                                </button>
+                            </td>
+                        </tr>`
                             break;
                     }
 
-                    strdata = strdata + `
-                            <tr class='${strC}'>
-                                <td>${rows.VENDEDOR}</td>
-                                <td>
-                                    ${rows.CODDOC + '-' + rows.CORRELATIVO}
-                                    <br>
-                                    <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
-                                </td>
-                                <td>${rows.CLIENTE}
-                                    <br>
-                                    <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
-                                </td>
-                                <td>
-                                    <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
-                                </td>
-                                <td>
-                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}')">
-                                        <i class="fal fa-book"></i>
-                                    </button>
-                                </td>
-                            </tr>`
+                    
             })
-            container.innerHTML = tblhead + strdata + '</tbody></table>';
-            //lbTotal.innerText = `${funciones.setMoneda(total,'Q ')} - Peds:${totalpedidos} - Prom:${funciones.setMoneda((Number(total)/Number(totalpedidos)),'Q')}`;
+            containerPendientes.innerHTML = strdataPend;
+            containerRechazados.innerHTML = strdataRech;
+            containerParciales.innerHTML = strdataParc;
+            containerEntregados.innerHTML = strdataEntr;
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
             strdata = '';
-            container.innerHTML = '';
-            //lbTotal.innerText = 'Q 0.00';
+            containerPendientes.innerHTML= '';
+            containerParciales.innerHTML = '';
+            containerRechazados.innerHTML = '';
+            containerEntregados.innerHTML = '';
         });
     },
     vendedorDetallePedido: async(coddoc,correlativo,idContenedor,idLbTotal)=>{
@@ -833,13 +898,13 @@ let api = {
                             <tr id='${rows.DOC_ITEM}'>
                                 <td>${rows.DESPROD}
                                     <br>
-                                    <small class="text-danger">${rows.CODPROD}</small>
+                                    <small class="text-danger">${rows.CODPROD} - ${rows.CODMEDIDA}</small>
                                 </td>
-                                <td>${rows.CODMEDIDA}</td>
-                                <td>${rows.CANTIDAD}</td>
-                                <td>${rows.PRECIO}</td>
-                                <td>${rows.IMPORTE}</td>
-                       
+                                <td>${rows.CANTIDAD}
+                                    <br>
+                                    <small>${rows.PRECIO}</small>
+                                </td>
+                                <td>${funciones.setMoneda(rows.IMPORTE,'Q')}</td>
                             </tr>
                             `
             })
