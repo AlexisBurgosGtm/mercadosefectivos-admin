@@ -982,7 +982,18 @@ let funciones = {
         }
         if (!('showTrigger' in Notification.prototype)) {
           console.log('Notification Trigger API not supported')
-          //alert('Notification Trigger API not supported');
+          navigator.serviceWorker.getRegistration()
+          .then((reg) => {
+            reg.showNotification(msg, {
+                showTrigger: new TimestampTrigger(new Date().getTime() + Number(minutos) * 60000) //60,000 es el número de milisegundos en un minuto
+            })
+          })
+          .catch((err) => {
+            //alert('Notification Trigger API error: ' + err);
+            console.log('Notification Trigger API error: ' + err);
+          });
+
+          alert('Notification Trigger API not supported');
           return;
         }
         
