@@ -294,6 +294,31 @@ let api = {
         
         
     },
+    vendedorTotalDia: async(sucursal,codven,fecha,idLbTotal)=>{
+
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+
+        let strdata = '';
+        
+        axios.post('/ventas/totalventadia', {
+            app:GlobalSistema,
+            sucursal: sucursal,
+            codven:codven,
+            fecha:fecha   
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                    strdata = `Venta Día: ${funciones.setMoneda(rows.IMPORTE,'Q')} Pedidos: ${rows.PEDIDOS}`
+            })
+            
+            lbTotal.innerText = strdata;
+        }, (error) => {
+            lbTotal.innerText = '--';
+        });
+           
+    },
     pedidosVendedor: async(sucursal,codven,fecha,idContenedor,idLbTotal)=>{
 
         let container = document.getElementById(idContenedor);

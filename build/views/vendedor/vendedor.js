@@ -4,7 +4,7 @@ function getView(){
             return `
                     <div class="card">
                         <div class="card-header">
-                            <h5>Seleccione Dia</h5>
+                            <h4 id="lbTotalDia">Seleccione Dia</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -397,6 +397,9 @@ async function addListeners(){
         let txtClientesAjenosBuscar = document.getElementById('txtClientesAjenosBuscar');
         await api.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar.value,'tblClientesAjenos')
     })
+
+    
+    await api.vendedorTotalDia(GlobalCodSucursal,GlobalCodUsuario,funciones.getFecha(),'lbTotalDia')
 };
 
 function inicializarVista(){

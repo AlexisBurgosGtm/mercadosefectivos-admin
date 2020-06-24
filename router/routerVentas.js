@@ -387,6 +387,19 @@ router.post('/historialcliente',async (req,res)=>{
 })
 
 // UNA FECHA (DIA)
+
+// TOTAL VENTAS Y TOTAL PEDIDOS POR FECHA
+router.post("/totalventadia", async(req,res)=>{
+    const {sucursal,codven,fecha}  = req.body;
+    
+    let qry = '';
+    qry = `SELECT COUNT(DOC_NUMERO) AS PEDIDOS, ISNULL(SUM(DOC_TOTALVENTA),0) AS IMPORTE
+            FROM ME_Documentos
+            WHERE (CODSUCURSAL = '${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'A')`
+    
+    execute.Query(res,qry);
+});
+
 // LISTA DE PEDIDOS POR UNA FECHA
 router.post("/listapedidos", async(req,res)=>{
     const {sucursal,codven,fecha}  = req.body;
