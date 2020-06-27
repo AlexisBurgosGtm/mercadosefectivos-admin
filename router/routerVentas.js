@@ -418,15 +418,15 @@ router.post('/reporteproductosdia', async(req,res)=>{
     
     const {fecha,sucursal,codven} = req.body;
 
-    let qry = `SELECT ME_Docproductos.CODPROD, ME_Productos.DESPROD, SUM(ME_Docproductos.CANTIDADINV) AS TOTALUNIDADES, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) 
+    let qry = `SELECT ISNULL(ME_Docproductos.CODPROD,'SN') AS CODPROD, ISNULL(ME_Productos.DESPROD, 'SN') AS DESPROD, SUM(ISNULL(ME_Docproductos.CANTIDADINV,0)) AS TOTALUNIDADES, SUM(ISNULL(ME_Docproductos.TOTALCOSTO,0)) AS TOTALCOSTO, SUM(ISNULL(ME_Docproductos.TOTALPRECIO,0)) 
     AS TOTALPRECIO
-FROM            ME_Docproductos LEFT OUTER JOIN
+    FROM ME_Docproductos LEFT OUTER JOIN
     ME_Productos ON ME_Docproductos.CODSUCURSAL = ME_Productos.CODSUCURSAL AND ME_Docproductos.CODPROD = ME_Productos.CODPROD RIGHT OUTER JOIN
     ME_Documentos ON ME_Docproductos.DOC_NUMERO = ME_Documentos.DOC_NUMERO AND ME_Docproductos.CODDOC = ME_Documentos.CODDOC AND 
     ME_Docproductos.CODSUCURSAL = ME_Documentos.CODSUCURSAL AND ME_Docproductos.DOC_ANO = ME_Documentos.DOC_ANO AND ME_Docproductos.EMP_NIT = ME_Documentos.EMP_NIT LEFT OUTER JOIN
     ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
-            WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_FECHA = '${fecha}') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.DOC_ESTATUS<>'A')
-            GROUP BY ME_Docproductos.CODPROD, ME_Productos.DESPROD`;
+    WHERE (ME_Tipodocumentos.TIPODOC = 'PED') AND (ME_Documentos.DOC_FECHA = '${fecha}') AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.DOC_ESTATUS<>'A')
+    GROUP BY ME_Docproductos.CODPROD, ME_Productos.DESPROD`;
     
     execute.Query(res,qry);
 
@@ -460,7 +460,7 @@ router.post("/reportedinero", async (req,res)=>{
 
     const {anio,mes,sucursal,codven} = req.body;
 
-    let qry = `SELECT       ME_Documentos.DOC_FECHA AS FECHA, COUNT(ME_Documentos.DOC_FECHA) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALVENTA
+    let qry = `SELECT       ME_Documentos.DOC_FECHA AS FECHA, COUNT(ME_Documentos.DOC_FECHA) AS PEDIDOS, SUM(ISNULL(ME_Documentos.DOC_TOTALVENTA,0)) AS TOTALVENTA
     FROM            ME_Documentos LEFT OUTER JOIN
                              ME_Tipodocumentos ON ME_Documentos.CODSUCURSAL = ME_Tipodocumentos.CODSUCURSAL AND ME_Documentos.CODDOC = ME_Tipodocumentos.CODDOC AND ME_Documentos.EMP_NIT = ME_Tipodocumentos.EMP_NIT
                 WHERE (ME_Documentos.DOC_ANO = ${anio}) AND (ME_Documentos.DOC_MES = ${mes}) AND (ME_Documentos.CODVEN = ${codven}) AND (ME_Documentos.CODSUCURSAL = '${sucursal}') AND (ME_Tipodocumentos.TIPODOC = 'PED') AND 
@@ -476,7 +476,7 @@ router.post('/reporteproductos', async(req,res)=>{
     
     const {anio,mes,sucursal,codven} = req.body;
 
-    let qry = `SELECT       ME_Docproductos.CODPROD, ME_Productos.DESPROD, SUM(ME_Docproductos.CANTIDADINV) AS TOTALUNIDADES, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) 
+    let qry = `SELECT ISNULL(ME_Docproductos.CODPROD,'SN') AS CODPROD, ISNULL(ME_Productos.DESPROD,'SN') AS DESPROD, SUM(ISNULL(ME_Docproductos.CANTIDADINV,0)) AS TOTALUNIDADES, SUM(ISNULL(ME_Docproductos.TOTALCOSTO,0)) AS TOTALCOSTO, SUM(ISNULL(ME_Docproductos.TOTALPRECIO,0)) 
     AS TOTALPRECIO
 FROM            ME_Docproductos LEFT OUTER JOIN
     ME_Productos ON ME_Docproductos.CODSUCURSAL = ME_Productos.CODSUCURSAL AND ME_Docproductos.CODPROD = ME_Productos.CODPROD RIGHT OUTER JOIN
@@ -491,13 +491,12 @@ FROM            ME_Docproductos LEFT OUTER JOIN
 });
 
 
-
 // reporte de marcas por vendedor y mes
 router.post('/reportemarcas',async(req,res)=>{
 
     const {anio,mes,sucursal,codven} = req.body;
 
-    let qry = `SELECT       ISNULL(ME_Marcas.DESMARCA,0) AS DESMARCA, 
+    let qry = `SELECT ISNULL(ME_Marcas.DESMARCA,0) AS DESMARCA, 
         ISNULL(SUM(ME_Docproductos.TOTALCOSTO),0) AS TOTALCOSTO, 
         ISNULL(SUM(ME_Docproductos.TOTALPRECIO),0) AS TOTALPRECIO
     FROM            ME_Marcas RIGHT OUTER JOIN

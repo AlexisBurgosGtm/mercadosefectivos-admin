@@ -973,7 +973,7 @@ let funciones = {
         text,
       }).show();
     },
-    setReminder: (msg,minutos)=>{
+    setReminder: async (msg,minutos)=>{
 
       
         if (!('Notification' in window)) {
@@ -985,7 +985,7 @@ let funciones = {
           return;
         }
         
-        Notification.requestPermission()
+        await Notification.requestPermission()
           .then(() => {
             if (Notification.permission !== 'granted') {
               throw 'Notification permission is not granted';
@@ -1001,7 +1001,7 @@ let funciones = {
             alert('Notification Trigger API error: ' + err);
           });
       
-
+    
     } 
 };
 
