@@ -87,9 +87,9 @@ function getView(){
                 <div class="input-group">
                     <select class="form-control col-3" id="cmbTipoPrecio">
                         <option value="P">DET</option>
-                        <option value="C">MayC</option>
-                        <option value="B">MayB</option>
-                        <option value="A">MayA</option>
+                        <option value="C">PreB</option>
+                        <option value="B">PreA</option>
+                        <option value="A">MAY</option>
                         <option value="K">CAMBIO</option>
                     </select>
                     <input id="txtBusqueda" type="text" ref="txtBusqueda" class="form-control col-7" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
@@ -123,9 +123,9 @@ function getView(){
                             <div class="input-group">
                                 <select class="form-control col-3" id="cmbTipoPrecio">
                                     <option value="P">DET</option>
-                                    <option value="C">MayC</option>
-                                    <option value="B">MayB</option>
-                                    <option value="A">MayA</option>
+                                    <option value="C">PreB</option>
+                                    <option value="B">PreC</option>
+                                    <option value="A">MAY</option>
                                     <option value="K">CAMBIO</option>
                                 </select>
                                 <input id="txtBusqueda" type="text" ref="txtBusqueda" class="form-control col-7" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />

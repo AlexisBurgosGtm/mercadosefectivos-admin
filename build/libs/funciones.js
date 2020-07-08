@@ -457,6 +457,7 @@ let funciones = {
                 <option value="VIERNES">VIERNES</option>
                 <option value="SABADO">SABADO</option>
                 <option value="DOMINGO">DOMINGO</option>
+                <option value="OTROS">OTROS</option>
                 `
       }else{
         str =  `<option value="1">LUNES</option>
@@ -466,6 +467,7 @@ let funciones = {
                 <option value="5">VIERNES</option>
                 <option value="6">SABADO</option>
                 <option value="7">DOMINGO</option>
+                <option value="0">OTROS</option>
                 `
       };
 
