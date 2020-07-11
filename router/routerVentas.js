@@ -63,7 +63,7 @@ router.get("/buscarproducto", async(req,res)=>{
                         WHERE (ME_Productos.DESPROD LIKE '%${filtro}%') AND (ME_Productos.NOHABILITADO = 0) AND (ME_Productos.CODSUCURSAL = '${app}') 
                         OR (ME_Productos.NOHABILITADO = 0) AND (ME_Productos.CODPROD = '${filtro}') AND (ME_Productos.CODSUCURSAL = '${app}')` 
     
-    
+        
     execute.Query(res,qry);
 
 })
@@ -388,6 +388,16 @@ router.post('/historialcliente',async (req,res)=>{
 
 // UNA FECHA (DIA)
 
+//Elimina un pedido, desde el vendedor
+router.post("/deletepedidovendedor",async(req,res)=>{
+    const {sucursal,fecha,codven,coddoc,correlativo} = req.body;
+
+    let qry = `DELETE FROM ME_DOCUMENTOS WHERE CODSUCURSAL='${sucursal}' AND CODDOC='${coddoc}' AND DOC_FECHA='${fecha}' AND DOC_NUMERO='${correlativo}' AND DOC_ESTATUS='O'; `
+    let qryprods = `DELETE FROM ME_DOCPRODUCTOS WHERE CODSUCURSAL='${sucursal}' AND CODDOC='${coddoc}' AND DOC_NUMERO='${correlativo}' ;`
+    execute.Query(res, qry + qryprods);
+
+})
+
 // TOTAL VENTAS Y TOTAL PEDIDOS POR FECHA
 router.post("/totalventadia", async(req,res)=>{
     const {sucursal,codven,fecha}  = req.body;
@@ -405,7 +415,7 @@ router.post("/listapedidos", async(req,res)=>{
     const {sucursal,codven,fecha}  = req.body;
     
     let qry = '';
-    qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, ISNULL(DOC_TOTALVENTA,0) AS IMPORTE, DOC_FECHA AS FECHA, LAT, LONG, DOC_OBS AS OBS, DOC_MATSOLI AS DIRENTREGA
+    qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, ISNULL(DOC_TOTALVENTA,0) AS IMPORTE, DOC_FECHA AS FECHA, LAT, LONG, DOC_OBS AS OBS, DOC_MATSOLI AS DIRENTREGA, DOC_ESTATUS AS ST
             FROM ME_Documentos
             WHERE (CODSUCURSAL = '${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'A')`
 

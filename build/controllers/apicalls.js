@@ -319,6 +319,22 @@ let api = {
         });
            
     },
+    deletePedidoVendedor: async(sucursal,codven,fecha,coddoc,correlativo)=>{
+        return new Promise((resolve,reject)=>{
+            axios.post('/ventas/deletepedidovendedor',{
+               sucursal:sucursal,
+               codven:codven,
+               fecha:fecha,
+               coddoc:coddoc,
+               correlativo:correlativo
+            })
+            .then((response) => {
+               resolve();             
+            }, (error) => {
+                reject();
+            });
+        })
+    },
     pedidosVendedor: async(sucursal,codven,fecha,idContenedor,idLbTotal)=>{
 
         let container = document.getElementById(idContenedor);
@@ -333,6 +349,7 @@ let api = {
                                     <td>Documento</td>
                                     <td>Cliente</td>
                                     <td>Importe</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -370,6 +387,12 @@ let api = {
                                     <button class="btn btn-info btn-sm btn-circle"
                                     onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
                                         +
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm btn-circle"
+                                    onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
+                                        <i class="fal fa-lock"></i>
                                     </button>
                                 </td>
                             </tr>`
@@ -550,7 +573,8 @@ let api = {
                     <thead class="bg-trans-gradient text-white"><tr>
                         <td>Fecha</td>
                         <td>Pedidos</td>
-                        <td>Importe</td></tr>
+                        <td>Importe</td>
+                        </tr>
                     <tbody>`;
 
         let tblfoot = `</tbody></table>`;

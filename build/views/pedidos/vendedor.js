@@ -216,6 +216,37 @@ function inicializarVistaPedidos(){
 
 };
 
+function deletePedidoVendedor(fecha,coddoc,correlativo,st){
+    console.log("status del documento: " + st)
+    if(st=='O'){
+        funciones.Confirmacion('¿Está seguro que desea Eliminar este Pedido?')
+        .then((value)=>{
+            if(value==true){
+                funciones.Confirmacion('¿Este pedido no se podrá recuperar, está seguro?')
+                    .then((value)=>{
+                        if(value==true){
+
+                            api.deletePedidoVendedor(GlobalCodSucursal,GlobalCodUsuario,fecha,coddoc,correlativo)
+                            .then(async()=>{
+                                funciones.Aviso('Pedido Eliminado Exitosamente!!')
+                                await api.pedidosVendedor(GlobalCodSucursal,GlobalCodUsuario,funciones.devuelveFecha('txtFechaPedido'),'tblListaPedidos','lbTotalPedidos');
+                            })
+                            .catch(()=>{
+                                funciones.AvisoError('No se pudo eliminar')
+                            })
+
+                        }
+                    }
+                )        
+            }
+        });
+
+    }else{
+        funciones.AvisoError('No se puede Eliminar un pedido que ya fué confirmado por Digitación');
+        funciones.hablar('No se puede Eliminar un pedido que ya fué confirmado por Digitación, comuníquese a oficina para solucionarlo');
+    }  
+
+};
 
 function getDetallePedido(fecha,coddoc,correlativo){
     GlobalSelectedFecha = fecha;
