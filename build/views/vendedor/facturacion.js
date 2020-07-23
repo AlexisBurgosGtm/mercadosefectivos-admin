@@ -84,17 +84,17 @@ function getView(){
         <div class="row">
             <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
 
-                <div class="input-group">
-                    <select class="form-control col-3" id="cmbTipoPrecio">
+                <div class="input-group shadow">
+                    <select class="form-control col-3 shadow" id="cmbTipoPrecio">
                         <option value="P">DET</option>
                         <option value="C">PreB</option>
                         <option value="B">PreA</option>
                         <option value="A">MAY</option>
                         <option value="K">CAMBIO</option>
                     </select>
-                    <input id="txtBusqueda" type="text" ref="txtBusqueda" class="form-control col-7" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
+                    <input id="txtBusqueda" type="text" ref="txtBusqueda" class="form-control col-7 shadow" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
                     <div class="input-group-prepend">
-                        <button class="btn btn-info waves-effect waves-themed" type="button" id="btnBuscarProducto">
+                        <button class="btn btn-info waves-effect waves-themed shadow" type="button" id="btnBuscarProducto">
                             <i class="fal fa-search"></i>
                         </button>
                     </div>
@@ -161,7 +161,7 @@ function getView(){
         btnCobrar :()=>{
             return `
             <div id="fixed-btn2">
-                <button class="btn btn-danger btn-lg waves-themed waves-effect" id="btnCobrar">
+                <button class="btn btn-outline-danger btn-lg waves-themed waves-effect shadow" id="btnCobrar">
                     <i class="fal fa-search"></i>
                     COBRAR
                 </button>

@@ -29,8 +29,11 @@ function getView(){
                                 <label>Contraseña:</label>
                                 <input class="form-control" type="password" id="txtPass" placeholder="Escriba su contraseña" required="true">
                             </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary form-control" type="submit">Ingresar</button>
+                            <div class="form-group" align="center">
+                                <button class="btn btn-outline-danger btn-lg shadow btn-rounded col-12"  type="submit">
+                                    <i class="fal fa-unlock"></i>
+                                    INICIAR
+                                </button>
                             </div>
                         </form>
                     </div>
