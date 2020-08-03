@@ -90,6 +90,7 @@ function getView(){
                                                 <i class="fal fa-cog"></i>
                                             </td>
                                             <td></td>
+                                            <td></td>
                                         </tr>
                                     </thead>
                                     <tbody id="tblClientes">
@@ -109,6 +110,7 @@ function getView(){
                                             <td>
                                                 <i class="fal fa-cog"></i>
                                             </td>
+                                            <td></td>
                                             <td></td>
                                         </tr>
                                     </thead>
@@ -142,6 +144,7 @@ function getView(){
                                             <td>
                                                 <i class="fal fa-cog"></i>
                                             </td>
+                                            <td></td>
                                             <td></td>
                                         </tr>
                                     </thead>
@@ -315,7 +318,21 @@ async function getHistorialCliente(codigo,nit,nombre){
 
     $('#ModalHistorialCliente').modal('show')
 
-}
+};
+
+async function setRecordatorioVisita(codigo, nit, nombre, direccion){
+    
+    funciones.hablar(`¿Quieres que te recuerde dentro de una hora que debes visitar a ${nombre}`);
+
+    funciones.Confirmacion(`¿Quieres que te recuerde dentro de una hora que debes visitar a ${nombre}`)
+    .then((value)=>{
+        if (value==true){
+            funciones.setReminder(`Visitar a ${nombre}, ubicado en ${direccion}`, 60);
+            funciones.Aviso('Recordatorio establecido a una hora a partir de este momento');
+        }
+    })
+    
+};
 
 async function addListeners(){
 

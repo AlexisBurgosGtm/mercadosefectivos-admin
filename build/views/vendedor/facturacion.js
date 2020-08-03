@@ -79,31 +79,6 @@ function getView(){
             //<select class="form-control input-sm" id="cmbCoddoc"></select>
             //<select class="form-control" id="cmbVendedor"></select>
         },
-        cajabusquedaproducto :()=>{
-            return `
-        <div class="row">
-            <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
-
-                <div class="input-group shadow">
-                    <select class="form-control col-3 shadow" id="cmbTipoPrecio">
-                        <option value="P">DET</option>
-                        <option value="C">PreB</option>
-                        <option value="B">PreA</option>
-                        <option value="A">MAY</option>
-                        <option value="K">CAMBIO</option>
-                    </select>
-                    <input id="txtBusqueda" type="text" ref="txtBusqueda" class="form-control col-7 shadow" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
-                    <div class="input-group-prepend">
-                        <button class="btn btn-info waves-effect waves-themed shadow" type="button" id="btnBuscarProducto">
-                            <i class="fal fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-            `
-        },
         gridTempVenta :()=>{
             return `
         <div class="row">
@@ -121,16 +96,16 @@ function getView(){
                     <div class="panel-content">
                         <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
                             <div class="input-group">
-                                <select class="form-control col-3" id="cmbTipoPrecio">
+                                <select class="form-control col-3 shadow border-info" id="cmbTipoPrecio">
                                     <option value="P">DET</option>
                                     <option value="C">PreB</option>
                                     <option value="B">PreC</option>
                                     <option value="A">MAY</option>
                                     <option value="K">CAMBIO</option>
                                 </select>
-                                <input id="txtBusqueda" type="text" ref="txtBusqueda" class="form-control col-7" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
+                                <input id="txtBusqueda" type="text" ref="txtBusqueda" class="form-control col-7  shadow border-info" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-info waves-effect waves-themed" type="button" id="btnBuscarProducto">
+                                    <button class="btn btn-info waves-effect waves-themed shadow" type="button" id="btnBuscarProducto">
                                         <i class="fal fa-search"></i>
                                     </button>
                                 </div>
@@ -864,6 +839,9 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     
 
     fcnIniciarModalCantidadProductos();
+
+    //establece un recordatorio de 10 minutos con el cliente
+    //funciones.setReminder('Lleva 10 minutos con el cliente actual', 10);
 };
 
 function fcnIniciarModalCantidadProductos(){

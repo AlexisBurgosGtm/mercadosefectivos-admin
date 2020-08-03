@@ -166,6 +166,11 @@ let api = {
                                 <i class="fal fa-book"></i>
                             </button>
                         </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm btn-circle" onclick="setRecordatorioVisita('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
+                                <i class="fal fa-bell"></i>
+                            </button>
+                        </td>
                     </tr>`    
                     }else{
                         strdata = strdata + `<tr class=''>
@@ -188,7 +193,11 @@ let api = {
                                         <i class="fal fa-book"></i>
                                     </button>
                                 </td>
-                                
+                                <td>
+                                    <button class="btn btn-primary btn-sm btn-circle" onclick="setRecordatorioVisita('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
+                                        <i class="fal fa-bell"></i>
+                                    </button>
+                                </td>   
                             </tr>`
                     }
                     
@@ -240,6 +249,11 @@ let api = {
                         <td>
                             <button class="btn btn-warning btn-sm btn-circle" onclick="getHistorialCliente('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}');">
                                 <i class="fal fa-book"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm btn-circle" onclick="setRecordatorioVisita('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
+                                <i class="fal fa-bell"></i>
                             </button>
                         </td>
                     </tr>`    
