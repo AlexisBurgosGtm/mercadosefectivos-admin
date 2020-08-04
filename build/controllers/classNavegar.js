@@ -49,6 +49,9 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorReparto">
                                 <span>REPARTO</span>
                             </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorCenso">
+                                <span>CENSO</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorPedidos">
                                 <span>LOGRO DIA</span>
                             </a>
@@ -74,6 +77,10 @@ let classNavegar = {
                     let btnMenuVendedorReparto = document.getElementById('btnMenuVendedorReparto');
                     btnMenuVendedorReparto.addEventListener('click',()=>{
                         classNavegar.vendedorReparto();
+                    });
+                    let btnMenuVendedorCenso = document.getElementById('btnMenuVendedorCenso');
+                    btnMenuVendedorCenso.addEventListener('click',()=>{
+                        classNavegar.vendedorCenso();
                     });
                     let btnMenuVendedorPedidos = document.getElementById('btnMenuVendedorPedidos');
                     btnMenuVendedorPedidos.addEventListener('click',()=>{
@@ -322,6 +329,15 @@ let classNavegar = {
                 iniciarVistaVentas(nit,nombre,direccion);
             })
           
+    },
+    vendedorCenso: async()=>{
+        
+        funciones.loadScript('./views/vendedor/censo.js','root')
+        .then(()=>{
+            GlobalSelectedForm ='VENDEDORCENSO';
+            iniciarVistaVendedorCenso();
+        })
+      
     },
     vendedorReparto: async()=>{
         

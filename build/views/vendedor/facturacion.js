@@ -787,17 +787,7 @@ async function iniciarVistaVentas(nit,nombre,direccion){
 
     // carga el grid
    
-    /*
-    classTipoDocumentos.comboboxTipodoc('PED','cmbCoddoc')
-        .then(async()=>{
-            cmbCoddoc.value = GlobalCoddoc;
-            await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
-        })
-        .then(async()=>{
-            await fcnCargarGridTempVentas('tblGridTempVentas');
-            await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-        })
-     */
+    
     await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
     await fcnCargarGridTempVentas('tblGridTempVentas');
     await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
