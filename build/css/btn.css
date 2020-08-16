@@ -1,7 +1,7 @@
 /* EVITA EL PULL TO REFRESH CON LA CLASE BODY Y LUEGO UN DIV WRAPPER */
 
 .body,
-.wrapper {
+.wrapper2 {
   /* Break the flow */
   position: absolute;
   top: 0px;
@@ -22,7 +22,7 @@
   z-index: 1;
 }
 
-.wrapper {
+.wrapper2 {
   /* Making the wrapper stack above the body */
   z-index: 2;
 }
