@@ -2,6 +2,17 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+router.post("/setreminder", async(req,res)=>{
+
+    const{sucursal,codclie,nit,nombre,direccion,fecha,hora,minuto,recordatorio} = req.body;
+
+    let qry = `INSERT INTO ME_RECORDATORIOS (CODSUCURSAL,CODCLIE,NIT,NOMCLIE,DIRECCION,HORA,MINUTO,FECHA,RECORDATORIO)
+     VALUES ('${sucursal}',${codclie},'${nit}','${nombre}','${direccion}',${hora},${minuto},'${fecha}','${recordatorio}');`
+
+     execute.Query(res,qry);
+     
+});
+
 
 router.post("/listavendedor", async(req,res)=>{
 

@@ -322,13 +322,23 @@ async function getHistorialCliente(codigo,nit,nombre){
 
 async function setRecordatorioVisita(codigo, nit, nombre, direccion){
     
-    funciones.hablar(`¿Quieres que te recuerde dentro de una hora que debes visitar a ${nombre}`);
+    await funciones.hablar(`¿Quieres establecer el recordatorio de visita a ${nombre}`);
+    
+    let recordatorio = 'Retomar visita';
 
-    funciones.Confirmacion(`¿Quieres que te recuerde dentro de una hora que debes visitar a ${nombre}`)
+    funciones.Confirmacion(`¿Quieres establecer el recordatorio de visita a ${nombre}`)
     .then((value)=>{
         if (value==true){
-            funciones.setReminder(`Visitar a ${nombre}, ubicado en ${direccion}`, 60);
-            funciones.Aviso('Recordatorio establecido a una hora a partir de este momento');
+
+            api.clientesSetReminder(codigo,nit,nombre,direccion,recordatorio,0,0,funciones.getFecha())
+            .then(()=>{
+                funciones.Aviso('Recordatorio establecido exitosamente');
+            })
+            .catch(()=>{
+                funciones.AvisoError('No se pudo establecer el recordatorio');
+            })
+            //funciones.setReminder(`Visitar a ${nombre}, ubicado en ${direccion}`, 60);
+            
         }
     })
     
