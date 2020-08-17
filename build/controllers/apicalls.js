@@ -1314,6 +1314,51 @@ let api = {
         });
 
     },
+    gerenciaSucursalesTotales: (mes,anio,idContenedor,idLbTotal)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        
+        let lbTotal = document.getElementById(idLbTotal);
+        lbTotal.innerText = '---';
+        
+        let strdata = '';
+
+        axios.post('/sucursales/totales', {
+            mes:mes,
+            anio: anio
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0; let utilidad = 0;
+            data.map((rows)=>{
+                    total = total + Number(rows.VENTA);
+                    utilidad = utilidad + Number(rows.UTILIDAD);
+                    strdata = strdata + `
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="p-3 bg-${rows.COLOR}-300 rounded overflow-hidden position-relative text-white mb-g">
+                            <div class="">
+                                <h3 class="display-4 d-block l-h-n m-0 fw-500">
+                                            ${funciones.setMoneda(rows.VENTA,'Q')}
+                                    <small class="m-0 l-h-n">${rows.SUCURSAL}</small>
+                                </h3>
+                                <small>Utilidad Bruta: ${funciones.setMoneda(rows.UTILIDAD)}</small>
+                            </div>
+                                <i class="fal fa-lightbulb position-absolute pos-right pos-bottom opacity-15 mb-n5 mr-n6" style="font-size:6rem"></i>
+                            </div>
+                        </div>
+                    </div>
+                    `
+            })
+            container.innerHTML = strdata;
+            lbTotal.innerHTML = `Total Ventas: ${funciones.setMoneda(total,'Q')} - Total Utilidad: ${funciones.setMoneda(utilidad,'Q')}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            lbTotal.innerHTML = '-';
+        });
+    },
     gerenciaResumenSucursal: (mes,anio,idContenedor,idLbTotal)=>{
         
         let container = document.getElementById(idContenedor);

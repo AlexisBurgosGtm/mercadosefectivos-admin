@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 const execute = require('./router/connection');
 var routerNoticias = require('./router/routerNoticias');
 var routerVentas = require('./router/routerVentas');
+var routerSucursales = require('./router/routerSucursales');
 let routerRepartidor = require('./router/routerRepartidor');
 var routerTipoDocs = require('./router/routerTipoDocs');
 var routerEmpleados = require('./router/routerEmpleados');
@@ -13,13 +14,6 @@ var routerClientes = require('./router/routerClientes');
 var routerProductos = require('./router/routerProductos');
 let routerDigitacion = require('./router/routerDigitacion');
 let routerUsuarios = require('./router/routerUsuarios');
-
-/**
-var request = require("request");
-var axios = require("axios");
-var cheerio = require("cheerio");
-var db = require("quick.db");
- */
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -53,6 +47,9 @@ app.get("/",function(req,res){
 	res.sendFile(path + 'index.html');
 }); 
 
+
+//Router para SUCURSALES
+app.use('/sucursales', routerSucursales);
 
 //Router para app NOTICIAS
 app.use('/noticias', routerNoticias);

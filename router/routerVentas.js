@@ -644,7 +644,7 @@ router.post('/reportemarcasmes',async(req,res)=>{
 
     const {anio,mes,sucursal} = req.body;
 
-    let qry = `SELECT       ME_Marcas.DESMARCA, SUM(ME_Docproductos.TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Docproductos.TOTALPRECIO) AS TOTALPRECIO
+    let qry = `SELECT ISNULL(ME_Marcas.DESMARCA,'SN') AS DESMARCA, SUM(ISNULL(ME_Docproductos.TOTALCOSTO,0)) AS TOTALCOSTO, SUM(ISNULL(ME_Docproductos.TOTALPRECIO,0)) AS TOTALPRECIO
     FROM            ME_Documentos LEFT OUTER JOIN
                              ME_Docproductos LEFT OUTER JOIN
                              ME_Productos LEFT OUTER JOIN

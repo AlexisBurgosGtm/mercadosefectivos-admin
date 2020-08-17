@@ -100,8 +100,11 @@ let classNavegar = {
     },
     inicioGerente: ()=>{
                 let strMenu =  `
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteSucursales">
+                                <span>Dashboard Sucursales</span>
+                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteInicio">
-                                <span>Inicio</span>
+                                <span>Dashboard App</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuGerenteTracking">
                                 <span>Tracking de Personal</span>
@@ -123,9 +126,13 @@ let classNavegar = {
                     rootMenu.innerHTML = strMenu;
                        
                      // handlers del menu
+                     let btnMenuGerenteSucursales = document.getElementById('btnMenuGerenteSucursales');
+                     btnMenuGerenteSucursales.addEventListener('click',()=>{
+                        classNavegar.gerenteInicioSucursales();
+                    });
                     let btnMenuGerenteInicio = document.getElementById('btnMenuGerenteInicio');
                     btnMenuGerenteInicio.addEventListener('click',()=>{
-                        classNavegar.inicioGerente();
+                        classNavegar.gerenteIniciar();
                     });
                     let btnMenuGerenteTracking = document.getElementById('btnMenuGerenteTracking');
                     btnMenuGerenteTracking.addEventListener('click',()=>{
@@ -149,7 +156,8 @@ let classNavegar = {
                         
                     });
 
-                    classNavegar.gerenteIniciar(); 
+                    //classNavegar.gerenteIniciar(); 
+                    classNavegar.gerenteInicioSucursales();
         
     },
     inicioDigitador : ()=>{
@@ -380,8 +388,15 @@ let classNavegar = {
             inicializarVistaNoticias();
         })
     },
+    gerenteInicioSucursales: ()=>{
+        funciones.loadScript('../views/gerente/iniciosucursales.js','root')
+        .then(()=>{
+            GlobalSelectedForm='DASHBOARD';
+            InicializarVistaGerenteSucursales();
+        });
+    },
     gerenteIniciar: ()=>{
-        funciones.loadScript('../views/gerente/inicio.js','root')
+        funciones.loadScript('../views/gerente/inicioapp.js','root')
         .then(()=>{
             GlobalSelectedForm='GERENTE';
             InicializarVistaGerente();
