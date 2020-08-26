@@ -1226,6 +1226,57 @@ let api = {
             });
         })
     },
+    censoListado:(sucursal, codven, visita, idContainer)=>{
+        let container = document.getElementById(idContainer);
+        container.innerHTML = GlobalLoader;
+        
+        let strdata = '';
+        let tbl = `<div class="table-responsive">
+                        <table class="table table-responsive table-hover table-striped">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <td>Código/NIT</td>
+                                    <td>Cliente/Dirección</td>
+                                    <td>Teléfono</td>
+                                </tr>
+                            </thead>
+                        </table>
+                        <tbody id="tblListado">`;
+
+        let tblfoot = `</tbody></table>`;
+
+        axios.post('/censo/listaclientes', {
+            sucursal: sucursal,
+            codven:codven,
+            visita:visita
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            
+            data.map((rows)=>{
+                    let strClass = '';
+                    strdata = strdata + `<tr class="cursormano"
+                    onClick="fcnGetDataCliente('${rows.CODCLIE}');">
+                                            <td>${rows.CODCLIE}
+                                                <br>
+                                                <small>NIT:<b>${rows.NITCLIE}</b></small>
+                                            </td>
+                                            <td>${rows.NOMCLIE}
+                                                <br>
+                                                <small>${rows.DIRCLIE},${rows.DESMUNI}</small>
+                                            </td>
+                                            <td>${rows.TELEFONO}</td>
+                                        </tr>`
+            })
+            container.innerHTML = tbl + strdata + tblfoot;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+
+    },
     clientesListadoVendedor:(sucursal, codven, idContainer)=>{
         let container = document.getElementById(idContainer);
         container.innerHTML = GlobalLoader;

@@ -435,17 +435,17 @@ let funciones = {
       
     },
     ObtenerUbicacion: async(idlat,idlong)=>{
-    let lat = document.getElementById(idlat);
-    let long = document.getElementById(idlong);
-    
-    try {
-        navigator.geolocation.getCurrentPosition(function (location) {
-            lat.innerText = location.coords.latitude.toString();
-            long.innerText = location.coords.longitude.toString();
-        })
-    } catch (error) {
-        funciones.AvisoError(error.toString());
-    }
+        let lat = document.getElementById(idlat);
+        let long = document.getElementById(idlong);
+        
+        try {
+            navigator.geolocation.getCurrentPosition(function (location) {
+                lat.innerText = location.coords.latitude.toString();
+                long.innerText = location.coords.longitude.toString();
+            })
+        } catch (error) {
+            funciones.AvisoError(error.toString());
+        }
     },
     ComboSemana :(letnum)=>{
       let str = '';

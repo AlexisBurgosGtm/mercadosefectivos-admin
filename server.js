@@ -14,6 +14,7 @@ var routerClientes = require('./router/routerClientes');
 var routerProductos = require('./router/routerProductos');
 let routerDigitacion = require('./router/routerDigitacion');
 let routerUsuarios = require('./router/routerUsuarios');
+let routerCenso = require('./router/routerCenso');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -53,6 +54,9 @@ app.use('/sucursales', routerSucursales);
 
 //Router para app NOTICIAS
 app.use('/noticias', routerNoticias);
+
+//Router para app CENSO
+app.use('/censo', routerCenso);
 
 //Router para app VENTAS
 app.use('/ventas', routerVentas);

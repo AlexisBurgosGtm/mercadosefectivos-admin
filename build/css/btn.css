@@ -71,6 +71,11 @@
     width: 450px;
   }
 
+
+.cursormano{
+  cursor: pointer;
+}
+
 .foot {
     bottom: 0;
 }
