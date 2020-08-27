@@ -30,36 +30,118 @@ function getView(){
             </div>
             `
         },
-        modalNuevo: ()=>{
+        modalNuevo:()=>{
             return `
             <div class="modal fade" id="ModalNuevoCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-right" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <label class="modal-title text-danger h3" id="">Datos del Nuevo Cliente</label>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true"><i class="fal fa-times"></i></span>
-                            </button>
+                            <label class="modal-title">Datos del Cliente</label>
                         </div>
-
                         <div class="modal-body">
+                            <div class="form">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>NIT:</label>
+                                            <input id="txtNit" class="form-control" type="text" placeholder="Escriba el NIT ...">
+                                        </div>    
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Telefonos:</label>
+                                            <input id="txtTelefono"  maxlength="8" class="form-control" type="number" placeholder="Telefono cliente">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Negocio/Establecimiento:</label>
+                                    <input id="txtNegocio" class="form-control" type="text" placeholder="nombre del negocio">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre y Apellido:</label>
+                                    <input id="txtNomcliente" class="form-control" type="text" placeholder="nombre completo">
+                                </div>
+                                <div class="form-group">
+                                    <label>Dirección:</label>
+                                    <input id="txtDircliente" class="form-control" type="text" placeholder="Dirección cliente...">
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Municipio:</label>
+                                            <select id="cmbMunicipio" class="form-control">
+                                            </select>
+                                        </div>    
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>Departamento:</label>
+                                            <select id="cmbDepartamento" class="form-control">
+                                            </select>
+                                        </div>    
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label>Vendedor:</label>
+                                            <select id="cmbVendedor" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        
+                                    </div>
+                                </div>
 
-                            <div class="form-group">
-                                <label id="lbClienteLat">0</label>
-                                <label id="lbClienteLong">0</label>
-
-                                <button class="btn btn-circle btn-outline-danger" id="btnUbicacion">
-                                    <i class="fal fa-map-marker-alt"></i>
-                                </button>
+                                <div class="form-group">
+                                    <label>Observaciones:</label>
+                                    <textarea rows="4" id="txtObs" class="form-control" maxlenght="250"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Latitud:</label>
+                                            <h4 id="txtLatitud">0</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Longitud:</label>
+                                            <h4 id="txtLongitud">0</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <button class="btn btn-circle btn-warning" id="btnUbicacion">
+                                                <i class="fal fa-map-marker"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button id="btnCancelar" class="btn btn-default btn-lg btn-round" data-dismiss="modal">
+                                            <i class="fal fa-remove"></i>
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button id="btnGuardar" class="btn btn-info btn-lg btn-round">
+                                            <i class="fal fa-save"></i> 
+                                            Guardar
+                                        </button>
+                                    </div>
+                                </div>
+                                
                             </div>
-
                         </div>
-                    
                     </div>
                 </div>
             </div>
             `
-        
         },
         modalMapa: ()=>{
             return `
@@ -104,6 +186,8 @@ async function addListeners(){
 
     let btnNuevoCliente = document.getElementById('btnNuevoCliente');
     btnNuevoCliente.addEventListener('click',()=>{
+        funciones.ObtenerUbicacion('txtLatitud','txtLongitud');
+
         $('#ModalNuevoCliente').modal('show');
     });
 
@@ -114,6 +198,7 @@ async function addListeners(){
     });
 
     await api.censoListado(GlobalCodSucursal, GlobalCodUsuario, cmbDiaVisita.value, 'listadoContainer');
+
 
     
 };
@@ -141,9 +226,7 @@ function showUbicacion(){
         funciones.AvisoError(error.toString());
     }
 
-    document.getElementById('lbClienteLat').innerText = lat;
-    document.getElementById('lbClienteLong').innerText = long;
-
+    
     /**
     L.marker([rows.LAT, rows.LONG])
         .addTo(map)
