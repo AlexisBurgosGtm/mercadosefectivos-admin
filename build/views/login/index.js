@@ -30,9 +30,9 @@ function getView(){
                                 <input class="form-control" type="password" id="txtPass" placeholder="Escriba su contraseña" required="true">
                             </div>
                             <div class="form-group" align="center">
-                                <button class="btn btn-outline-danger btn-lg shadow btn-rounded col-12"  type="submit">
+                                <button class="btn btn-outline-info btn-lg shadow btn-round col-12 shadow"  type="submit" id="btnIniciar">
                                     <i class="fal fa-unlock"></i>
-                                    INICIAR
+                                    Ingresar
                                 </button>
                             </div>
                         </form>
@@ -99,12 +99,20 @@ function addListeners(){
     })
 
     let frmLogin = document.getElementById('frmLogin');
-
+    let btnIniciar = document.getElementById('btnIniciar');
     frmLogin.addEventListener('submit',(e)=>{
         e.preventDefault();
+        btnIniciar.innerHTML = GlobalLoader; //<i class="fal fa-unlock"></i>Ingresar
         api.empleadosLogin(frmLogin.cmbSucursal.value,frmLogin.txtUser.value,frmLogin.txtPass.value)
-        
-    })
+        .then(()=>{
+            
+        })
+        .catch(()=>{
+            btnIniciar.innerHTML = '<i class="fal fa-unlock"></i>Ingresar'
+        });
+    });
+
+
 
     let txtQry = document.getElementById('txtQry');
     let rootQry = document.getElementById('rootQry');
@@ -120,19 +128,24 @@ function addListeners(){
             funciones.AvisoError('Error')
         })
 
-    })
+    });
+
+    //carga las sucursales directamente desde código
+    document.getElementById('cmbSucursal').innerHTML = funciones.getComboSucursales();
+
 };
 
 
 function InicializarVista(){
    getView();
    addListeners();
+    
    
+   /* 
    classTipoDocumentos.getSucursales('cmbSucursal')
    .then(async()=>{
        console.log('hola mundo...')
    })
-
-
-   
+   */
+  
 };

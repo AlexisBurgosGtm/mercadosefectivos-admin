@@ -559,29 +559,6 @@ let funciones = {
       regex = new RegExp(reemplazarQue, modif);
       return texto.replace(regex,reemplazarCon);
     },
-    copyTextToClipboard: (text)=> {
-      if (window.clipboardData && window.clipboardData.setData) {
-        // IE specific code path to prevent textarea being shown while dialog is visible.
-        return window.clipboardData.setData('Text', text);
-      } else if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
-        const textArea = createTextarea(text);
-        textArea.focus();
-        textArea.select();
-    
-        try {
-          const status = document.execCommand('copy'); // Security exception may be thrown by some browsers.
-          if (status) {
-            createNotification('Copied text to clipboard');
-          }
-          return status;
-        } catch (ex) {
-          console.warn('Copy to clipboard failed.', ex);
-          return false;
-        } finally {
-          document.body.removeChild(textArea);
-        }
-      }
-    },
     devuelveFecha: (idInputFecha)=>{
       let fe = new Date(document.getElementById(idInputFecha).value);
       let ae = fe.getFullYear();
@@ -1004,6 +981,23 @@ let funciones = {
           });
       
     
+    },
+    getComboSucursales: ()=>{
+      let str = '';
+      let data = [
+        {codsucursal:"ME-ZACAPA",nomsucursal:"BODEGA ZACAPA",color:"success"},
+        {codsucursal:"ME-IZABAL",nomsucursal:"BODEGA IZABAL",color:"primary"},
+        {codsucursal:"ME-JUTIAPA",nomsucursal:"BODEGA JUTIAPA",color:"info"},
+        {codsucursal:"ME-COBAN",nomsucursal:"BODEGA COBAN",color:"warning"},
+        {codsucursal:"ME-PETEN",nomsucursal:"BODEGA PETEN",color:"danger"},
+      ];
+
+      data.map((rows)=>{
+        str = str + `<option value='${rows.codsucursal}'>${rows.nomsucursal}</option>`;
+      });
+
+      return str;
+      
     } 
 };
 

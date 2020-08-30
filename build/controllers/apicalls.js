@@ -71,39 +71,44 @@ let api = {
         
     },
     empleadosLogin : (sucursal,user,pass)=>{
+        return new Promise((resolve,reject)=>{
+            axios.post('/empleados/login', {
+                app:GlobalSistema,
+                codsucursal: sucursal,
+                user:user,
+                pass:pass       
+            })
+            .then((response) => {
+                const data = response.data.recordset;
+                if(response.data.rowsAffected[0]==1){
+                    data.map((rows)=>{
+                        if(rows.USUARIO==user){
+                            GlobalCodUsuario = rows.CODIGO;
+                            GlobalUsuario = rows.USUARIO;
+                            GlobalTipoUsuario = rows.TIPO;
+                            GlobalCoddoc= rows.CODDOC;
+                            GlobalCodSucursal = sucursal;
+                            GlobalSistema = sucursal;
+                            
+                            classNavegar.inicio(GlobalTipoUsuario);        
+                        }        
+                    })
+                    resolve();
+                }else{
+                    GlobalCodUsuario = 9999
+                    GlobalUsuario = '';
+                    GlobalTipoUsuario = '';
+                    GlobalCoddoc= '';
+                    funciones.AvisoError('Usuario o Contraseña incorrectos, intente seleccionando la sucursal a la que pertenece');
+                    reject();
+                }
+            }, (error) => {
+                funciones.AvisoError('Error en la solicitud');
+                reject();
+            });
 
-        axios.post('/empleados/login', {
-            app:GlobalSistema,
-            codsucursal: sucursal,
-            user:user,
-            pass:pass       
         })
-        .then((response) => {
-            const data = response.data.recordset;
-            if(response.data.rowsAffected[0]==1){
-                data.map((rows)=>{
-                    if(rows.USUARIO==user){
-                        GlobalCodUsuario = rows.CODIGO;
-                        GlobalUsuario = rows.USUARIO;
-                        GlobalTipoUsuario = rows.TIPO;
-                        GlobalCoddoc= rows.CODDOC;
-                        GlobalCodSucursal = sucursal;
-                        GlobalSistema = sucursal;
-                        
-                        classNavegar.inicio(GlobalTipoUsuario);        
-                    }        
-                })
-            }else{
-                GlobalCodUsuario = 9999
-                GlobalUsuario = '';
-                GlobalTipoUsuario = '';
-                GlobalCoddoc= '';
-                funciones.AvisoError('Usuario o Contraseña incorrectos, intente seleccionando la sucursal a la que pertenece')
-            }
-            
-        }, (error) => {
-            funciones.AvisoError('Error en la solicitud');
-        });
+        
 
     },
     clientesVendedor: async(sucursal,codven,dia,idContenedor,idContenedorVisitados)=>{
@@ -1225,57 +1230,6 @@ let api = {
                 reject();
             });
         })
-    },
-    censoListado:(sucursal, codven, visita, idContainer)=>{
-        let container = document.getElementById(idContainer);
-        container.innerHTML = GlobalLoader;
-        
-        let strdata = '';
-        let tbl = `<div class="table-responsive">
-                        <table class="table table-responsive table-hover table-striped">
-                            <thead class="bg-primary text-white">
-                                <tr>
-                                    <td>Código/NIT</td>
-                                    <td>Cliente/Dirección</td>
-                                    <td>Teléfono</td>
-                                </tr>
-                            </thead>
-                        </table>
-                        <tbody id="tblListado">`;
-
-        let tblfoot = `</tbody></table>`;
-
-        axios.post('/censo/listaclientes', {
-            sucursal: sucursal,
-            codven:codven,
-            visita:visita
-        })
-        .then((response) => {
-            const data = response.data.recordset;
-            
-            data.map((rows)=>{
-                    let strClass = '';
-                    strdata = strdata + `<tr class="cursormano"
-                    onClick="fcnGetDataCliente('${rows.CODCLIE}');">
-                                            <td>${rows.CODCLIE}
-                                                <br>
-                                                <small>NIT:<b>${rows.NITCLIE}</b></small>
-                                            </td>
-                                            <td>${rows.NOMCLIE}
-                                                <br>
-                                                <small>${rows.DIRCLIE},${rows.DESMUNI}</small>
-                                            </td>
-                                            <td>${rows.TELEFONO}</td>
-                                        </tr>`
-            })
-            container.innerHTML = tbl + strdata + tblfoot;
-            
-        }, (error) => {
-            funciones.AvisoError('Error en la solicitud');
-            strdata = '';
-            container.innerHTML = '';
-        });
-
     },
     clientesListadoVendedor:(sucursal, codven, idContainer)=>{
         let container = document.getElementById(idContainer);

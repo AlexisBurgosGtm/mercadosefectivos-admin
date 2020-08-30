@@ -5,7 +5,7 @@
   /* Break the flow */
   position: absolute;
   top: 0px;
-
+  
   /* Give them all the available space */
   width: 100%;
   height: 100%;
@@ -28,6 +28,10 @@
 }
 /* EVITA EL PULL TO REFRESH CON LA CLASE BODY Y LUEGO UN DIV WRAPPER */
 /****************************************/
+
+.toppegado {
+  margin-top: 0px;
+};
 
 .mapcontainer {
     width: 100%;
