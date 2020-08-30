@@ -8,7 +8,9 @@ router.post("/nuevocliente", async(req,res)=>{
 
     let qry = `INSERT INTO ME_CENSO (CODSUCURSAL,CODVEN,FECHA,CODCLIE,NITCLIE,NEGOCIO,NOMCLIE,DIRCLIE,REFERENCIA,CODMUN,CODDEPTO,OBS,VISITA,LAT,LONG,TELEFONO)
     VALUES ('${sucursal}',${codven},'${fecha}',${codclie},'${nitclie}','${negocio}','${nomclie}','${dirclie}','${referencia}','${codmun}','${coddepto}','${obs}','${visita}',${lat},${long},'${telefono}');`
-
+    
+    console.log(qry);
+    
      execute.Query(res,qry);
      
 });
@@ -18,8 +20,12 @@ router.post("/listaclientes", async(req,res)=>{
 
     const{sucursal,codven,visita} = req.body;
 
-    let qry = `SELECT CODSUCURSAL,CODVEN,FECHA,CODCLIE,NITCLIE,NEGOCIO,NOMCLIE,DIRCLIE,CODMUN,CODDEPTO, REFERENCIA,OBS,VISITA,LAT,LONG,TELEFONO
-     FROM ME_CENSO WHERE CODSUCURSAL='${sucursal}' AND CODVEN=${codven} AND VISITA='${visita}'; `
+    let qry = `SELECT ME_CENSO.CODSUCURSAL, ME_CENSO.CODVEN, ME_CENSO.FECHA, ME_CENSO.CODCLIE, ME_CENSO.NITCLIE, ME_CENSO.NEGOCIO, ME_CENSO.NOMCLIE, ME_CENSO.DIRCLIE, ME_CENSO.CODMUN, 
+    ME_CENSO.CODDEPTO, ME_CENSO.REFERENCIA, ME_CENSO.OBS, ME_CENSO.VISITA, ME_CENSO.LAT, ME_CENSO.LONG, ME_CENSO.TELEFONO, ME_Municipios.DESMUNI AS MUNICIPIO, ME_Departamentos.DESDEPTO AS DEPARTAMENTO
+    FROM ME_CENSO LEFT OUTER JOIN
+    ME_Departamentos ON ME_CENSO.CODDEPTO = ME_Departamentos.CODDEPTO AND ME_CENSO.CODSUCURSAL = ME_Departamentos.CODSUCURSAL LEFT OUTER JOIN
+    ME_Municipios ON ME_CENSO.CODMUN = ME_Municipios.CODMUNI AND ME_CENSO.CODSUCURSAL = ME_Municipios.CODSUCURSAL
+     WHERE ME_CENSO.CODSUCURSAL='${sucursal}' AND ME_CENSO.CODVEN=${codven} AND ME_CENSO.VISITA='${visita}'; `
 
      execute.Query(res,qry);
      

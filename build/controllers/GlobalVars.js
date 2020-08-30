@@ -20,6 +20,7 @@ let GlobalUsuario = 'MERCADOSEFECTIVOS';
 let GlobalNivelUser = 0;
 let GlobalTipoUsuario ='';
 let GlobalSelectedDia ='';
+let GlobalBool = false;
 
 let GlobalEmpnit = '1034261-3';
 let GlobalEmpNombre = 'MERCADOS EFECTIVOS';

@@ -12,7 +12,7 @@ function getView(){
                     </ul>
                     <div class="tab-content py-3">
 
-                        <div class="tab-pane slide active show" id="panelListado" role="tabpanel">
+                        <div class="tab-pane fade active show" id="panelListado" role="tabpanel">
                             <div class="row">
                                 <div class="form-group">
                                     <label>Día de Visita</label>
@@ -33,7 +33,7 @@ function getView(){
 
                         </div>
                         
-                        <div class="tab-pane slide" id="panelNuevo" role="tabpanel">
+                        <div class="tab-pane fade" id="panelNuevo" role="tabpanel">
                             
 
                         </div>
@@ -97,7 +97,7 @@ function getView(){
                                 
                                 <div class="form-group">
                                     <label>Referencia:</label>
-                                    <input id="txtReferncia" class="form-control" type="text" maxlenght="250" placeholder="Referencia del cliente...">
+                                    <input id="txtReferencia" class="form-control" type="text" maxlenght="250" placeholder="Referencia del cliente...">
                                 </div>
                                 <br>
 
@@ -189,6 +189,8 @@ function getView(){
 
 async function addListeners(){
 
+    GlobalBool = false;
+
     let cmbDiaVisita = document.getElementById('cmbDiaVisita');
     cmbDiaVisita.innerHTML = funciones.ComboSemana("LETRAS");
     
@@ -210,30 +212,29 @@ async function addListeners(){
 
     let btnNuevoCliente = document.getElementById('btnNuevoCliente');
     btnNuevoCliente.addEventListener('click',()=>{
-        //funciones.ObtenerUbicacion('txtLatitud','txtLongitud');
-        //document.getElementById('btnTabNuevo').click()
         document.getElementById('btnTabUbicacion').click();
         document.getElementById('cmbVendedor').value = GlobalCodUsuario;
-        //btnNuevoCliente.style = 'visibility:hidden';
-        //btnNuevoClienteUbicacion.style = 'visibility:visible';
+       
         setTimeout(function () {
-            map.invalidateSize();
-            
-        }, 500); 
+            try {
+                map.invalidateSize();    
+            } catch (error) {
+                
+            }
+        }, 500);
+
     });
 
     
     btnNuevoClienteUbicacion.addEventListener('click',()=>{
-        document.getElementById('btnTabNuevo').click()        
-        //btnNuevoClienteUbicacion.style = 'visibility:hidden';
+        document.getElementById('btnTabNuevo').click();        
+        fcnCleanDataCliente();
     });
 
-    //btnNuevoClienteUbicacion.style = 'visibility:hidden';
-
+    
     let btnUbicacion = document.getElementById('btnUbicacion');
     btnUbicacion.addEventListener('click',()=>{
         btnNuevoCliente.click();
-
     });
 
     //carga el listado de clientes en el censo
@@ -249,28 +250,57 @@ async function addListeners(){
 
     let btnCancelar = document.getElementById('btnCancelar');
     btnCancelar.addEventListener('click',()=>{
+        fcnCleanDataCliente();
         document.getElementById('btnTabListado').click();
-        //btnNuevoCliente.style = 'visibility:visible';
     });
 
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
-        funciones.Confirmacion('¿Está seguro que desea Guardar este Cliente?')
-        .then((value)=>{
-            if(value==true){
-                fcnGuardarCliente()
-                .then(async()=>{
-                    document.getElementById('btnTabListado').click();
-                    //btnNuevoCliente.style = 'visibility:visible';
-                    //btnNuevoClienteUbicacion.style = 'visibility:hidden';
-                    await fcnCensoListado(GlobalCodSucursal, GlobalCodUsuario, cmbDiaVisita.value, 'listadoContainer');
-                })
-                .catch(()=>{
-                    funciones.AvisoError('No se pudo guardar el cliente, revise su conexión')
-                })
+        if(GlobalBool==false){
 
-            }
-        })
+            funciones.Confirmacion('¿Está seguro que desea GUARDAR este Cliente?')
+            .then((value)=>{
+                if(value==true){
+    
+                    fcnGuardarCliente()
+                    .then(()=>{
+                        GlobalBool = false;
+                        document.getElementById('btnTabListado').click();
+                        fcnCleanDataCliente();
+                        fcnCensoListado(GlobalCodSucursal, GlobalCodUsuario, cmbDiaVisita.value, 'listadoContainer');
+                        funciones.Aviso('Cliente Creado exitosamente!!');
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('No se pudo guardar el cliente, revise su conexión')
+                    })
+                    
+                }
+            })
+
+        }else{
+
+            funciones.Confirmacion('¿Está seguro que desea EDITAR este Cliente?')
+            .then((value)=>{
+                if(value==true){
+    
+                    fcnEditarCliente()
+                    .then(()=>{
+                        GlobalBool = false;
+                        document.getElementById('btnTabListado').click();
+                        fcnCleanDataCliente();
+                        fcnCensoListado(GlobalCodSucursal, GlobalCodUsuario, cmbDiaVisita.value, 'listadoContainer');
+                        funciones.Aviso('Cliente Editado exitosamente!!');
+                        document.getElementById('txtCodigo').disabled = false;
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('No se pudo editar el cliente, revise su conexión')
+                    })
+                    
+                }
+            });
+
+        }
+        
         
         
     });
@@ -283,25 +313,25 @@ async function addListeners(){
 };
 
 function fcnGuardarCliente(){  
-
-    let txtNit = document.getElementById('txtNit');
-    let txtCodigo = document.getElementById('txtCodigo');
-    let cmbVisitaCliente = document.getElementById('cmbVisitaCliente');
-    let txtNegocio = document.getElementById('txtNegocio'); 
-    let txtNomcliente = document.getElementById('txtNomcliente');
-    let txtDircliente = document.getElementById('txtDircliente');
-    let txtReferencia = document.getElementById('txtReferencia');
-    let cmbMunicipio = document.getElementById('cmbMunicipio');
-    let cmbDepartamento = document.getElementById('cmbDepartamento');
-    let cmbVendedor = document.getElementById('cmbVendedor');
-    let txtTelefono = document.getElementById('txtTelefono');
-    let txtObs = document.getElementById('txtObs');
-    let txtLatitud = document.getElementById('txtLatitud');
-    let txtLongitud = document.getElementById('txtLongitud');
-
+    
     return new Promise((resolve,reject)=>{
+        let txtNit = document.getElementById('txtNit');
+        let txtCodigo = document.getElementById('txtCodigo');
+        let cmbVisitaCliente = document.getElementById('cmbVisitaCliente');
+        let txtNegocio = document.getElementById('txtNegocio'); 
+        let txtNomcliente = document.getElementById('txtNomcliente');
+        let txtDircliente = document.getElementById('txtDircliente');
+        let txtReferencia = document.getElementById('txtReferencia');
+        let cmbMunicipio = document.getElementById('cmbMunicipio');
+        let cmbDepartamento = document.getElementById('cmbDepartamento');
+        let cmbVendedor = document.getElementById('cmbVendedor');
+        let txtTelefono = document.getElementById('txtTelefono');
+        let txtObs = document.getElementById('txtObs');
+        let txtLatitud = document.getElementById('txtLatitud');
+        let txtLongitud = document.getElementById('txtLongitud');
+
         axios.post('/censo/nuevocliente',{
-            sucursal:sucursal,
+            sucursal:GlobalCodSucursal,
             codven:cmbVendedor.value,
             fecha:funciones.getFecha(),
             codclie:txtCodigo.value,
@@ -319,13 +349,15 @@ function fcnGuardarCliente(){
             long:txtLongitud.innerText
         })
         .then((response) => {
+            
             let data = response.data;
             if(Number(data.rowsAffected[0])>0){
-                resolve();             
+                resolve();
             }else{
                 reject();
             };
         }, (error) => {
+            console.log(error);
             reject();
         });      
 
@@ -333,22 +365,98 @@ function fcnGuardarCliente(){
     });
 };
 
-function getDataCliente(codigo,nit,negocio,nombre,direccion,referencia,codmun,coddepto,obs,codven,visita,latitud,longitud){
+function fcnEditarCliente(){  
+    
+    return new Promise((resolve,reject)=>{
+        let txtNit = document.getElementById('txtNit');
+        let txtCodigo = document.getElementById('txtCodigo');
+        let cmbVisitaCliente = document.getElementById('cmbVisitaCliente');
+        let txtNegocio = document.getElementById('txtNegocio'); 
+        let txtNomcliente = document.getElementById('txtNomcliente');
+        let txtDircliente = document.getElementById('txtDircliente');
+        let txtReferencia = document.getElementById('txtReferencia');
+        let cmbMunicipio = document.getElementById('cmbMunicipio');
+        let cmbDepartamento = document.getElementById('cmbDepartamento');
+        let cmbVendedor = document.getElementById('cmbVendedor');
+        let txtTelefono = document.getElementById('txtTelefono');
+        let txtObs = document.getElementById('txtObs');
+        let txtLatitud = document.getElementById('txtLatitud');
+        let txtLongitud = document.getElementById('txtLongitud');
 
-    document.getElementById('txtNit').value = nit;
-    document.getElementById('txtCodigo').value = codigo;
-    document.getElementById('cmbVisitaCliente').value = visita;
-    document.getElementById('txtNegocio').value = negocio; 
-    document.getElementById('txtNomcliente').value = nombre;
-    document.getElementById('txtDircliente').value = direccion;
-    document.getElementById('txtReferencia').value = referencia;
-    document.getElementById('cmbMunicipio').value = codmun;
-    document.getElementById('cmbDepartamento').value = coddepto;
-    document.getElementById('cmbVendedor').value = codven;
-    document.getElementById('txtTelefono').value = telefono;
-    document.getElementById('txtObs').value = obs;
-    document.getElementById('txtLatitud').innerText = latitud;
-    document.getElementById('txtLongitud').innerText = longitud;
+        axios.post('/censo/editarcliente',{
+            sucursal:GlobalCodSucursal,
+            codven:cmbVendedor.value,
+            fecha:funciones.getFecha(),
+            codclie:txtCodigo.value,
+            nitclie:txtNit.value,
+            negocio: funciones.quitarCaracteres(txtNegocio.value,'"'," pulg",true),
+            nomclie: funciones.quitarCaracteres(txtNomcliente.value,'"'," pulg",true), 
+            dirclie: funciones.quitarCaracteres(txtDircliente.value,'"'," pulg",true), 
+            codmun:cmbMunicipio.value,
+            coddepto:cmbDepartamento.value,
+            referencia: funciones.quitarCaracteres(txtReferencia.value,'"'," pulg",true), 
+            obs: funciones.quitarCaracteres(txtObs.value,'"'," pulg",true), 
+            telefono:txtTelefono.value,
+            visita:cmbVisitaCliente.value,
+            lat:txtLatitud.innerText,
+            long:txtLongitud.innerText
+        })
+        .then((response) => {
+            
+            let data = response.data;
+            if(Number(data.rowsAffected[0])>0){
+                resolve();
+            }else{
+                reject();
+            };
+        }, (error) => {
+            console.log(error);
+            reject();
+        });      
+
+
+    });
+};
+
+function getDataCliente(codigo,nit,negocio,nombre,direccion,referencia,codmun,coddepto,obs,codven,visita,latitud,longitud,telefono){
+    funciones.Confirmacion('¿Está seguro que desea EDITAR este cliente?')
+    .then((value)=>{
+        if(value==true){
+            GlobalBool = true;
+            
+            document.getElementById('txtCodigo').value = codigo;
+            document.getElementById('txtCodigo').disabled = true;
+
+            document.getElementById('txtNit').value = nit;
+            document.getElementById('cmbVisitaCliente').value = visita;
+            document.getElementById('txtNegocio').value = negocio; 
+            document.getElementById('txtNomcliente').value = nombre;
+            document.getElementById('txtDircliente').value = direccion;
+            document.getElementById('txtReferencia').value = referencia;
+            document.getElementById('cmbMunicipio').value = codmun;
+            document.getElementById('cmbDepartamento').value = coddepto;
+            document.getElementById('cmbVendedor').value = codven;
+            document.getElementById('txtTelefono').value = telefono;
+            document.getElementById('txtObs').value = obs;
+            document.getElementById('txtLatitud').innerText = latitud;
+            document.getElementById('txtLongitud').innerText = longitud;
+
+            document.getElementById('btnTabNuevo').click();
+        }
+    });
+
+};
+
+function fcnCleanDataCliente(){
+    
+            document.getElementById('txtNit').value = "CF";
+            document.getElementById('txtCodigo').value = "";
+            document.getElementById('txtNegocio').value = ""; 
+            document.getElementById('txtNomcliente').value = "";
+            document.getElementById('txtDircliente').value = "";
+            document.getElementById('txtReferencia').value = "";
+            document.getElementById('txtTelefono').value = "";
+            document.getElementById('txtObs').value = "SN";
 
 };
 
@@ -413,10 +521,6 @@ function iniciarVistaVendedorCenso(){
     addListeners();
 };
 
-function fcnGetDataCliente(codclie){
-
-};
-
 function iniciarMapa(){
     
     try {
@@ -446,19 +550,18 @@ function fcnCensoListado(sucursal, codven, visita, idContainer){
     container.innerHTML = GlobalLoader;
     
     let strdata = '';
-    let tbl = `<div class="table-responsive">
+    let tbl = `<div class="table-responsive col-12">
                     <table class="table table-responsive table-hover table-striped">
-                        <thead class="bg-primary text-white">
+                        <thead class="bg-trans-gradient text-white">
                             <tr>
                                 <td>Código/NIT</td>
                                 <td>Cliente/Dirección</td>
                                 <td>Teléfono</td>
                             </tr>
                         </thead>
-                    </table>
-                    <tbody id="tblListado">`;
+                        <tbody id="tblListado">`;
 
-    let tblfoot = `</tbody></table>`;
+    let tblfoot = `</tbody></table></div>`;
 
     axios.post('/censo/listaclientes', {
         sucursal: sucursal,
@@ -469,19 +572,23 @@ function fcnCensoListado(sucursal, codven, visita, idContainer){
         const data = response.data.recordset;
         
         data.map((rows)=>{
-                let strClass = '';
-                strdata = strdata + `<tr class="cursormano"
-                onClick="fcnGetDataCliente('${rows.CODCLIE}');">
-                                        <td>${rows.CODCLIE}
-                                            <br>
-                                            <small>NIT:<b>${rows.NITCLIE}</b></small>
-                                        </td>
-                                        <td>${rows.NOMCLIE}
-                                            <br>
-                                            <small>${rows.DIRCLIE},${rows.DESMUNI}</small>
-                                        </td>
-                                        <td>${rows.TELEFONO}</td>
-                                    </tr>`
+                strdata = strdata + `<tr class="cursormano border-bottom"
+                onClick="getDataCliente('${rows.CODCLIE}','${rows.NITCLIE}','${rows.NEGOCIO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.REFERENCIA}','${rows.CODMUN}','${rows.CODDEPTO}','${rows.OBS}','${rows.CODVEN}','${rows.VISITA}','${rows.LAT}','${rows.LONG}','${rows.TELEFONO}')">
+                    <td>${rows.NITCLIE}
+                        <br>
+                        <small>Código: <b>${rows.CODCLIE}</b> </small>
+                    </td>
+
+                    <td>${rows.NOMCLIE}
+                            <br>
+                        <small><b>${rows.NEGOCIO}</b></small>
+                            <br class="border-bottom">
+                        <small>${rows.DIRCLIE},${rows.MUNICIPIO}</small>
+                    </td>
+
+                    <td>${rows.TELEFONO}
+                    </td>
+                </tr>`
         })
         container.innerHTML = tbl + strdata + tblfoot;
         
