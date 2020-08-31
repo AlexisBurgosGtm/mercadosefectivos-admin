@@ -258,24 +258,38 @@ async function addListeners(){
     btnGuardar.addEventListener('click',()=>{
         if(GlobalBool==false){
 
-            funciones.Confirmacion('¿Está seguro que desea GUARDAR este Cliente?')
-            .then((value)=>{
-                if(value==true){
-    
-                    fcnGuardarCliente()
-                    .then(()=>{
-                        GlobalBool = false;
-                        document.getElementById('btnTabListado').click();
-                        fcnCleanDataCliente();
-                        fcnCensoListado(GlobalCodSucursal, GlobalCodUsuario, cmbDiaVisita.value, 'listadoContainer');
-                        funciones.Aviso('Cliente Creado exitosamente!!');
-                    })
-                    .catch(()=>{
-                        funciones.AvisoError('No se pudo guardar el cliente, revise su conexión')
-                    })
-                    
-                }
+            document.getElementById('btnGuardar').innerHTML = GlobalLoader; //   <i class="fal fa-save"></i>Guardar
+            verifyCodigoCliente(txtCodigo.value)
+            .then(()=>{
+                document.getElementById('btnGuardar').innerHTML = '<i class="fal fa-save"></i>Guardar';
+                funciones.Confirmacion('¿Está seguro que desea GUARDAR este Cliente?')
+                .then((value)=>{
+                    if(value==true){
+                        document.getElementById('btnGuardar').innerHTML = GlobalLoader; //   <i class="fal fa-save"></i>Guardar
+                        fcnGuardarCliente()
+                        .then(()=>{
+                            GlobalBool = false;
+                            document.getElementById('btnTabListado').click();
+                            fcnCleanDataCliente();
+                            fcnCensoListado(GlobalCodSucursal, GlobalCodUsuario, cmbDiaVisita.value, 'listadoContainer');
+                            funciones.Aviso('Cliente Creado exitosamente!!');
+                            document.getElementById('btnGuardar').innerHTML = '<i class="fal fa-save"></i>Guardar';
+                        })
+                        .catch(()=>{
+                            funciones.AvisoError('No se pudo guardar el cliente, revise su conexión');
+                            document.getElementById('btnGuardar').innerHTML = '<i class="fal fa-save"></i>Guardar';
+                        })
+                        
+                    }
+                })
             })
+            .catch(()=>{
+                funciones.AvisoError('Código ya existe o no se pudo Verificar');                
+                document.getElementById('btnGuardar').innerHTML = '<i class="fal fa-save"></i>Guardar';
+                document.getElementById('txtCodigo').focus();
+            })
+
+            
 
         }else{
 
@@ -305,10 +319,46 @@ async function addListeners(){
         
     });
 
+    //VERIFICACION DE CÓDIGO DE CLIENTE
+    let txtCodigo = document.getElementById('txtCodigo');
+    txtCodigo.addEventListener('focusout',()=>{
+        verifyCodigoCliente(txtCodigo.value)
+        .then(()=>{
+            funciones.Aviso('Código de Cliente aprobado')
+        })
+        .catch(()=>{
+            funciones.AvisoError('Código ya existe o no se pudo Verificar');
+            document.getElementById('txtCodigo').focus();
+        })
+    })
+
     await getComboMunicipios('cmbMunicipio');
     await getComboDepartamentos('cmbDepartamento');  
 
     await api.comboVendedores(GlobalCodSucursal,'cmbVendedor');
+
+};
+
+function verifyCodigoCliente(codclie){
+    
+    return new Promise((resolve,reject)=>{
+        axios.post('/censo/verificar',{
+            sucursal:GlobalCodSucursal,
+            codclie:Number(codclie)
+        })
+        .then((response) => {
+            
+            let data = response.data;
+            if(Number(data.rowsAffected[0])>0){
+                reject();
+            }else{
+                resolve();
+            };
+        }, (error) => {
+            console.log(error);
+            reject();
+        });          
+    });
 
 };
 

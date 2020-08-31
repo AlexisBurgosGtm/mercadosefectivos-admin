@@ -85,5 +85,16 @@ router.post("/departamentos", async(req,res)=>{
      
 });
 
+
+router.post("/verificar", async(req,res)=>{
+
+    const{sucursal,codclie} = req.body;
+
+    let qry = `SELECT CODCLIE FROM ME_CENSO WHERE CODSUCURSAL='${sucursal}' AND CODCLIE=${codclie};`
+
+     execute.Query(res,qry);
+     
+});
+
 module.exports = router;
 
