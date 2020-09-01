@@ -538,7 +538,7 @@ let funciones = {
       let fecha
       let f = new Date(); 
       let d = f.getDate(); 
-      let m = f.getUTCMonth(); //f.getUTCMonth()+1; 
+      let m = f.getUTCMonth()+1; 
       let y = f.getFullYear();
      
       di = d;
