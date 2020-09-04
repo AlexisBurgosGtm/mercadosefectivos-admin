@@ -57,7 +57,12 @@ function getView(){
                             <div class="card shadow col-12">
                                 <br>        
                                 <div class="row">
-                                    
+                                    <div class="col-auto">
+                                        <div class="form-group">
+                                            <label>Codigo:</label>
+                                            <input id="txtCodigo" class="form-control" type="text" placeholder="Código automático"  maxlenght="20">  
+                                        </div>
+                                    </div>
                                     <div class="col-auto">
                                         <div class="form-group">
                                             <label>NIT:</label>
@@ -70,12 +75,7 @@ function getView(){
                                             <select id="cmbVisitaCliente" class="form-control"></select>
                                         </div>    
                                     </div>   
-                                    <div class="col-auto">
-                                        <div class="form-group">
-                                            <label>Codigo:</label>
-                                            <input id="txtCodigo" class="form-control" type="text" placeholder="Escriba el Código"  maxlenght="20">  
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                 <br>
                                 
@@ -244,7 +244,7 @@ async function addListeners(){
         fcnCleanDataCliente();
 
         document.getElementById('cmbVendedor').value = GlobalCodUsuario;
-        
+        //RE-AJUSTA EL MAPA A LA PANTALLA
         setTimeout(function () {
             try {
                 map.invalidateSize();    
@@ -258,6 +258,14 @@ async function addListeners(){
     
     btnNuevoClienteUbicacion.addEventListener('click',()=>{
         document.getElementById('btnTabNuevo').click();        
+        //RE-AJUSTA EL MAPA A LA PANTALLA
+        setTimeout(function () {
+            try {
+                map.invalidateSize();    
+            } catch (error) {
+                
+            }
+        }, 500);
         
     });
 
@@ -666,7 +674,7 @@ function fcnCensoListado(sucursal, codven, visita, idContainer){
         
         data.map((rows)=>{
                 strdata = strdata + `<tr class="cursormano border-bottom"
-                onClick="getDataCliente('${rows.CODCLIE}','${rows.NITCLIE}','${rows.TIPONEGOCIO}','${rows.NEGOCIO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.REFERENCIA}','${rows.CODMUN}','${rows.CODDEPTO}','${rows.OBS}','${rows.CODVEN}','${rows.VISITA}','${rows.LAT}','${rows.LONG}','${rows.TELEFONO}')">
+                ondblclick="getDataCliente('${rows.CODCLIE}','${rows.NITCLIE}','${rows.TIPONEGOCIO}','${rows.NEGOCIO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.REFERENCIA}','${rows.CODMUN}','${rows.CODDEPTO}','${rows.OBS}','${rows.CODVEN}','${rows.VISITA}','${rows.LAT}','${rows.LONG}','${rows.TELEFONO}')">
                     <td>${rows.NITCLIE}
                         <br>
                         <small>Código: <b>${rows.CODCLIE}</b> </small>
