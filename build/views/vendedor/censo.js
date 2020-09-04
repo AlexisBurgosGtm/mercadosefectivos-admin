@@ -258,14 +258,8 @@ async function addListeners(){
     
     btnNuevoClienteUbicacion.addEventListener('click',()=>{
         document.getElementById('btnTabNuevo').click();        
-        //RE-AJUSTA EL MAPA A LA PANTALLA
-        setTimeout(function () {
-            try {
-                map.invalidateSize();    
-            } catch (error) {
-                
-            }
-        }, 500);
+        
+        
         
     });
 
@@ -273,7 +267,12 @@ async function addListeners(){
     let btnUbicacion = document.getElementById('btnUbicacion');
     btnUbicacion.addEventListener('click',()=>{
         document.getElementById('btnTabUbicacion').click();
-        
+        //RE-AJUSTA EL MAPA A LA PANTALLA
+        try {
+            map.invalidateSize();    
+        } catch (error) {
+            
+        };
     });
 
     //carga el listado de clientes en el censo
