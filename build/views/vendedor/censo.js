@@ -268,11 +268,13 @@ async function addListeners(){
     btnUbicacion.addEventListener('click',()=>{
         document.getElementById('btnTabUbicacion').click();
         //RE-AJUSTA EL MAPA A LA PANTALLA
-        try {
-            map.invalidateSize();    
-        } catch (error) {
-            
-        };
+        setTimeout(function () {
+            try {
+                map.invalidateSize();    
+            } catch (error) {
+                
+            }
+        }, 500);
     });
 
     //carga el listado de clientes en el censo
