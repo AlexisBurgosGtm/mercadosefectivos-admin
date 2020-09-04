@@ -57,12 +57,7 @@ function getView(){
                             <div class="card shadow col-12">
                                 <br>        
                                 <div class="row">
-                                    <div class="col-auto">
-                                        <div class="form-group">
-                                            <label>Codigo:</label>
-                                            <input id="txtCodigo" class="form-control" type="text" placeholder="Escriba el Código"  maxlenght="20">  
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-auto">
                                         <div class="form-group">
                                             <label>NIT:</label>
@@ -75,13 +70,45 @@ function getView(){
                                             <select id="cmbVisitaCliente" class="form-control"></select>
                                         </div>    
                                     </div>   
+                                    <div class="col-auto">
+                                        <div class="form-group">
+                                            <label>Codigo:</label>
+                                            <input id="txtCodigo" class="form-control" type="text" placeholder="Escriba el Código"  maxlenght="20">  
+                                        </div>
+                                    </div>
                                 </div>
                                 <br>
                                 
                                 <div class="form-group">
                                     <label>Negocio/Establecimiento:</label>
-                                    <input id="txtNegocio" class="form-control" type="text" placeholder="nombre del negocio"  maxlenght="150">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <select class="form-control" id="cmbTipoNegocio">
+                                                <option value="TIENDITA">TIENDITA</option>
+                                                <option value="ABARROTERIA">ABARROTERIA</option>
+                                                <option value="FARMACIA">FARMACIA</option>
+                                                <option value="LIBRERIA">LIBRERIA</option>
+                                                <option value="PIÑATERIA">PIÑATERIA</option>
+                                                <option value="MUNDO DE 3">MUNDO DE 3</option>
+                                                <option value="RESTAURANTE">RESTAURANTE</option>
+                                                <option value="COMEDOR">COMEDOR</option>
+                                                <option value="PAPEROS">PAPEROS</option>
+                                                <option value="HOTEL">HOTEL</option>
+                                                <option value="AUTOHOTEL">AUTOHOTEL</option>
+                                                <option value="CARNICERIA">CARNICERIA</option>
+                                                <option value="MERCERIA">MERCERIA</option>
+                                                <option value="BAR">BAR</option>
+                                                <option value="MINISUPER">MINISUPER</option>
+                                                <option value="SUPERMERCADO">SUPERMERCADO</option>
+                                                <option value="RUTEROS">RUTEROS</option>
+                                                <option value="OTROS">OTROS</option>
+                                            </select>
+                                        </div>
+                                        <input id="txtNegocio" class="form-control" type="text" placeholder="nombre del negocio"  maxlenght="150">
+                                                
+                                    </div>
                                 </div>
+
                                                                 
                                 <br>
                                 <div class="form-group">
@@ -213,8 +240,11 @@ async function addListeners(){
     let btnNuevoCliente = document.getElementById('btnNuevoCliente');
     btnNuevoCliente.addEventListener('click',()=>{
         document.getElementById('btnTabUbicacion').click();
+        
+        fcnCleanDataCliente();
+
         document.getElementById('cmbVendedor').value = GlobalCodUsuario;
-       
+        
         setTimeout(function () {
             try {
                 map.invalidateSize();    
@@ -228,13 +258,14 @@ async function addListeners(){
     
     btnNuevoClienteUbicacion.addEventListener('click',()=>{
         document.getElementById('btnTabNuevo').click();        
-        fcnCleanDataCliente();
+        
     });
 
     
     let btnUbicacion = document.getElementById('btnUbicacion');
     btnUbicacion.addEventListener('click',()=>{
-        btnNuevoCliente.click();
+        document.getElementById('btnTabUbicacion').click();
+        
     });
 
     //carga el listado de clientes en el censo
@@ -259,8 +290,8 @@ async function addListeners(){
         if(GlobalBool==false){
 
             document.getElementById('btnGuardar').innerHTML = GlobalLoader; //   <i class="fal fa-save"></i>Guardar
-            verifyCodigoCliente(txtCodigo.value)
-            .then(()=>{
+            //verifyCodigoCliente(txtCodigo.value)
+            //.then(()=>{
                 document.getElementById('btnGuardar').innerHTML = '<i class="fal fa-save"></i>Guardar';
                 funciones.Confirmacion('¿Está seguro que desea GUARDAR este Cliente?')
                 .then((value)=>{
@@ -282,12 +313,12 @@ async function addListeners(){
                         
                     }
                 })
-            })
-            .catch(()=>{
-                funciones.AvisoError('Código ya existe o no se pudo Verificar');                
-                document.getElementById('btnGuardar').innerHTML = '<i class="fal fa-save"></i>Guardar';
-                document.getElementById('txtCodigo').focus();
-            })
+            //})
+            //.catch(()=>{
+              //  funciones.AvisoError('Código ya existe o no se pudo Verificar');                
+                //document.getElementById('btnGuardar').innerHTML = '<i class="fal fa-save"></i>Guardar';
+                //document.getElementById('txtCodigo').focus();
+            //})
 
             
 
@@ -321,6 +352,7 @@ async function addListeners(){
 
     //VERIFICACION DE CÓDIGO DE CLIENTE
     let txtCodigo = document.getElementById('txtCodigo');
+    /*
     txtCodigo.addEventListener('focusout',()=>{
         verifyCodigoCliente(txtCodigo.value)
         .then(()=>{
@@ -331,11 +363,14 @@ async function addListeners(){
             document.getElementById('txtCodigo').focus();
         })
     })
+    */
 
     await getComboMunicipios('cmbMunicipio');
     await getComboDepartamentos('cmbDepartamento');  
 
     await api.comboVendedores(GlobalCodSucursal,'cmbVendedor');
+    
+    document.getElementById('txtCodigo').disabled = true;
 
 };
 
@@ -366,6 +401,7 @@ function fcnGuardarCliente(){
     
     return new Promise((resolve,reject)=>{
         let txtNit = document.getElementById('txtNit');
+        let cmbTipoNegocio = document.getElementById('cmbTipoNegocio');
         let txtCodigo = document.getElementById('txtCodigo');
         let cmbVisitaCliente = document.getElementById('cmbVisitaCliente');
         let txtNegocio = document.getElementById('txtNegocio'); 
@@ -385,6 +421,7 @@ function fcnGuardarCliente(){
             codven:cmbVendedor.value,
             fecha:funciones.getFecha(),
             codclie:txtCodigo.value,
+            tiponegocio:cmbTipoNegocio.value,
             nitclie:txtNit.value,
             negocio: funciones.quitarCaracteres(txtNegocio.value,'"'," pulg",true),
             nomclie: funciones.quitarCaracteres(txtNomcliente.value,'"'," pulg",true), 
@@ -421,6 +458,7 @@ function fcnEditarCliente(){
         let txtNit = document.getElementById('txtNit');
         let txtCodigo = document.getElementById('txtCodigo');
         let cmbVisitaCliente = document.getElementById('cmbVisitaCliente');
+        let cmbTipoNegocio = document.getElementById('cmbTipoNegocio');
         let txtNegocio = document.getElementById('txtNegocio'); 
         let txtNomcliente = document.getElementById('txtNomcliente');
         let txtDircliente = document.getElementById('txtDircliente');
@@ -439,6 +477,7 @@ function fcnEditarCliente(){
             fecha:funciones.getFecha(),
             codclie:txtCodigo.value,
             nitclie:txtNit.value,
+            tiponegocio:cmbTipoNegocio.value,
             negocio: funciones.quitarCaracteres(txtNegocio.value,'"'," pulg",true),
             nomclie: funciones.quitarCaracteres(txtNomcliente.value,'"'," pulg",true), 
             dirclie: funciones.quitarCaracteres(txtDircliente.value,'"'," pulg",true), 
@@ -468,7 +507,7 @@ function fcnEditarCliente(){
     });
 };
 
-function getDataCliente(codigo,nit,negocio,nombre,direccion,referencia,codmun,coddepto,obs,codven,visita,latitud,longitud,telefono){
+function getDataCliente(codigo,nit,tiponegocio,negocio,nombre,direccion,referencia,codmun,coddepto,obs,codven,visita,latitud,longitud,telefono){
     funciones.Confirmacion('¿Está seguro que desea EDITAR este cliente?')
     .then((value)=>{
         if(value==true){
@@ -477,6 +516,7 @@ function getDataCliente(codigo,nit,negocio,nombre,direccion,referencia,codmun,co
             document.getElementById('txtCodigo').value = codigo;
             document.getElementById('txtCodigo').disabled = true;
 
+            document.getElementById('cmbTipoNegocio').value = tiponegocio;
             document.getElementById('txtNit').value = nit;
             document.getElementById('cmbVisitaCliente').value = visita;
             document.getElementById('txtNegocio').value = negocio; 
@@ -501,6 +541,7 @@ function fcnCleanDataCliente(){
     
             document.getElementById('txtNit').value = "CF";
             document.getElementById('txtCodigo').value = "";
+            document.getElementById('cmbTipoNegocio').value = "TIENDITA";
             document.getElementById('txtNegocio').value = ""; 
             document.getElementById('txtNomcliente').value = "";
             document.getElementById('txtDircliente').value = "";
@@ -613,17 +654,19 @@ function fcnCensoListado(sucursal, codven, visita, idContainer){
 
     let tblfoot = `</tbody></table></div>`;
 
-    axios.post('/censo/listaclientes', {
-        sucursal: sucursal,
-        codven:codven,
-        visita:visita
+    axios.get('/censo/listaclientes', {
+        params:{
+            sucursal: sucursal,
+            codven:codven,
+            visita:visita
+        }
     })
     .then((response) => {
         const data = response.data.recordset;
         
         data.map((rows)=>{
                 strdata = strdata + `<tr class="cursormano border-bottom"
-                onClick="getDataCliente('${rows.CODCLIE}','${rows.NITCLIE}','${rows.NEGOCIO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.REFERENCIA}','${rows.CODMUN}','${rows.CODDEPTO}','${rows.OBS}','${rows.CODVEN}','${rows.VISITA}','${rows.LAT}','${rows.LONG}','${rows.TELEFONO}')">
+                onClick="getDataCliente('${rows.CODCLIE}','${rows.NITCLIE}','${rows.TIPONEGOCIO}','${rows.NEGOCIO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.REFERENCIA}','${rows.CODMUN}','${rows.CODDEPTO}','${rows.OBS}','${rows.CODVEN}','${rows.VISITA}','${rows.LAT}','${rows.LONG}','${rows.TELEFONO}')">
                     <td>${rows.NITCLIE}
                         <br>
                         <small>Código: <b>${rows.CODCLIE}</b> </small>
@@ -631,7 +674,7 @@ function fcnCensoListado(sucursal, codven, visita, idContainer){
 
                     <td>${rows.NOMCLIE}
                             <br>
-                        <small><b>${rows.NEGOCIO}</b></small>
+                        <small><b>${rows.TIPONEGOCIO}-${rows.NEGOCIO}</b></small>
                             <br class="border-bottom">
                         <small>${rows.DIRCLIE},${rows.MUNICIPIO}</small>
                     </td>
@@ -654,8 +697,10 @@ function getComboMunicipios(idContainer){
     let contenedor = document.getElementById(idContainer);
     let strdata = '';
     
-    axios.post('/censo/municipios', {
-        sucursal: GlobalCodSucursal
+    axios.get('/censo/municipios', {
+        params:{
+            sucursal: GlobalCodSucursal
+        }
     })
     .then((response) => {
         const data = response.data.recordset;
@@ -672,8 +717,10 @@ function getComboDepartamentos(idContainer){
     let contenedor = document.getElementById(idContainer);
     let strdata = '';
     
-    axios.post('/censo/departamentos', {
-        sucursal: GlobalCodSucursal
+    axios.get('/censo/departamentos', {
+        params:{
+            sucursal: GlobalCodSucursal
+        }
     })
     .then((response) => {
         const data = response.data.recordset;       
