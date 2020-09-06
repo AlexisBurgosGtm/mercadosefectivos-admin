@@ -84,24 +84,7 @@ function getView(){
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <select class="form-control" id="cmbTipoNegocio">
-                                                <option value="TIENDITA">TIENDITA</option>
-                                                <option value="ABARROTERIA">ABARROTERIA</option>
-                                                <option value="FARMACIA">FARMACIA</option>
-                                                <option value="LIBRERIA">LIBRERIA</option>
-                                                <option value="PIÑATERIA">PIÑATERIA</option>
-                                                <option value="MUNDO DE 3">MUNDO DE 3</option>
-                                                <option value="RESTAURANTE">RESTAURANTE</option>
-                                                <option value="COMEDOR">COMEDOR</option>
-                                                <option value="PAPEROS">PAPEROS</option>
-                                                <option value="HOTEL">HOTEL</option>
-                                                <option value="AUTOHOTEL">AUTOHOTEL</option>
-                                                <option value="CARNICERIA">CARNICERIA</option>
-                                                <option value="MERCERIA">MERCERIA</option>
-                                                <option value="BAR">BAR</option>
-                                                <option value="MINISUPER">MINISUPER</option>
-                                                <option value="SUPERMERCADO">SUPERMERCADO</option>
-                                                <option value="RUTEROS">RUTEROS</option>
-                                                <option value="OTROS">OTROS</option>
+                                                
                                             </select>
                                         </div>
                                         <input id="txtNegocio" class="form-control" type="text" placeholder="nombre del negocio"  maxlenght="150">
@@ -224,6 +207,8 @@ async function addListeners(){
     let cmbVisitaCliente = document.getElementById('cmbVisitaCliente');
     cmbVisitaCliente.innerHTML = cmbDiaVisita.innerHTML;
 
+    let cmbTipoNegocio = document.getElementById('cmbTipoNegocio')
+    cmbTipoNegocio.innerHTML = funciones.getComboTipoClientes();
 
     let f = new Date();
     cmbDiaVisita.value = funciones.getDiaSemana(f.getDay());

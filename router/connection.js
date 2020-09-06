@@ -1,4 +1,4 @@
-﻿const config = {
+﻿const configO = {
 	user: 'DB_A54053_Respaldobd_admin',
 	password: 'Alexis2020',
 	server: 'SQL5049.site4now.net',
@@ -6,7 +6,7 @@
 	pool: {	max: 100,	min: 0,	idleTimeoutMillis: 30000}
 };
 
-const configN = {
+const config = {
 	user: 'DB_A6478C_mercadosefectivos_admin',
 	password: 'razors1805',
 	server: 'sql5006.site4now.net',
