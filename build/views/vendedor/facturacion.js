@@ -592,8 +592,7 @@ function getView(){
             
                                         <div class="col-5">
                                             <button class="btn btn-success btn-lg btn-pills btn-block waves-effect waves-themed" id="btnFinalizarPedido">
-                                                <i class="fal fa-check mr-1"></i>
-                                                Finalizar
+                                                <i class="fal fa-check mr-1"></i>Finalizar
                                             </button>
                                         </div>
                                         
@@ -1670,6 +1669,7 @@ async function fcnFinalizarPedido(){
     .then((value)=>{
         if(value==true){
 
+            document.getElementById('btnFinalizarPedido').innerHTML = GlobalLoader;
             //,,obs,usuario,codven
             axios.post('/ventas/documentos', {
                 app: GlobalSistema,
@@ -1699,10 +1699,13 @@ async function fcnFinalizarPedido(){
             .then(async(response) => {
                 const data = response.data;
                 if (data.rowsAffected[0]==0){
+                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
                     funciones.AvisoError('No se logró Guardar este pedido');
                 }else{
 
                     funciones.Aviso('Pedido Generado Exitosamente !!!')
+                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
+
                     document.getElementById('btnEntregaCancelar').click();
                     $('#ModalCobro').modal('hide');
         
@@ -1710,6 +1713,7 @@ async function fcnFinalizarPedido(){
                     socket.emit('ventas nueva',GlobalCodSucursal, GlobalSelectedForm);
                     //actualiza la ubicación del empleado
                     await classEmpleados.updateMyLocation();
+                    
                     //actualiza la última venta del cliente
                     api.updateClientesLastSale(nit,'VENTA');
                     //elimina el temp ventas asociado al empleado
