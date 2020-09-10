@@ -275,11 +275,12 @@ function Lmap(lat,long,nombre,direccion){
       var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       osm = L.tileLayer(osmUrl, {center: [lat, long],maxZoom: 20, attribution: osmAttrib});    
-      map = L.map('mapcontainer').setView([lat, long], 18).addLayer(osm);
+      map = L.map('mapcontainer').setView([lat, long], 11).addLayer(osm);
 
       L.marker([lat, long])
         .addTo(map)
-        .bindPopup(nombre + ' - ' + direccion)
+        .bindPopup(nombre + ' - ' + direccion, {closeOnClick: false, autoClose: false})   
+        .openPopup()
 
       return map;
 };

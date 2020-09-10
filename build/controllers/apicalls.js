@@ -1389,7 +1389,7 @@ let api = {
         let container = document.getElementById(idContainer);
         container.innerHTML = GlobalLoader;
         
-        let tbl = `<div class="mapcontainer2" id="mapcontainer"></div>`;        
+        let tbl = `<div class="mapcontainer4" id="mapcontainer"></div>`;        
         
         container.innerHTML = tbl;
         
@@ -1412,8 +1412,8 @@ let api = {
                     }else{
                         L.marker([rows.LAT, rows.LONG])
                         .addTo(map)
-                        .bindPopup(rows.CLIENTE + ' - '  + rows.DIRCLIE)   
-                        .openPopup();
+                        .bindPopup(`${rows.NOMCLIE} <br><small>${rows.DIRCLIE}</small>`, {closeOnClick: false, autoClose: false})   
+                        //.openPopup();
                     }
             })
             
