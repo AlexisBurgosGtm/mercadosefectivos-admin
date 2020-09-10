@@ -1319,6 +1319,110 @@ let api = {
         });
 
     },
+    clientesCensoVendedor:(sucursal, codven, visita, idContainer)=>{
+        
+        let container = document.getElementById(idContainer);
+        container.innerHTML = GlobalLoader;
+        
+        let strdata = '';
+        let tbl = `<table class="table table-hover table-striped table-border" id="tblClientesVendedor">
+                    <thead  class="bg-trans-gradient text-white"> 
+                        <tr>
+                            <td>Cliente</td>
+                            <td>Dirección</td>
+                            <td>Telefono</td>
+                            <td>Visita</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+        let tblfoot = `</tbody></table>`;
+
+        axios.post('/clientes/censovendedor', {
+            sucursal: sucursal,
+            codven:codven,
+            visita:visita
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            
+            data.map((rows)=>{
+                    let strClass = 'border-bottom';
+                    strdata = strdata + `<tr class="${strClass}">
+                                            <td>${rows.NOMCLIE}
+                                                    <br>
+                                                <small><b>${rows.TIPONEGOCIO} - ${rows.NEGOCIO}</b> </small>
+                                                    <br>
+                                                <small>Id:<b>${rows.ID}</b>  NIT:<b>${rows.NITCLIE}</b></small>
+                                            </td>
+                                            <td>${rows.DIRCLIE}
+                                                <br>
+                                                <small>Ref: ${rows.REFERENCIA}</small>
+                                                <br>
+                                                <small>${rows.DESMUNI},${rows.DESDEPTO}</small>
+                                            </td>
+                                            <td>${rows.TELEFONO}
+                                                <br>
+                                                <small>${rows.FECHA.replace('T00:00:00.000Z','')}</small>
+                                            </td>
+                                            <td>${rows.VISITA}</td>
+                                            <td>
+                                                <button class="btn btn-md btn-circle btn-info" 
+                                                onclick="getMenuCliente(${rows.ID},'${rows.NITCLIE}','${rows.TIPONEGOCIO}','${rows.NEGOCIO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.REFERENCIA}','${rows.OBS}','${rows.FECHA}','${rows.CODMUNI}','${rows.CODDEPTO}','${rows.TELEFONO}','${rows.VISITA}','${rows.LAT}','${rows.LONG}');">
+                                                    <i class="fal fa-bullet"></i>
+                                                </button>
+                                            </td>
+                                        </tr>`
+            })
+            container.innerHTML = tbl + strdata + tblfoot;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+
+    },
+    clientesCensoVendedorMapa:(sucursal, codven, visita, idContainer)=>{
+        
+        let container = document.getElementById(idContainer);
+        container.innerHTML = GlobalLoader;
+        
+        let tbl = `<div class="mapcontainer2" id="mapcontainer"></div>`;        
+        
+        container.innerHTML = tbl;
+        
+        let mapcargado = 0;
+        
+
+        axios.post('/clientes/censovendedor', {
+            sucursal: sucursal,
+            codven:codven,
+            visita:visita
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+
+            data.map((rows)=>{
+                    if(mapcargado==0){
+                        map = Lmap(rows.LAT, rows.LONG, rows.NOMCLIE, rows.DIRCLIE);
+                        mapcargado = 1;
+
+                    }else{
+                        L.marker([rows.LAT, rows.LONG])
+                        .addTo(map)
+                        .bindPopup(rows.CLIENTE + ' - '  + rows.DIRCLIE)   
+                        .openPopup();
+                    }
+            })
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';
+        });
+
+    },
     gerenciaSucursalesTotales: (mes,anio,idContenedor,idLbTotal)=>{
         
         let container = document.getElementById(idContenedor);

@@ -13,6 +13,22 @@ router.post("/setreminder", async(req,res)=>{
      
 });
 
+//CENSO
+router.post('/censovendedor',async(req,res)=>{
+
+    const {sucursal,codven,visita} = req.body;
+    
+    let qry = `SELECT ME_CENSO.ID, ME_CENSO.FECHA, ME_CENSO.CODCLIE, ME_CENSO.NITCLIE, ME_CENSO.TIPONEGOCIO, ME_CENSO.NEGOCIO, ME_CENSO.NOMCLIE, ME_CENSO.DIRCLIE, ISNULL(ME_CENSO.REFERENCIA, 'SN') AS REFERENCIA, ME_CENSO.CODMUN, 
+    ME_Municipios.DESMUNI, ME_CENSO.CODDEPTO, ME_Departamentos.DESDEPTO, ISNULL(ME_CENSO.OBS,'SN') AS OBS, ISNULL(ME_CENSO.TELEFONO,'SN') AS TELEFONO, ME_CENSO.VISITA, ME_CENSO.LAT, ME_CENSO.LONG
+    FROM ME_CENSO LEFT OUTER JOIN
+    ME_Departamentos ON ME_CENSO.CODDEPTO = ME_Departamentos.CODDEPTO AND ME_CENSO.CODSUCURSAL = ME_Departamentos.CODSUCURSAL LEFT OUTER JOIN
+    ME_Municipios ON ME_CENSO.CODMUN = ME_Municipios.CODMUNI AND ME_CENSO.CODSUCURSAL = ME_Municipios.CODSUCURSAL
+    WHERE (ME_CENSO.CODSUCURSAL = '${sucursal}') AND (ME_CENSO.CODVEN = ${codven}) AND (ME_CENSO.VISITA='${visita}')
+    ORDER BY ME_CENSO.ID`;
+
+    execute.Query(res,qry);
+    
+})
 
 router.post("/listavendedor", async(req,res)=>{
 

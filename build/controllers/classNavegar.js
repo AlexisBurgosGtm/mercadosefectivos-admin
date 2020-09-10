@@ -316,10 +316,10 @@ let classNavegar = {
         })
     },
     supervisorClientes: ()=>{
-        funciones.loadScript('../views/supervisor/clientes.js','root')
+        funciones.loadScript('../views/supervisor/censo.js','root')
         .then(()=>{
-            GlobalSelectedForm='SUPERVISORCLIENTES';
-            inicializarVistaClientesSupervisor();
+            GlobalSelectedForm='SUPERVISORCENSO';
+            inicializarVistaCensoSupervisor();
         })
     },
     repartidorIniciar:()=>{
