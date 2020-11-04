@@ -269,7 +269,7 @@ async function addListeners(){
     //txtFechaCenso.value = funciones.getFecha();
 
 };
-
+(
 function Lmap(lat,long,nombre,direccion){
     //INICIALIZACION DEL MAPA            
       var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -279,9 +279,9 @@ function Lmap(lat,long,nombre,direccion){
 
       L.marker([lat, long])
         .addTo(map)
-        .bindPopup(nombre + ' - ' + direccion, {closeOnClick: false, autoClose: false})   
+        .bindPopup(nombre + ' - ' + direccion, {closeOnClick: true, autoClose: false})   
         .openPopup()
-
+                
       return map;
 };
 

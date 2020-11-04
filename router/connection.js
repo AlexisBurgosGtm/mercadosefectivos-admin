@@ -1,16 +1,8 @@
-﻿const configO = {
-	user: 'DB_A54053_Respaldobd_admin',
-	password: 'Alexis2020',
-	server: 'SQL5049.site4now.net',
-	database: 'DB_A54053_Respaldobd',
-	pool: {	max: 100,	min: 0,	idleTimeoutMillis: 30000}
-};
-
-const config = {
-	user: 'DB_A6478C_mercadosefectivos_admin',
+﻿const config = {
+	user: 'DB_A6478C_mercadosv2_admin',
 	password: 'razors1805',
-	server: 'sql5006.site4now.net',
-	database: 'DB_A6478C_mercadosefectivos',
+	server: 'sql5060.site4now.net',
+	database: 'DB_A6478C_mercadosv2',
 	pool: {	max: 100,	min: 0,	idleTimeoutMillis: 30000}
 };
 

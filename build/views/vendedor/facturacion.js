@@ -1639,7 +1639,6 @@ async function fcnFinalizarPedido(){
     let cmbTipoEntrega = document.getElementById('cmbEntregaTipo').value; //campo TRANSPORTE
 
 
-
     let txtFecha = new Date(document.getElementById('txtFecha').value);
     let anio = txtFecha.getFullYear();
     let mes = txtFecha.getUTCMonth()+1;
@@ -1648,7 +1647,6 @@ async function fcnFinalizarPedido(){
     let dia = d;
 
     
-
     let fe = new Date(document.getElementById('txtEntregaFecha').value);
     let ae = fe.getFullYear();
     let me = fe.getUTCMonth()+1;
@@ -1723,8 +1721,10 @@ async function fcnFinalizarPedido(){
                 }
             }, (error) => {
                 console.log(error);
+                funciones.AvisoError('Ha ocurrido un error y no se pudo guardar');
+                document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
             });           
-            
+         
         }
     })
 };

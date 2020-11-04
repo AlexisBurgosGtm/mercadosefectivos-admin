@@ -49,15 +49,17 @@ let funciones = {
       });
 
     },
-    instalationHandlers: (idBtnInstall)=>{
+    instalationHandlers2: (idContainer,idBtnInstall)=>{
       //INSTALACION APP
       let btnInstalarApp = document.getElementById(idBtnInstall);
       btnInstalarApp.hidden = true;
 
+      let container = document.getElementById(idContainer);
+
       let capturedInstallEvent;
       window.addEventListener('beforeinstallprompt',(e)=>{
         e.preventDefault();
-        btnInstalarApp.hidden = false;
+        container.hidden = false;
         capturedInstallEvent = e;
       });
       btnInstalarApp.addEventListener('click',(e)=>{
