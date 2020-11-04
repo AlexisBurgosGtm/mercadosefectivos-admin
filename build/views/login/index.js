@@ -35,6 +35,9 @@ function getView(){
                                     Ingresar
                                 </button>
                             </div>
+                            <div class="form-group" align="right">
+                                <label>Versión 2.0</label>
+                            </div>
                         </form>
                     </div>
 
