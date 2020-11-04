@@ -1,5 +1,5 @@
 
-var CACHE = 'mercadosefectivosv5';
+var CACHE = 'mercadosefectivos2v1';
 const staticAssets = [  
   './css/vendors.bundle.css',
   './css/app.bundle.css',

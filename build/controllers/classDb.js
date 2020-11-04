@@ -17,7 +17,7 @@ window.onload = function () {
     initiateDb();
 };
 //nombre de la base de datos
-const DbName = "mercadosefectivos-v1";
+const DbName = "mercadosefectivosv2.1";
 
 function initiateDb() {
     
@@ -36,6 +36,18 @@ function initiateDb() {
 
 // define las tablas de la base de datos
 function getTbl() {
+    //TABLA DATOS USUARIO
+    var tblUsuario = {
+        Name: "usuario",
+        Columns: [
+            { Name: "Id", PrimaryKey: true, AutoIncrement: true},
+            { Name: "codsucursal", DataType: "string" },
+            { Name: "coddoc", DataType: "string" },
+            { Name: "codusuario", DataType: "string" },
+            { Name: "nomusuario", DataType: "string" }
+        ]
+    };
+
     //TABLA VENTAS TEMPORAL
     var TblTemp = {
         Name: "tempVentas",
@@ -80,8 +92,11 @@ function getTbl() {
 
     var DataBase = {
         Name: DbName,
-        Tables: [TblTemp,TblCenso]
+        Tables: [tblUsuario,TblTemp,TblCenso]
     }
 
     return DataBase;
 };
+
+
+

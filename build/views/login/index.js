@@ -8,9 +8,9 @@ function getView(){
             </div>
 
             <div class="col-md-4 col-sm-12 col-lg-4 col-lx-4">
-                <div class="card">
+                <div class="card shadow">
 
-                    <div class="card-header bg-trans-gradient text-center">
+                    <div class="card-header bg-info text-center">
                     <button class="btn btn-sm btn-primary-outline btn-circle" id="btnComandos"></button>
                         <h5 class="text-white">Inicio de Sesión</h5>
                     </div>
@@ -30,13 +30,13 @@ function getView(){
                                 <input class="form-control" type="password" id="txtPass" placeholder="Escriba su contraseña" required="true">
                             </div>
                             <div class="form-group" align="center">
-                                <button class="btn btn-outline-info btn-lg shadow btn-round col-12 shadow"  type="submit" id="btnIniciar">
+                                <button class="btn btn-outline-info btn-lg shadow col-12 btn-rounded"  type="submit" id="btnIniciar">
                                     <i class="fal fa-unlock"></i>
                                     Ingresar
                                 </button>
                             </div>
                             <div class="form-group" align="right">
-                                <label>Versión 2.0</label>
+                                <small class="text-warning">Versión 2.0</small>
                             </div>
                         </form>
                     </div>
