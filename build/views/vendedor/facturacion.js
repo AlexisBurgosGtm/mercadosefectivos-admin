@@ -100,7 +100,7 @@ function getView(){
                                 <select class="form-control col-3 shadow border-info" id="cmbTipoPrecio">
                                     <option value="P">DET</option>
                                     <option value="C">PreB</option>
-                                    <option value="B">PreC</option>
+                                    <option value="B">PreA</option>
                                     <option value="A">MAY</option>
                                     <option value="K">CAMBIO</option>
                                 </select>
