@@ -121,7 +121,7 @@ router.put("/pedidoquitaritem", async(req,res)=>{
 router.post("/embarquespendientes", async(req,res)=>{
      const sucursal = req.body.sucursal;
 
-    let qry = `SELECT CODIGO AS CODEMBARQUE, NOMRUTA AS RUTA FROM ME_EMBARQUES WHERE STATUS='PENDIENTE' AND CODSUCURSAL='${sucursal}'`;
+    let qry = `SELECT CODIGO AS CODEMBARQUE, NOMRUTA AS RUTA FROM ME_EMBARQUES WHERE CODSUCURSAL='${sucursal}'`;
     
     execute.Query(res,qry);
 });
