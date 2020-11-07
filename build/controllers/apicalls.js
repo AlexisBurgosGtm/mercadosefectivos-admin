@@ -160,6 +160,8 @@ let api = {
                         <td>${rows.DIRCLIE}
                             <br>
                             <small>${rows.DESMUNI}</small>
+                            <br>
+                            <small class="text-info">Ref:${rows.REFERENCIA}</small>
                         </td>
                         <td>
                             <button class="btn btn-info btn-sm btn-circle" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
@@ -244,6 +246,8 @@ let api = {
                         <td>${rows.DIRCLIE}
                             <br>
                             <small>${rows.DESMUNI}</small>
+                            <br>
+                            <small class="text-info">Ref:${rows.REFERENCIA}</small>
                         </td>
                         <td>
                             <button class="btn btn-info btn-sm btn-circle" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
