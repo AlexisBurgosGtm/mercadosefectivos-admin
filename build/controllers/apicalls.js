@@ -224,6 +224,55 @@ let api = {
         
         
     },
+    clientesVendedorMapa: async(sucursal,codven,dia,idContenedor, lt, lg)=>{
+
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+        let m = '<div class="mapcontainer2 col-12" id="mapcontainer"></div>';
+        let tbl = `<div class="mapcontainer" id="mapcontainer"></div>`;        
+        
+        container.innerHTML = tbl;
+        
+        let mapcargado = 0;
+
+
+        axios.post('/clientes/listavendedor', {
+            app:GlobalSistema,
+            sucursal: sucursal,
+            codven:codven,
+            dia:dia   
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+
+            data.map((rows)=>{
+              
+                    if(mapcargado==0){
+                        //centra el mapa
+                        map = Lmap(lt, lg);
+                        //carga el primer cliente
+                        L.marker([rows.LAT, rows.LONG])
+                        .addTo(map)
+                        .bindPopup(rows.NOMCLIE + ' - '  + rows.DIRCLIE)   
+
+                        mapcargado = 1;
+                    }else{
+                        L.marker([rows.LAT, rows.LONG])
+                        .addTo(map)
+                        .bindPopup(rows.NOMCLIE + ' - '  + rows.DIRCLIE)   
+                    }
+                /*
+                        L.marker([rows.LAT, rows.LONG])
+                        .addTo(map)
+                        .bindPopup(rows.NOMCLIE + ' - '  + rows.DIRCLIE)   
+                        */                   
+            })
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';
+        });
+           
+    },
     clientesAjenosVendedor: async(sucursal,filtro,idContenedor)=>{
     
         let container = document.getElementById(idContenedor);
@@ -2540,7 +2589,7 @@ let api = {
         
         let container = document.getElementById(idContainer);
                 
-        let strdata = '<option value="">SELECCIONE EMBARQUE</option>';
+        let strdata = '';  //'<option value="">SELECCIONE EMBARQUE</option>';
 
         axios.post('/digitacion/embarquespendientes', {
             sucursal: GlobalCodSucursal
@@ -2700,7 +2749,7 @@ let api = {
         
             let container = document.getElementById(idContainer);
                 
-            let strdata = '<option value="">SELECCIONE EMBARQUE</option>';
+            let strdata = ''; //'<option value="">SELECCIONE EMBARQUE</option>';
     
             axios.post('/repartidor/embarquesrepartidor', {
                 sucursal: GlobalCodSucursal,

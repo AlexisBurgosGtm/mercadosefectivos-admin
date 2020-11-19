@@ -44,7 +44,10 @@ let classNavegar = {
     inicioVendedor : async ()=>{
         let strMenu =   `
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorClientes">
-                                <span>VENDER</span>
+                                <span>VENDER(Lista Clientes)</span>
+                            </a>
+                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorClientesMapa">
+                                <span>VENDER(Mapa Clientes)</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorReparto">
                                 <span>REPARTO</span>
@@ -73,6 +76,10 @@ let classNavegar = {
                     let btnMenuVendedorClientes = document.getElementById('btnMenuVendedorClientes');
                     btnMenuVendedorClientes.addEventListener('click',()=>{
                         classNavegar.inicio('VENDEDOR');
+                    });
+                    let btnMenuVendedorClientesMapa = document.getElementById('btnMenuVendedorClientesMapa');
+                    btnMenuVendedorClientesMapa.addEventListener('click',()=>{
+                        classNavegar.ventasMapaClientes();
                     });
                     let btnMenuVendedorReparto = document.getElementById('btnMenuVendedorReparto');
                     btnMenuVendedorReparto.addEventListener('click',()=>{
@@ -346,6 +353,13 @@ let classNavegar = {
             iniciarVistaVendedorCenso();
         })
       
+    },
+    ventasMapaClientes: async()=>{
+        funciones.loadScript('./views/vendedor/mapaclientes.js','root')
+        .then(()=>{
+            GlobalSelectedForm ='VENDEDORMAPACLIENTES';
+            iniciarVistaVendedorMapaClientes();
+        })
     },
     vendedorReparto: async()=>{
         
