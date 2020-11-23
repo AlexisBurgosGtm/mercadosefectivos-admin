@@ -228,13 +228,14 @@ let api = {
 
         let container = document.getElementById(idContenedor);
         container.innerHTML = GlobalLoader;
-        let m = '<div class="mapcontainer2 col-12" id="mapcontainer"></div>';
-        let tbl = `<div class="mapcontainer" id="mapcontainer"></div>`;        
+        
+        let tbl = `<div class="mapcontainer4" id="mapcontainer"></div>`;        
         
         container.innerHTML = tbl;
         
         let mapcargado = 0;
-
+        var map;
+        map = Lmap(lt, lg);
 
         axios.post('/clientes/listavendedor', {
             app:GlobalSistema,
@@ -246,27 +247,20 @@ let api = {
             const data = response.data.recordset;
 
             data.map((rows)=>{
-              
-                    if(mapcargado==0){
-                        //centra el mapa
-                        map = Lmap(lt, lg);
-                        //carga el primer cliente
-                        L.marker([rows.LAT, rows.LONG])
-                        .addTo(map)
-                        .bindPopup(rows.NOMCLIE + ' - '  + rows.DIRCLIE)   
-
-                        mapcargado = 1;
-                    }else{
-                        L.marker([rows.LAT, rows.LONG])
-                        .addTo(map)
-                        .bindPopup(rows.NOMCLIE + ' - '  + rows.DIRCLIE)   
-                    }
-                /*
-                        L.marker([rows.LAT, rows.LONG])
-                        .addTo(map)
-                        .bindPopup(rows.NOMCLIE + ' - '  + rows.DIRCLIE)   
-                        */                   
+                    L.marker([rows.LAT, rows.LONG])
+                    .addTo(map)
+                    .bindPopup(`${rows.NOMCLIE} <br><small>${rows.DIRCLIE}</small>`, {closeOnClick: true, autoClose: true})   
             })
+
+            //RE-AJUSTA EL MAPA A LA PANTALLA
+            setTimeout(function () {
+                try {
+                    map.invalidateSize();    
+                } catch (error) {
+                    
+                }
+            }, 500);
+
         }, (error) => {
             funciones.AvisoError('Error en la solicitud');
             container.innerHTML = '';

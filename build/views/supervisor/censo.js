@@ -269,7 +269,7 @@ async function addListeners(){
     //txtFechaCenso.value = funciones.getFecha();
 
 };
-(
+
 function Lmap(lat,long,nombre,direccion){
     //INICIALIZACION DEL MAPA            
       var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

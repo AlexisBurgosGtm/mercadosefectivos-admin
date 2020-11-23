@@ -33,8 +33,9 @@ function getView(){
         },
         tabsClientes :()=>{
             return `
-            <div class="row">
-                <div class="card" id="tblClientes">
+            <div class="card col-12">
+                <div class="table-responsive" id="tblClientes">
+                    
                     
                 </div>
             </div>
@@ -161,27 +162,21 @@ async function addListeners(){
     //EVENTOS DE LOS COMBOBOXES
     let cmbDiaVisita = document.getElementById('cmbDiaVisita');
     cmbDiaVisita.innerHTML = funciones.ComboSemana("LETRAS");
-       
+    let f = new Date();
+    cmbDiaVisita.value = funciones.getDiaSemana(f.getDay());
+    
     cmbDiaVisita.addEventListener('change',async()=>{
         showUbicacion()
-        .then((location)=>{
+        .then(async (location)=>{
                 let lat = location.coords.latitude.toString();
                 let longg = location.coords.longitude.toString();
                 
-                api.clientesVendedorMapa(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes',Number(lat),Number(longg))
-                //RE-AJUSTA EL MAPA A LA PANTALLA
-                setTimeout(function () {
-                    try {
-                        map.invalidateSize();    
-                    } catch (error) {
-                        
-                    }
-                }, 500);
+                await  api.clientesVendedorMapa(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes',Number(lat),Number(longg))
+                
         });    
     })
     
-    let f = new Date();
-    cmbDiaVisita.value = funciones.getDiaSemana(f.getDay());
+    
 
     //MODAL OPCIONES CLIENTE
     
@@ -241,19 +236,12 @@ async function addListeners(){
 
     //carga la ubicación actual y general el mapa
     showUbicacion()
-    .then((location)=>{
+    .then(async(location)=>{
             let lat = location.coords.latitude.toString();
             let longg = location.coords.longitude.toString();
             //Number(lat),Number(longg));
-            api.clientesVendedorMapa(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes',Number(lat),Number(longg))
-            //RE-AJUSTA EL MAPA A LA PANTALLA
-            setTimeout(function () {
-                try {
-                    map.invalidateSize();    
-                } catch (error) {
-                    
-                }
-            }, 500);
+            await api.clientesVendedorMapa(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes',Number(lat),Number(longg))
+            
     });
 
     await api.vendedorTotalDia(GlobalCodSucursal,GlobalCodUsuario,funciones.getFecha(),'lbTotalDia')
@@ -290,6 +278,7 @@ function showUbicacion(){
     return new Promise((resolve,reject)=>{
         try {
             navigator.geolocation.getCurrentPosition(function (location) {
+                console.log(location);
                 resolve(location);
             })
         } catch (error) {
@@ -300,19 +289,27 @@ function showUbicacion(){
 
 
 function Lmap(lat,long){
-
     //INICIALIZACION DEL MAPA            
       var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       osm = L.tileLayer(osmUrl, {center: [lat, long],maxZoom: 20, attribution: osmAttrib});    
-      let mapa = L.map('mapcontainer').setView([lat, long], 18).addLayer(osm);
+      map = L.map('mapcontainer').setView([lat, long], 11).addLayer(osm);
 
-      L.marker([lat, long], {draggable:'true'})
-        .addTo(mapa)
-        .bindPopup(`Su ubicación`, {closeOnClick: false, autoClose: false})
+      var userIcon = L.icon({
+        iconUrl: '../img/userIcon.png',
+        shadowUrl: '../img/marker-shadow.png',
+    
+        iconSize:     [20, 45], // size of the icon
+        shadowSize:   [50, 64], // size of the shadow
+        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        shadowAnchor: [4, 62],  // the same for the shadow
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+
+      L.marker([lat, long],{icon:userIcon})
+        .addTo(map)
+        .bindPopup('Mi Ubicación', {closeOnClick: true, autoClose: false})   
         .openPopup()
-             
-        
-    return mapa;
-  
+                
+      return map;
 };
