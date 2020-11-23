@@ -250,6 +250,9 @@ let api = {
                     L.marker([rows.LAT, rows.LONG])
                     .addTo(map)
                     .bindPopup(`${rows.NOMCLIE} <br><small>${rows.DIRCLIE}</small>`, {closeOnClick: true, autoClose: true})   
+                    .on('click', function(e){
+                        getMenuCliente(rows.CODIGO,rows.NOMCLIE,rows.DIRCLIE,rows.TELEFONO,rows.LAT,rows.LONG,rows.NIT);
+                    })
             })
 
             //RE-AJUSTA EL MAPA A LA PANTALLA
@@ -1455,7 +1458,7 @@ let api = {
 
             data.map((rows)=>{
                     if(mapcargado==0){
-                        map = Lmap(rows.LAT, rows.LONG, rows.NOMCLIE, rows.DIRCLIE);
+                        map = Lmap(rows.LAT, rows.LONG, funciones.quitarCaracteres(rows.NOMCLIE,'"'," plg",true), funciones.quitarCaracteres(rows.DIRCLIE,'"'," plg",true));
                         mapcargado = 1;
 
                     }else{

@@ -19,7 +19,7 @@ function getView(){
                                     <br>
                                 </div>                                        
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                    <input type="text" id="txtFiltrarCliente" class="form-control" placeholder="Buscar en la lista...">
+                                    <input type="text" id="txtFiltrarCliente" class="form-control hidden" placeholder="Buscar en la lista...">
                                 </div>
                                 <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 text-right">
                                     <br>
@@ -287,7 +287,6 @@ function showUbicacion(){
     })
 };
 
-
 function Lmap(lat,long){
     //INICIALIZACION DEL MAPA            
       var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -299,7 +298,7 @@ function Lmap(lat,long){
         iconUrl: '../img/userIcon.png',
         shadowUrl: '../img/marker-shadow.png',
     
-        iconSize:     [20, 45], // size of the icon
+        iconSize:     [30, 45], // size of the icon
         shadowSize:   [50, 64], // size of the shadow
         iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
         shadowAnchor: [4, 62],  // the same for the shadow
