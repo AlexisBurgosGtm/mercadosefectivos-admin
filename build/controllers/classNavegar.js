@@ -52,7 +52,7 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorReparto">
                                 <span>REPARTO</span>
                             </a>
-                            <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorCenso">
+                            <a class="dropdown-item hidden" data-toggle="dropdown" id="btnMenuVendedorCenso">
                                 <span>CENSO</span>
                             </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorPedidos">
