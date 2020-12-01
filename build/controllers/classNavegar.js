@@ -52,9 +52,6 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorReparto">
                                 <span>REPARTO</span>
                             </a>
-                            <a class="dropdown-item hidden" data-toggle="dropdown" id="btnMenuVendedorCenso">
-                                <span>CENSO</span>
-                            </a>
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorPedidos">
                                 <span>LOGRO DIA</span>
                             </a>
@@ -64,18 +61,16 @@ let classNavegar = {
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorNoticias">
                                 <span>NOTICIAS</span>
                             </a>
+                            <a class="dropdown-item hidden" data-toggle="dropdown" id="btnMenuVendedorCenso">
+                                <span>CENSO</span>
+                            </a>
                             `
-                rootMenu.innerHTML = strMenu;
-
-                funciones.loadScript('../views/vendedor/vendedor.js','root')
-                .then(async()=>{
-                    GlobalSelectedForm='INICIO';
-                    InicializarVista();
-                    
-                      // handlers del menu
+                    rootMenu.innerHTML = strMenu;
+           
+                     // handlers del menu
                     let btnMenuVendedorClientes = document.getElementById('btnMenuVendedorClientes');
                     btnMenuVendedorClientes.addEventListener('click',()=>{
-                        classNavegar.inicio('VENDEDOR');
+                        classNavegar.inicioVendedorListado();
                     });
                     let btnMenuVendedorClientesMapa = document.getElementById('btnMenuVendedorClientesMapa');
                     btnMenuVendedorClientesMapa.addEventListener('click',()=>{
@@ -103,7 +98,16 @@ let classNavegar = {
                     });
                     //actualiza la ubicación del empleado
                     await classEmpleados.updateMyLocation();
-                })          
+
+                    classNavegar.ventasMapaClientes();
+             
+    },
+    inicioVendedorListado :async ()=>{
+        funciones.loadScript('../views/vendedor/vendedor.js','root')
+        .then(async()=>{
+            GlobalSelectedForm='INICIO';
+            InicializarVista();
+        })
     },
     inicioGerente: ()=>{
                 let strMenu =  `
