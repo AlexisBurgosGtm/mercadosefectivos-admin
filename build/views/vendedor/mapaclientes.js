@@ -193,7 +193,7 @@ async function addListeners(){
                 api.updateClientesLastSale(GlobalSelectedCodCliente,'CERRADO')
                 .then(async()=>{
                     funciones.Aviso('TIENDA CERRADA');
-                    await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
+                    await cargarMapaClientes();
                 })
                 .catch(()=>{
                     funciones.AvisoError('No se marcar esta tienda. Inténtelo de nuevo')
@@ -214,7 +214,7 @@ async function addListeners(){
                 api.updateClientesLastSale(GlobalSelectedCodCliente,'NODINERO')
                 .then(async()=>{
                     funciones.Aviso('TIENDA SIN DINERO');
-                    await api.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
+                    await cargarMapaClientes();
                 })
                 .catch(()=>{
                     funciones.AvisoError('No se marcar esta tienda. Inténtelo de nuevo')
@@ -246,6 +246,19 @@ async function addListeners(){
 
     await api.vendedorTotalDia(GlobalCodSucursal,GlobalCodUsuario,funciones.getFecha(),'lbTotalDia')
     
+};
+
+function cargarMapaClientes(){
+    //carga la ubicación actual y general el mapa
+    showUbicacion()
+    .then(async(location)=>{
+            let lat = location.coords.latitude.toString();
+            let longg = location.coords.longitude.toString();
+            //Number(lat),Number(longg));
+            await api.clientesVendedorMapa(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes',Number(lat),Number(longg))
+            
+    });
+
 };
 
 function getMenuCliente(codigo,nombre,direccion,telefono,lat,long,nit){

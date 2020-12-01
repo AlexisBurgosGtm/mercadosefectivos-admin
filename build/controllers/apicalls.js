@@ -133,6 +133,7 @@ let api = {
                     let f = rows.LASTSALE.toString().replace('T00:00:00.000Z','');
                     let stClassClie = ''; let stNomStatus='';
                     if(f==funciones.getFecha()){
+                        
                         switch (rows.STVISITA) {
                             case 'VENTA':
                                 stClassClie='bg-success text-white';
@@ -178,7 +179,8 @@ let api = {
                                 <i class="fal fa-bell"></i>
                             </button>
                         </td>
-                    </tr>`    
+                    </tr>` 
+
                     }else{
                         strdata = strdata + `<tr class=''>
                                 <td>${rows.NOMCLIE}
@@ -247,12 +249,17 @@ let api = {
             const data = response.data.recordset;
 
             data.map((rows)=>{
+                let f = rows.LASTSALE.toString().replace('T00:00:00.000Z','');
+                if(f==funciones.getFecha()){}else{
                     L.marker([rows.LAT, rows.LONG])
                     .addTo(map)
                     .bindPopup(`${rows.NOMCLIE} <br><small>${rows.DIRCLIE}</small>`, {closeOnClick: true, autoClose: true})   
                     .on('click', function(e){
+                        //console.log(e.sourceTarget._leaflet_id);
+                        GlobalMarkerId = Number(e.sourceTarget._leaflet_id);
                         getMenuCliente(rows.CODIGO,rows.NOMCLIE,rows.DIRCLIE,rows.TELEFONO,rows.LAT,rows.LONG,rows.NIT);
                     })
+                }
             })
 
             //RE-AJUSTA EL MAPA A LA PANTALLA

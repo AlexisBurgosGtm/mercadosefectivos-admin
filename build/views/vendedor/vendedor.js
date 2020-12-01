@@ -276,7 +276,6 @@ function getView(){
     rootMenuLateral.innerHTML = view.modalMenuCliente();
 };
 
-
 function Lmap(lat,long,nombre,telefono){
     //INICIALIZACION DEL MAPA
                      
@@ -424,9 +423,9 @@ async function addListeners(){
         let txtClientesAjenosBuscar = document.getElementById('txtClientesAjenosBuscar');
         await api.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar.value,'tblClientesAjenos')
     })
-
     
-    await api.vendedorTotalDia(GlobalCodSucursal,GlobalCodUsuario,funciones.getFecha(),'lbTotalDia')
+    await api.vendedorTotalDia(GlobalCodSucursal,GlobalCodUsuario,funciones.getFecha(),'lbTotalDia');
+
 };
 
 function inicializarVista(){
