@@ -49,6 +49,25 @@ let funciones = {
       });
 
     },
+    instalationHandlers: (idBtnInstall)=>{
+      //INSTALACION APP
+      let btnInstalarApp = document.getElementById(idBtnInstall);
+      btnInstalarApp.hidden = true;
+
+      let capturedInstallEvent;
+      window.addEventListener('beforeinstallprompt',(e)=>{
+        e.preventDefault();
+        btnInstalarApp.hidden = false;
+        capturedInstallEvent = e;
+      });
+      btnInstalarApp.addEventListener('click',(e)=>{
+        capturedInstallEvent.prompt();
+      capturedInstallEvent.userChoice.then((choice)=>{
+          //solicita al usuario confirmacion para instalar
+      })
+    })
+    //INSTALACION APP
+    },
     instalationHandlers2: (idContainer,idBtnInstall)=>{
       //INSTALACION APP
       let btnInstalarApp = document.getElementById(idBtnInstall);
@@ -64,11 +83,11 @@ let funciones = {
       });
       btnInstalarApp.addEventListener('click',(e)=>{
         capturedInstallEvent.prompt();
-      capturedInstallEvent.userChoice.then((choice)=>{
+        capturedInstallEvent.userChoice.then((choice)=>{
           //solicita al usuario confirmacion para instalar
+        })
       })
-    })
-    //INSTALACION APP
+      //INSTALACION APP
     },
     Confirmacion: function(msn){
         return swal({
@@ -541,6 +560,21 @@ let funciones = {
       let f = new Date(); 
       let d = f.getDate(); 
       let m = f.getUTCMonth()+1; 
+
+      switch (d.toString()) {
+        case '30':
+          m = f.getMonth()+1; 
+          break;
+        case '31':
+          m = f.getMonth()+1; 
+            break;
+      
+        default:
+
+          break;
+      }
+
+      
       let y = f.getFullYear();
      
       di = d;
@@ -1028,8 +1062,75 @@ let funciones = {
         <option value="RUTEROS">RUTEROS</option>
         <option value="OTROS">OTROS</option>
       `
+    },
+    slideAnimationTabs: ()=>{
+      //inicializa el slide de las tabs en censo
+      $('a[data-toggle="tab"]').on('hide.bs.tab', function (e) {
+          var $old_tab = $($(e.target).attr("href"));
+          var $new_tab = $($(e.relatedTarget).attr("href"));
+  
+          if($new_tab.index() < $old_tab.index()){
+              $old_tab.css('position', 'relative').css("right", "0").show();
+              $old_tab.animate({"right":"-100%"}, 300, function () {
+                  $old_tab.css("right", 0).removeAttr("style");
+              });
+          }
+          else {
+              $old_tab.css('position', 'relative').css("left", "0").show();
+              $old_tab.animate({"left":"-100%"}, 300, function () {
+                  $old_tab.css("left", 0).removeAttr("style");
+              });
+          }
+      });
+  
+      $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+          var $new_tab = $($(e.target).attr("href"));
+          var $old_tab = $($(e.relatedTarget).attr("href"));
+  
+          if($new_tab.index() > $old_tab.index()){
+              $new_tab.css('position', 'relative').css("right", "-2500px");
+              $new_tab.animate({"right":"0"}, 500);
+          }
+          else {
+              $new_tab.css('position', 'relative').css("left", "-2500px");
+              $new_tab.animate({"left":"0"}, 500);
+          }
+      });
+  
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+          // your code on active tab shown
+      });
+    },
+    exportTableToExcel: (tableID, filename = '')=>{
+      var downloadLink;
+      var dataType = 'application/vnd.ms-excel;charset=UTF-8';
+      var tableSelect = document.getElementById(tableID);
+      var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+      
+      // Specify file name
+      filename = filename?filename+'.xls':'excel_data.xlsx';
+      
+      // Create download link element
+      downloadLink = document.createElement("a");
+      
+      document.body.appendChild(downloadLink);
+      
+      if(navigator.msSaveOrOpenBlob){
+          var blob = new Blob(['ufeff', tableHTML], {
+              type: "text/plain;charset=utf-8;"//dataType
+          });
+          navigator.msSaveOrOpenBlob( blob, filename);
+      }else{
+          // Create a link to the file
+          downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+      
+          // Setting the file name
+          downloadLink.download = filename;
+          
+          //triggering the function
+          downloadLink.click();
+      }
     }
-    
 };
 
 //export default funciones;
