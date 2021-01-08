@@ -104,7 +104,7 @@ async function addListeners(){
 
 };
 
-function InicializarVistaGerente(){
+function InicializarVistaGerenteSucursales(){
     
     getView();
     addListeners();
