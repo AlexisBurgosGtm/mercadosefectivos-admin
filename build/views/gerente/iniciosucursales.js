@@ -5,10 +5,9 @@ function getView(){
             <div class="row">
                 <div id="panel-1" class="panel col-12">
                     <div class="panel-hdr">
-                        <h2>Seleccione mes y año</h2>                  
+                        <h2>Ventas registradas por Sede</h2>                  
                         <div class="panel-toolbar">
                             <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>          
                         </div>
                     </div>
                     <div class="panel-container">
@@ -32,7 +31,7 @@ function getView(){
                 <div id="panel-1" class="panel col-12">
                     <div class="panel-hdr">
                         <h2>Ventas totales del Mes</h2>
-                        <div id="lbTotalSucursales" class="text-danger">-</div>
+                        <h3 id="lbTotalSucursales" class="text-danger">0.00</h3>
                         <div class="panel-toolbar">
                             <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
                             <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>          
@@ -74,7 +73,7 @@ function getView(){
         }
     };
 
-    root.innerHTML = view.encabezado() + view.seccionSucursales() ;
+    root.innerHTML = view.encabezado() + view.seccionSucursales() + view.seccionVendedores();
 
 };
 
@@ -89,20 +88,23 @@ async function addListeners(){
     cmbAnio.value = f.getFullYear();
     
     cmbMes.addEventListener('change',async()=>{
-        await api.gerenciaSucursalesTotales(cmbMes.value, cmbAnio.value,'rootSucursales','lbTotalSucursales');
+        await api.gerenciaResumenSucursalSucursales(cmbMes.value, cmbAnio.value,'rootSucursales','lbTotalSucursales');
+        await api.gerenciaRankingVendedoresSucursales(cmbMes.value, cmbAnio.value,'rootVendedores');
     });
     
     cmbAnio.addEventListener('change',async()=>{
-        await api.gerenciaSucursalesTotales(cmbMes.value, cmbAnio.value,'rootSucursales','lbTotalSucursales');
+        await api.gerenciaResumenSucursalSucursales(cmbMes.value, cmbAnio.value,'rootSucursales','lbTotalSucursales');
+        await api.gerenciaRankingVendedoresSucursales(cmbMes.value, cmbAnio.value,'rootVendedores');
     });
 
 
-    await api.gerenciaSucursalesTotales(cmbMes.value, cmbAnio.value,'rootSucursales','lbTotalSucursales');
 
+    await api.gerenciaResumenSucursalSucursales(cmbMes.value, cmbAnio.value,'rootSucursales','lbTotalSucursales');
+    await api.gerenciaRankingVendedoresSucursales(cmbMes.value, cmbAnio.value,'rootVendedores');
 
 };
 
-function InicializarVistaGerenteSucursales(){
+function InicializarVistaGerente(){
     
     getView();
     addListeners();

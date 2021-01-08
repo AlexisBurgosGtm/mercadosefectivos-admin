@@ -556,7 +556,7 @@ router.post('/rptsucursalesventas',async(req,res)=>{
 
 });
 
-// ranking de vendedores
+// ranking de vendedores / datos del host
 router.post('/rptrankingvendedores', async(req,res)=>{
     const {anio,mes} = req.body;
     let qry = `SELECT ME_Vendedores.NOMVEN, ME_Sucursales.NOMBRE AS SUCURSAL, SUM(ME_Documentos.DOC_TOTALCOSTO) AS TOTALCOSTO, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
@@ -569,6 +569,35 @@ router.post('/rptrankingvendedores', async(req,res)=>{
     
     execute.Query(res,qry);
 });
+
+
+// reporte de sucursales ventas - DATOS DE LA SUCURSAL
+router.post('/rptsucursalesventassucursales',async(req,res)=>{
+
+    const {anio,mes} = req.body;
+
+    let qry = `SELECT ME_Sucursales.COLOR, ME_RPT_VENTAS.CODSUCURSAL AS SUCURSAL, ME_Sucursales.NOMBRE AS NOMSUCURSAL, SUM(ME_RPT_VENTAS.TOTALPRECIO) AS IMPORTE
+    FROM            ME_RPT_VENTAS LEFT OUTER JOIN
+                             ME_Sucursales ON ME_RPT_VENTAS.CODSUCURSAL = ME_Sucursales.CODSUCURSAL
+    WHERE        (ME_RPT_VENTAS.ANIO =${anio}) AND (ME_RPT_VENTAS.MES = ${mes})
+    GROUP BY ME_Sucursales.COLOR, ME_RPT_VENTAS.CODSUCURSAL, ME_Sucursales.NOMBRE`;
+
+    execute.Query(res,qry);
+
+});
+// ranking de vendedores / datos de la sucursal
+router.post('/rptrankingvendedoressucursal', async(req,res)=>{
+    const {anio,mes} = req.body;
+    let qry = `SELECT        NOMVEN, SUM(TOTALPRECIO) AS TOTALPRECIO, CODSUCURSAL AS SUCURSAL
+    FROM            ME_RPT_VENTAS
+    WHERE        (ANIO = ${anio}) AND (MES = ${mes})
+    GROUP BY NOMVEN, CODSUCURSAL
+    ORDER BY TOTALPRECIO DESC`;
+    
+    execute.Query(res,qry);
+});
+
+
 
 
 //******************************* */
