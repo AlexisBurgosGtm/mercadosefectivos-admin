@@ -2046,7 +2046,7 @@ let api = {
                         <tbody>`;
         let tblFoot = `</tbody></table>`;
 
-        axios.post('/ventas/rptrankingvendedoressucursal', {
+        axios.post('/ventas/rptrankingvendedoressucursal2', {
             fecha:fecha,
             sucursal: GlobalCodSucursal
         })

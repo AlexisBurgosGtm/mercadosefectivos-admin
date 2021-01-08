@@ -606,7 +606,7 @@ router.post('/rptrankingvendedoressucursal', async(req,res)=>{
 
 
 // ranking de vendedores por sucursal y fecha
-router.post('/rptrankingvendedoressucursal', async(req,res)=>{
+router.post('/rptrankingvendedoressucursal2', async(req,res)=>{
     const {fecha,sucursal} = req.body;
     let qry = `SELECT       ME_Vendedores.NOMVEN, COUNT(ME_Documentos.CODDOC) AS PEDIDOS, SUM(ME_Documentos.DOC_TOTALVENTA) AS TOTALPRECIO
     FROM            ME_Documentos LEFT OUTER JOIN
