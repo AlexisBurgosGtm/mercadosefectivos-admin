@@ -155,6 +155,8 @@ async function addListeners(){
         })
     })
 
+    fcnCargarGrid();
+
 };
 
 async function fcnCargarGrid(){
