@@ -2,21 +2,19 @@ function getView(){
     let view = {
         encabezado : ()=>{
             return `
+            <h3 id="txtTotalPicking">Q 0.00</h3>
             <div class="row">
-                <h3 id="txtTotalPicking">Q 0.00</h3>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <select id="cmbPicking" class="form-control">
                         
                     </select>
                 </div>
-
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <select id="cmbTipoListado" class="form-control">
                         <option value="PEDIDOS">PEDIDOS</option>
                         <option value="MAPA">MAPA</option>
                     </select>
                 </div>
-
             </div>
             `
         },
