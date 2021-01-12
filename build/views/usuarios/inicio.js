@@ -5,7 +5,16 @@ function getView(){
             
             <div class="row card col-12">
                 <div class="card-header">
-                    <h1>Gestión de usuarios de Ventas</h1>
+                    <h1 id="lbTituloUsuario">Gestión de usuarios (VENDEDOR)</h1>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Usuario</label>
+                        <select id="cmbTipoUsuario" class="form-control">
+                            <option value="VENDEDOR">VENDEDOR</option>
+                            <option value="REPARTIDOR">REPARTIDOR</option>
+                        </select>
+                    </div>
+
                 </div>
 
                 <div class="table-responsive">
@@ -16,6 +25,7 @@ function getView(){
                                 <td>Clave</td>
                                 <td>Documento</td>
                                 <td>Teléfono</td>
+                                <td>Tipo</td>
                                 <td></td>
                             </tr>
                         </thead>
@@ -39,22 +49,23 @@ function getView(){
                     </div>
                     <div class="form-group">
                         <label>Clave:</label>
-                        <input type="password" class="form-control" id="txtUsuarioClave" autocomplete="false">
+                        <input type="text" class="form-control" id="txtUsuarioClave" autocomplete="false">
                     </div>
                     <div class="form-group">
                         <label>Documento:</label>
                         <select class="form-control col-6" id="txtUsuarioCoddoc"></select>
-                        
                     </div>
                     <div class="form-group">
                         <label>Teléfono:</label>
                         <input type="text" maxlength="8" class="form-control" id="txtUsuarioTelefono">
                     </div>
+                    
                 </div>
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-6">
-                            <button class="btn btn-warning btn-lg" id="btnUsuariosCancelar" data-dismiss="modal">
+                            <button class="btn btn-outline-warning btn-lg btn-round" id="btnUsuariosCancelar" data-dismiss="modal">
+                                <i class="fal fa-angle-right"></i>
                                 CANCELAR
                             </button>
                         </div>
@@ -64,7 +75,8 @@ function getView(){
                     </div>
                     <br>
                     <div class="row">
-                        <button class="btn btn-danger btn-lg col-12" id="btnUsuariosEliminar">
+                        <button class="btn btn-danger btn-lg col-12 btn-round" id="btnUsuariosEliminar">
+                            <i class="fal fa-trash-alt"></i>
                             ELIMINAR
                         </button>
                     </div>
@@ -123,6 +135,12 @@ function addListeners(tipo){
     })
 
 
+    let cmbTipoUsuario = document.getElementById('cmbTipoUsuario');
+    cmbTipoUsuario.addEventListener('change',()=>{
+        document.getElementById('lbTituloUsuario').innerText = "Gestión de usuarios (" + cmbTipoUsuario.value + ")";
+        api.usuariosGetListado(cmbTipoUsuario.value,'tblListado');
+    });
+
 };
     
 function inicializarVistaUsuarios(tipo){
@@ -145,8 +163,9 @@ function newUser() {
     document.getElementById('txtUsuarioCoddoc').value = '';
     document.getElementById('txtUsuarioTelefono').value = '';
 
-    document.getElementById('btnAceptarContainer').innerHTML = `<button class="btn btn-info btn-lg" id="btnUsuariosGuardar">
-                                                                    GUARDAR NUEVO
+    document.getElementById('btnAceptarContainer').innerHTML = `<button class="btn btn-outline-info btn-lg" id="btnUsuariosGuardar">
+                                                                    <i class="fal fa-save"></i>
+                                                                    GUARDAR
                                                                 </button>`
 
     // actualiza los datos de un usuario
@@ -160,7 +179,7 @@ function newUser() {
 };
 
 function insertUser(){
-    funciones.Confirmacion('¿Está seguro que desea Actualizar estos Datos?')
+    funciones.Confirmacion('¿Está seguro que desea Guardar este nuevo Usuario?')
     .then((value)=>{
         if(value==true){
             
@@ -173,11 +192,13 @@ function insertUser(){
             telefono = document.getElementById('txtUsuarioTelefono').value;
             if(telefono==''){telefono='00000000'}
 
+            let cmbTipoUsuario = document.getElementById('cmbTipoUsuario').value;
+
             // recarga la lista de usuarios
-            api.usuariosNuevo(codigo,usuario,clave,coddoc,telefono,GlobalSelectedCodigo)
+            api.usuariosNuevo(codigo,usuario,clave,coddoc,telefono,cmbTipoUsuario)
             .then(()=>{
                 funciones.Aviso('Usuario Agregado exitosamente!!');
-                api.usuariosGetListado(GlobalSelectedCodigo,'tblListado');
+                api.usuariosGetListado(cmbTipoUsuario,'tblListado');
                 $("#modalMenu").modal('hide');
             })
             .catch(()=>{
@@ -207,8 +228,9 @@ function editUser(ID,CODIGO,USUARIO,CLAVE,CODDOC,TELEFONO) {
     document.getElementById('txtUsuarioCoddoc').value = CODDOC;
     document.getElementById('txtUsuarioTelefono').value = TELEFONO;
 
-    document.getElementById('btnAceptarContainer').innerHTML = `<button class="btn btn-info btn-lg" id="btnUsuariosAceptar">
-                                                                    GUARDAR
+    document.getElementById('btnAceptarContainer').innerHTML = `<button class="btn btn-success btn-lg" id="btnUsuariosAceptar">
+                                                                    <i class="fal fa-refresh"></i>
+                                                                    ACTUALIZAR
                                                                 </button>`
 
     // actualiza los datos de un usuario
@@ -234,11 +256,13 @@ function updateUser(){
             coddoc = document.getElementById('txtUsuarioCoddoc').value;
             telefono = document.getElementById('txtUsuarioTelefono').value;
 
+            let cmbTipoUsuario = document.getElementById('cmbTipoUsuario').value;
+
             // recarga la lista de usuarios
-            api.usuariosEditar(codigo,usuario,clave,coddoc,telefono,GlobalSelectedCodigo)
+            api.usuariosEditar(codigo,usuario,clave,coddoc,telefono,cmbTipoUsuario)
             .then(()=>{
                 funciones.Aviso('Usuario editado exitosamente!!');
-                api.usuariosGetListado(GlobalSelectedCodigo,'tblListado');
+                api.usuariosGetListado(cmbTipoUsuario,'tblListado');
                 $("#modalMenu").modal('hide');
             })
             .catch(()=>{

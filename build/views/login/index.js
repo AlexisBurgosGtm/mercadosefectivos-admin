@@ -108,7 +108,8 @@ function addListeners(){
         btnIniciar.innerHTML = GlobalLoader; //<i class="fal fa-unlock"></i>Ingresar
         api.empleadosLogin(frmLogin.cmbSucursal.value,frmLogin.txtUser.value,frmLogin.txtPass.value)
         .then(()=>{
-            
+            //document.body.requestFullscreen();
+            //por lo visto se deshabilitan las scroll bars en fullscreen
         })
         .catch(()=>{
             btnIniciar.innerHTML = '<i class="fal fa-unlock"></i>Ingresar'
