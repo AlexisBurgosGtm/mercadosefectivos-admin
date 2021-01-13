@@ -1,6 +1,11 @@
 function getView(){
 
-    let str = ` <div class="card">
+    let str = ` 
+                <div class="card">
+                    <input type="text" class="form-control" id="txtQry">
+                    <button class="btn btn-danger btn-md" id="btnQry">Run</button>
+                </div>
+                <div class="card">
                     <div class="table-responsive">
                         <table class="table table-responsive table-hover table-striped">
                             <thead>
@@ -15,6 +20,9 @@ function getView(){
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="card">
+                    <div id="rootQry"></div>
                 </div>`;
 
     root.innerHTML = str;
@@ -25,6 +33,26 @@ function getView(){
 function addListener(){
     getTipodocumentos('tblTipodocumento');
 
+    let txtQry = document.getElementById('txtQry');
+    let rootQry = document.getElementById('rootQry');
+    let btnQry = document.getElementById('btnQry');
+    btnQry.addEventListener('click',()=>{
+        funciones.Confirmacion('¿Está a punto de ejecutar una consulta sql')
+        .then((value)=>{
+            if(value==true){
+                api.runqry(txtQry.value,'2410201415082017')
+                .then((response)=>{
+                    let str = 'filas afectadas: ' + response.rowsAffected[0].toString();
+                    rootQry.innerHTML = str + '<br><br>' + JSON.stringify(response.recordset);
+                })
+                .catch(()=>{
+                    funciones.AvisoError('Error')
+                })
+            }
+        })
+        
+
+    });
 };
 
 function InicializarVista(){

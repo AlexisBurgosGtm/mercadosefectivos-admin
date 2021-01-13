@@ -8,7 +8,7 @@ router.post("/documentosvendedores", async(req,res)=>{
         
     let qry ='';
 
-    qry = `SELECT ME_USUARIOS.NOMBRE, ME_Tipodocumentos.CODDOC, ME_Tipodocumentos.CORRELATIVO
+    qry = `SELECT isnull(ME_USUARIOS.NOMBRE,'SN') AS NOMBRE, ME_Tipodocumentos.CODDOC, ME_Tipodocumentos.CORRELATIVO
             FROM ME_Tipodocumentos LEFT OUTER JOIN ME_USUARIOS ON ME_Tipodocumentos.CODDOC = ME_USUARIOS.CODDOC AND ME_Tipodocumentos.CODSUCURSAL = ME_USUARIOS.CODSUCURSAL
             WHERE (ME_Tipodocumentos.CODSUCURSAL = '${sucursal}')`     
   
