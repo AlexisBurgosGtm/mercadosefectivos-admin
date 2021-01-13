@@ -95,7 +95,7 @@ async function addListeners(){
         await api.repartidorPicking(cmbPicking.value,'containerRepartidor','txtTotalPicking')
     })
 
-    api.repartidorComboEmbarques('cmbPicking')
+    api.repartidorComboEmbarquesRep('cmbPicking')
     
     let cmbTipoListado = document.getElementById('cmbTipoListado')
     cmbTipoListado.addEventListener('change',()=>{

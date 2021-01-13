@@ -2861,6 +2861,39 @@ let api = {
 
         
     },
+    repartidorComboEmbarquesRep : async(idContainer)=>{
+        
+        let container = document.getElementById(idContainer);
+            
+        let strdata = ''; //'<option value="">SELECCIONE EMBARQUE</option>';
+
+        axios.post('/repartidor/embarquesrepartidor', {
+            sucursal: GlobalCodSucursal,
+            codrepartidor:GlobalCodUsuario
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                strdata = strdata + `
+                            <option value='${rows.CODIGO}'>
+                                ${rows.CODIGO}-${rows.RUTA}-${rows.FECHA.toString().replace('T00:00:00.000Z','')}
+                            </option>
+                            `
+            })
+            container.innerHTML = strdata;
+            try {
+                fcnCargarGrid();    
+            } catch (error) {
+                
+            }
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            container.innerHTML = '';            
+        });
+
+    
+},
     repartidorPicking : async(embarque,idContenedor,idLbTotal)=>{
         
         let container = document.getElementById(idContenedor);
