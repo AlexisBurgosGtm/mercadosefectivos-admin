@@ -1,5 +1,3 @@
-const { root } = require("cheerio");
-
 function getView(){
 
     let str = ` <div class="card">
