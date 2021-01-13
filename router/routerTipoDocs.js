@@ -2,6 +2,20 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+
+router.post("/documentosvendedores", async(req,res)=>{
+    const {sucursal} = req.body;
+        
+    let qry ='';
+
+    qry = `SELECT ME_USUARIOS.NOMBRE, ME_Tipodocumentos.CODDOC, ME_Tipodocumentos.CORRELATIVO
+            FROM ME_Tipodocumentos LEFT OUTER JOIN ME_USUARIOS ON ME_Tipodocumentos.CODDOC = ME_USUARIOS.CODDOC AND ME_Tipodocumentos.CODSUCURSAL = ME_USUARIOS.CODSUCURSAL
+            WHERE (ME_Tipodocumentos.CODSUCURSAL = '${sucursal}')`     
+  
+    execute.Query(res,qry);
+
+});
+
 // VENTAS BUSCAR PRODUCTO POR DESCRIPCION
 router.get("/tipo", async(req,res)=>{
     const {app,empnit,tipo} = req.query;

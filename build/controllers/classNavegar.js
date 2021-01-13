@@ -37,9 +37,19 @@ let classNavegar = {
             case 'GERENTE':
                 classNavegar.inicioGerente();                        
                 break;
+            case 'DEVELOPER':
+                classNavegar.inicioProgramador();                        
+                break;
             default:
                 break;
         };
+    },
+    inicioProgramador: ()=>{
+        funciones.loadScript('../views/programador.js','root')
+        .then(async()=>{
+            GlobalSelectedForm='DEVELOPER';
+            InicializarVista();
+        })
     },
     inicioVendedor : async ()=>{
         let strMenu =   `
