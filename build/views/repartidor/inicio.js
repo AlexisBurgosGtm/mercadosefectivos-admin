@@ -9,6 +9,7 @@ function getView(){
                         
                     </select>
                 </div>
+                <br>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <select id="cmbTipoListado" class="form-control">
                         <option value="PEDIDOS">PEDIDOS</option>
@@ -160,7 +161,11 @@ async function addListeners(){
 };
 
 async function fcnCargarGrid(){
+
+    let cmbPicking = document.getElementById('cmbPicking');
+
     if(cmbTipoListado.value == "PEDIDOS"){
+        GlobalSelectedCodEmbarque =cmbPicking.value;
         await api.repartidorPicking(cmbPicking.value,'containerRepartidor','txtTotalPicking')
     }else{
         await api.repartidorMapaEmbarque(cmbPicking.value,'containerRepartidor','txtTotalPicking');

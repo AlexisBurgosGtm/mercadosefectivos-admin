@@ -96,8 +96,12 @@ router.post("/marcarpedido", async(req,res)=>{
             
     let qry ='';
 
-    qry = `UPDATE ME_REPARTO_DOCUMENTOS SET ST='${st}' WHERE CODSUCURSAL='${sucursal}' AND CODEMBARQUE='${embarque}' AND CODDOC='${coddoc}' AND CORRELATIVO=${correlativo} `;     
-  
+    qry = `UPDATE ME_REPARTO_DOCUMENTOS SET ST='${st}' 
+            WHERE CODSUCURSAL='${sucursal}' AND CODEMBARQUE='${embarque}' AND CODDOC='${coddoc}' AND CORRELATIVO=${correlativo} `;     
+
+    console.log(qry);
+
+
     execute.Query(res,qry);
 
 });

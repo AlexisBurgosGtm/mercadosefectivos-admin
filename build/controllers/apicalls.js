@@ -2893,7 +2893,7 @@ let api = {
         });
 
     
-},
+    },//Listado de facturas a entregar en el picking
     repartidorPicking : async(embarque,idContenedor,idLbTotal)=>{
         
         let container = document.getElementById(idContenedor);
@@ -2907,8 +2907,6 @@ let api = {
             <table class="table table-responsive table-hover table-striped" id="tblListado">
                 <thead class="bg-trans-gradient text-white">
                     <tr>
-                        <td>Vendedor</td>
-                        <td>Pedido</td>
                         <td>Cliente</td>
                         <td>Importe</td>
                         <td></td>
@@ -2948,22 +2946,25 @@ let api = {
                     }
 
                     strdata = strdata + `
-                            <tr class='${strC}'>
-                                <td>${rows.VENDEDOR}</td>
-                                <td>
-                                    ${rows.CODDOC + '-' + rows.CORRELATIVO}
-                                    <br>
-                                    <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
-                                </td>
+                            <tr class='${strC} border-bottom'>
                                 <td>${rows.CLIENTE}
                                     <br>
                                     <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
+                                    <br>
+                                    <br>
+                                    <small><b>${rows.CODDOC + '-' + rows.CORRELATIVO}</b></small>
+                                    <br>
+                                    <small class="">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+                                    <br>
+                                    <br>
+                                    <small>${rows.VENDEDOR}</small>
                                 </td>
                                 <td>
                                     <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}','${rows.CODVEN}')">
+                                    <button class="btn btn-info btn-sm btn-circle" 
+                                        onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}','${rows.CODVEN}')">
                                         <i class="fal fa-book"></i>
                                     </button>
                                 </td>
@@ -2977,6 +2978,31 @@ let api = {
             container.innerHTML = '';
             lbTotal.innerText = 'Q 0.00';
         });
+    /*
+    let bk = `
+        <tr class='${strC} border-bottom'>
+            <td>${rows.VENDEDOR}</td>
+            <td>
+                ${rows.CODDOC + '-' + rows.CORRELATIVO}
+                <br>
+                <small class="text-danger">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</small>
+            </td>
+            <td>${rows.CLIENTE}
+                <br>
+                <small>${rows.DIRECCION + ',' + rows.MUNICIPIO}</small>
+            </td>
+            <td>
+                <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
+            </td>
+            <td>
+                <button class="btn btn-info btn-sm btn-circle" 
+                    onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}','${rows.CODVEN}')">
+                    <i class="fal fa-book"></i>
+                </button>
+            </td>
+        </tr>`
+    */
+        
     },
     repartidorDetallePedido: async(coddoc,correlativo,idContenedor,idLbTotal)=>{
 
@@ -3054,7 +3080,8 @@ let api = {
                     }else{
                         L.marker([rows.LAT, rows.LONG])
                         .addTo(map)
-                        .bindPopup(`${rows.CLIENTE} - ${funciones.setMoneda(rows.IMPORTE,'Q ')}<br><small>${rows.DIRECCION},${rows.MUNICIPIO}</small><br><small>${rows.VENDEDOR}</small>` )   
+                        .bindPopup(`<div  onclick="getDetalleFactura('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CLIENTE}','${rows.CODVEN}')">${rows.CLIENTE} - ${funciones.setMoneda(rows.IMPORTE,'Q ')}<br>
+                        <small>${rows.DIRECCION},${rows.MUNICIPIO}</small><br><small>${rows.VENDEDOR}</small></div>` )   
                     }
             })
             //container.innerHTML = tbl;
