@@ -2586,7 +2586,7 @@ let api = {
                                 </td>
                                 <td>${rows.CODMEDIDA}
                                     <br>
-                                    TipoP:<b class="text-danger">${rows.TIPOPRECIO}</b>
+                                    TipoP:<b class="text-danger">${funciones.getTipoPrecio(rows.TIPOPRECIO.toString())}</b>
                                 </td>
                                 <td>${rows.CANTIDAD}</td>
                                 <td>

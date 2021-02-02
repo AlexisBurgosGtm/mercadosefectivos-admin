@@ -1130,7 +1130,26 @@ let funciones = {
           //triggering the function
           downloadLink.click();
       }
+    },
+    getTipoPrecio: (tipo)=>{
+      let str = '';
+      switch (tipo) {
+        case 'A':
+            str = 'MAYOREO';
+            break;
+        case 'B':
+            str = 'PRECIO A';
+            break;
+        case 'C':
+            str = 'PRECIO B';
+            break;
+        case 'K':
+            str = 'CAMBIO';
+            break;
+      };
+      return str;
     }
+
 };
 
 //export default funciones;
