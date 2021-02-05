@@ -19,8 +19,10 @@ router.get("/buscarproducto", async(req,res)=>{
     // app= sucusal
     // K= CAMBIO DE PRODUCTO
 
-    let campoprecio = '';
+    let qry ='';
 
+    let campoprecio = '';
+    let equ = '<>0'; //equivalente diferente a cero para que jale todos
     switch (tipoprecio) {
         case 'P':
             campoprecio = 'ME_PRECIOS.PRECIO';        
@@ -35,20 +37,24 @@ router.get("/buscarproducto", async(req,res)=>{
             campoprecio = 'ME_PRECIOS.OFERTA';
             break;
         case 'K':
-            campoprecio = '0.01'
+            campoprecio = '0.01';
+            equ = '=1'; //equivalente =1 para que solo me jale las unidades
+
             break;
         default:
             campoprecio = 'ME_PRECIOS.PRECIO';
             break;
     }
-    let qry ='';
     
-    qry = `SELECT TOP 20 ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, ME_Precios.EQUIVALE, ME_Precios.COSTO, ${campoprecio} AS PRECIO, ME_Marcas.DESMARCA, 0 AS EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
+    
+    qry = `SELECT TOP 20 ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, 
+                ME_Precios.EQUIVALE, ME_Precios.COSTO, ${campoprecio} AS PRECIO, 
+                ME_Marcas.DESMARCA, 0 AS EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
             FROM ME_Productos LEFT OUTER JOIN
-            ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA LEFT OUTER JOIN
-            ME_Precios ON ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.CODPROD = ME_Precios.CODPROD
-            WHERE (ME_Productos.DESPROD LIKE '%${filtro}%') AND (ME_Productos.CODSUCURSAL = '${app}') 
-                        OR (ME_Productos.CODPROD = '${filtro}') AND (ME_Productos.CODSUCURSAL = '${app}')` 
+                ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA LEFT OUTER JOIN
+                ME_Precios ON ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.CODPROD = ME_Precios.CODPROD
+            WHERE (ME_Productos.DESPROD LIKE '%${filtro}%') AND (ME_Productos.CODSUCURSAL = '${app}') AND (ME_Precios.EQUIVALE ${equ}) 
+                OR (ME_Productos.CODPROD = '${filtro}') AND (ME_Productos.CODSUCURSAL = '${app}') AND (ME_Precios.EQUIVALE ${equ})` 
     
         
     execute.Query(res,qry);
