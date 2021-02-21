@@ -459,22 +459,7 @@ function getView(){
                             </div>
                 
                             <div class="modal-body">
-                                    <div class="row">
-                                            <div class="col-sm-6 ml-sm-auto">
-                                                <div class="form-group hidden">
-                                                    <label>Entregar en:</label>
-                                                    <select class="form-control" id="cmbEntregaTipo">
-                                                        <option value="TIENDA">TIENDA</option>
-                                                        <option value="DOMICILIO">DOMICILIO</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Escriba Whatsapp del Cliente para enviar pedido:</label>
-                                                    <input type="number" class="form-control" id="txtEntregaDireccion">
-                                                </div>
-                                                
-                                            </div>
-            
+                                    <div class="row">            
                                             <div class="col-sm-6 ml-sm-auto">
                                                 <div class="form-group">
                                                     <label>Fecha Entrega:</label>
@@ -752,11 +737,7 @@ async function iniciarVistaVentas(nit,nombre,direccion){
                funciones.ObtenerUbicacion('lbDocLat','lbDocLong')
                 switch (GlobalTipoCobro) {
                     case 'COBRO':
-                        $('#ModalCobro').modal('show');
-                        document.getElementById('txtPagadoEfectivo').value=GlobalTotalDocumento;
-                        document.getElementById('txtTotalPagado').innerText=GlobalTotalDocumento;
-                        document.getElementById('txtTotalAPagar').innerText=funciones.setMoneda(GlobalTotalDocumento,'Q ');
-
+                    
                         break;
                     case 'TERMINAR':
                         $('#ModalFinalizarPedido').modal('show');   
@@ -859,23 +840,7 @@ async function iniciarVistaVentas(nit,nombre,direccion){
            // })
 
     fcnCargarComboTipoPrecio();
-
-    let txtPagadoEfectivo = document.getElementById('txtPagadoEfectivo');
-    let txtVuelto = document.getElementById('txtVuelto');
-    txtPagadoEfectivo.addEventListener('keyup',(e)=>{
-        let txtTotalPagado = document.getElementById('txtTotalPagado');
-        txtTotalPagado.innerText = funciones.setMoneda(txtPagadoEfectivo.value,'Q ');
-        let vuelto = Number(txtPagadoEfectivo.value) - Number(GlobalTotalDocumento);
-        txtVuelto.innerText = funciones.setMoneda(vuelto,'Q ');
-    });
-
-    
-    let btnCobrarVenta = document.getElementById('btnCobrarVenta');
-    btnCobrarVenta.addEventListener('click',async ()=>{
-        
-        fcnFinalizarPedido();
-      
-    });
+  
 
     // inicializa la calculadora de cantidad
     iniciarModalCantidad();
@@ -1546,14 +1511,17 @@ async function fcnCargarTotal(idContenedor,idContenedor2){
 };
 
 async function fcnFinalizarPedido(){
-    
+    if(Number(GlobalTotalDocumento)<Number(GlobalVentaMinima)){
+        funciones.NotificacionPersistent('AVISO IMPORTANTE','Este pedido es menor al mínimo permitido');
+    };
+
     let codcliente = GlobalSelectedCodCliente;
     let ClienteNombre = document.getElementById('txtNombre').value;
     let dirclie = document.getElementById('txtDireccion').value; // CAMPO DIR_ENTREGA
     let obs = document.getElementById('txtEntregaObs').value; 
-    let direntrega = document.getElementById('txtEntregaDireccion').value; //CAMPO MATSOLI
+    let direntrega = "SN"; //document.getElementById('txtEntregaDireccion').value; //CAMPO MATSOLI
     let codbodega = GlobalCodBodega;
-    let cmbTipoEntrega = document.getElementById('cmbEntregaTipo').value; //campo TRANSPORTE
+    let cmbTipoEntrega = 'TIENDA'; // document.getElementById('cmbEntregaTipo').value; //campo TRANSPORTE
 
 
     let txtFecha = new Date(document.getElementById('txtFecha').value);

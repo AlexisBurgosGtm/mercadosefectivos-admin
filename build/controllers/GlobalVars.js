@@ -67,7 +67,7 @@ let GlobalSelectedApp = '';
 
 let GlobalSistema = 'ISC';
 
-
+let GlobalVentaMinima = 79.99;
 
 let GlobalLoader = `
                 <div>

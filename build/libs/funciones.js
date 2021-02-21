@@ -422,7 +422,7 @@ let funciones = {
     
     function requestPermission() {
       if (!('Notification' in window)) {
-        alert('Notification API not supported!');
+        funciones.Aviso('Notification API not supported!');
         return;
       }
       
