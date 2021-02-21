@@ -456,8 +456,6 @@ let api = {
                                     <td>Documento</td>
                                     <td>Cliente</td>
                                     <td>Importe</td>
-                                    <td></td>
-                                    <td></td>
                                 </tr>
                             </thead>
                             <tbody id="tblListaPedidos">`;
@@ -478,29 +476,32 @@ let api = {
                     total = total + Number(rows.IMPORTE);
                     totalpedidos = totalpedidos + 1;
                     strdata = strdata + `<tr>
-                                <td>
-                                    ${rows.CODDOC + '-' + rows.CORRELATIVO}
-                                </td>
-                                <td>${rows.NOMCLIE}
+                                <td colspan="2">
+                                        <b class="text-danger">${rows.CODDOC + '-' + rows.CORRELATIVO}</b>
                                     <br>
-                                    <small>${rows.DIRCLIE + ', ' + rows.DESMUNI}</small>
+                                        ${rows.NOMCLIE}
                                     <br>
-                                    <small class="text-white bg-secondary">${rows.OBS}</small>
+                                        <small class="text-secondary">${rows.DIRCLIE + ', ' + rows.DESMUNI}</small>
+                                    <br>
+                                        <small class="text-white bg-secondary">${rows.OBS}</small>
                                 </td>
                                 <td>
                                     ${funciones.setMoneda(rows.IMPORTE,'Q')}
-                                </td>
-                                <td>
-                                    <button class="btn btn-info btn-sm btn-circle"
-                                    onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
-                                        +
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm btn-circle"
-                                    onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
-                                        <i class="fal fa-lock"></i>
-                                    </button>
+                                    <br><br><br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-info btn-sm btn-circle"
+                                            onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                                +
+                                            </button>    
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-danger btn-sm btn-circle"
+                                            onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
+                                                <i class="fal fa-lock"></i>
+                                            </button>    
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>`
             })

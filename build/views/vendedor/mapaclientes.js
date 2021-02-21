@@ -9,7 +9,7 @@ function getView(){
                             <div class="row">
 
                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div class="input-group text-md">               
+                                        <div class="input-group">               
                                             <select class="form-control border-info" id="cmbDiaVisita"></select>
                                         </div>                            
                                 </div>
