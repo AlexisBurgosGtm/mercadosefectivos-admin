@@ -4,14 +4,12 @@ function getView(){
         encabezado : ()=>{
             return `
                     <div class="card">
-                        <div class="card-header">
-                            <h4 id="lbTotalDia">Seleccione Dia</h4>
-                        </div>
                         <div class="card-body">
+                            <h4 id="lbTotalDia">Seleccione Dia</h4>
                             <div class="row">
 
                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <div class="input-group">               
+                                        <div class="input-group text-md">               
                                             <select class="form-control border-info" id="cmbDiaVisita"></select>
                                         </div>                            
                                 </div>
