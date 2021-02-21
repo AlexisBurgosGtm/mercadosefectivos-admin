@@ -1511,8 +1511,10 @@ async function fcnCargarTotal(idContenedor,idContenedor2){
 };
 
 async function fcnFinalizarPedido(){
+
     if(Number(GlobalTotalDocumento)<Number(GlobalVentaMinima)){
-        funciones.NotificacionPersistent('AVISO IMPORTANTE','Este pedido es menor al mínimo permitido');
+        funciones.AvisoError('Pedido menor al mínimo de venta');
+        funciones.hablar('Advertencia. Este pedido es menor al mínimo de venta permitido')
     };
 
     let codcliente = GlobalSelectedCodCliente;
@@ -1590,10 +1592,11 @@ async function fcnFinalizarPedido(){
                     document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
 
                     document.getElementById('btnEntregaCancelar').click();
-                    $('#ModalCobro').modal('hide');
+                    //$('#ModalCobro').modal('hide');
         
                     //socket.emit('ordenes nueva',`Nueva Orden a nombre de ${ClienteNombre} por valor de ${GlobalTotalDocumento} quetzales`, GlobalSelectedForm);
                     socket.emit('ventas nueva',GlobalCodSucursal, GlobalSelectedForm);
+                    
                     //actualiza la ubicación del empleado
                     await classEmpleados.updateMyLocation();
                     

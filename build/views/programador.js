@@ -43,6 +43,7 @@ function addListener(){
                 api.runqry(txtQry.value,'2410201415082017')
                 .then((response)=>{
                     let str = 'filas afectadas: ' + response.rowsAffected[0].toString();
+                    funciones.Aviso(str);
                     rootQry.innerHTML = str + '<br><br>' + JSON.stringify(response.recordset);
                 })
                 .catch(()=>{
