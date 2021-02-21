@@ -11,6 +11,7 @@ let classNavegar = {
             .then(()=>{
                 GlobalSelectedForm='LOGIN';
                 InicializarVista();
+                rootMenuFooter.innerHTML = '<b class="text-white">Mercados Efectivos</b>';
             })
         
     },
@@ -52,6 +53,27 @@ let classNavegar = {
         })
     },
     inicioVendedor : async ()=>{
+        let strFooter =    `<button class="btn btn-sm text-white"  id="btnMenu2VendedorClientesMapa">
+                                <i class="fal fa-map"></i>
+                                Mapa
+                            </button> 
+                            <button class="btn btn-sm text-white"  id="btnMenu2VendedorClientes">
+                                <i class="fal fa-shopping-cart"></i>
+                                Clientes
+                            </button>
+                            <button class="btn btn-sm text-white" id="btnMenu2VendedorPedidos">
+                                <i class="fal fa-chart-line"></i>
+                                Logro
+                            </button>
+                            <button class="btn btn-sm text-white" id="btnMenu2VendedorLogro">
+                                <i class="fal fa-chart-pie"></i>
+                                Mes
+                            </button>
+                            <button class="btn btn-sm text-white"  id="btnMenu2VendedorNoticias">
+                                <i class="fal fa-bell"></i>
+                                Noticias
+                            </button>
+        `
         let strMenu =   `
                             <a class="dropdown-item" data-toggle="dropdown" id="btnMenuVendedorClientes">
                                 <span>VENDER(Lista Clientes)</span>
@@ -76,16 +98,29 @@ let classNavegar = {
                             </a>
                             `
                     rootMenu.innerHTML = strMenu;
+                    rootMenuFooter.innerHTML = strFooter;
            
                      // handlers del menu
                     let btnMenuVendedorClientes = document.getElementById('btnMenuVendedorClientes');
                     btnMenuVendedorClientes.addEventListener('click',()=>{
                         classNavegar.inicioVendedorListado();
                     });
+                    let btnMenu2VendedorClientes = document.getElementById('btnMenu2VendedorClientes');
+                    btnMenu2VendedorClientes.addEventListener('click',()=>{
+                        classNavegar.inicioVendedorListado();
+                    });
+
+                    
                     let btnMenuVendedorClientesMapa = document.getElementById('btnMenuVendedorClientesMapa');
                     btnMenuVendedorClientesMapa.addEventListener('click',()=>{
                         classNavegar.ventasMapaClientes();
                     });
+                    let btnMenu2VendedorClientesMapa = document.getElementById('btnMenu2VendedorClientesMapa');
+                    btnMenu2VendedorClientesMapa.addEventListener('click',()=>{
+                        classNavegar.ventasMapaClientes();
+                    });
+
+
                     let btnMenuVendedorReparto = document.getElementById('btnMenuVendedorReparto');
                     btnMenuVendedorReparto.addEventListener('click',()=>{
                         classNavegar.vendedorReparto();
@@ -94,16 +129,33 @@ let classNavegar = {
                     btnMenuVendedorCenso.addEventListener('click',()=>{
                         classNavegar.vendedorCenso();
                     });
+
+
                     let btnMenuVendedorPedidos = document.getElementById('btnMenuVendedorPedidos');
                     btnMenuVendedorPedidos.addEventListener('click',()=>{
                         classNavegar.pedidos();
                     });
+                    let btnMenu2VendedorPedidos = document.getElementById('btnMenu2VendedorPedidos');
+                    btnMenu2VendedorPedidos.addEventListener('click',()=>{
+                        classNavegar.pedidos();
+                    });
+
+
                     let btnMenuVendedorLogro = document.getElementById('btnMenuVendedorLogro');
                     btnMenuVendedorLogro.addEventListener('click',()=>{
                         classNavegar.logrovendedor();
                     });
+                    let btnMenu2VendedorLogro = document.getElementById('btnMenu2VendedorLogro');
+                    btnMenu2VendedorLogro.addEventListener('click',()=>{
+                        classNavegar.logrovendedor();
+                    });
+
                     let btnMenuVendedorNoticias = document.getElementById('btnMenuVendedorNoticias');
                     btnMenuVendedorNoticias.addEventListener('click',()=>{
+                        classNavegar.noticias();
+                    });
+                    let btnMenu2VendedorNoticias = document.getElementById('btnMenu2VendedorNoticias');
+                    btnMenu2VendedorNoticias.addEventListener('click',()=>{
                         classNavegar.noticias();
                     });
                     //actualiza la ubicación del empleado

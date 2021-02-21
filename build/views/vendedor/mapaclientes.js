@@ -12,9 +12,10 @@ function getView(){
 
                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <div class="input-group">               
-                                            <select class="form-control" id="cmbDiaVisita"></select>
+                                            <select class="form-control border-info" id="cmbDiaVisita"></select>
                                         </div>                            
                                 </div>
+                            <!--
                                 <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 text-right">
                                     <br>
                                 </div>                                        
@@ -24,7 +25,7 @@ function getView(){
                                 <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 text-right">
                                     <br>
                                 </div>                                        
-                                
+                            -->    
                             </div> 
                         </div>
 

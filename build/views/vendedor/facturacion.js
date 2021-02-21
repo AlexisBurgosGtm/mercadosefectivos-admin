@@ -128,9 +128,8 @@ function getView(){
                         </div>
                     </div>
                 </div>
-
+                
                 <div id="containerModalesVentas"></div>
-
 
             </div>
         </div>  
@@ -356,92 +355,6 @@ function getView(){
             </div>
             `
         },
-        modalCobro :()=>{
-            return `
-        <div class="modal fade" id="ModalCobro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <label class="modal-title text-danger h3" id="">Datos del Cobro</label>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
-                        </button>
-                    </div>
-        
-                    <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-sm-5 ml-sm-auto">
-                                            <div class="form-group">
-                                                <label>Pagado Efectivo:</label>
-                                                <input type="number" class="form-control" id='txtPagadoEfectivo'>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Pagado Tarjeta:</label>
-                                                <input type="number" class="form-control" id='txtPagadoTarjeta' value=0>
-                                            </div>                              
-                                            
-                                            <div class="form-group table-scale-border-top border-left-0 border-right-0 border-bottom-0">
-                                                <br>
-                                                    <label>Total Descuento:</label>
-                                                    <input type="number" class="form-control" id='txtDescuento' value=0>
-                                            </div>
-                                                                           
-                                    </div>
-                                    <div class="col-sm-6 ml-sm-auto">
-                                        <table class="table table-clean">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-left">
-                                                        <strong>TOTAL VENTA</strong>
-                                                    </td>
-                                                    <td class="text-right h6" id="txtTotalVentaCobro">Q0.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-left">
-                                                        <strong>Descuento</strong>
-                                                    </td>
-                                                    <td class="text-right" id="txtTotalDescuento">Q0.00</td>
-                                                </tr>
-                                                
-                                                <tr class="table-scale-border-top border-left-0 border-right-0 border-bottom-0">
-                                                    <td class="text-left keep-print-font">
-                                                        <h4 class="m-0 fw-700 h2 keep-print-font color-primary-700">Total a Pagar</h4>
-                                                    </td>
-                                                    <td class="text-right keep-print-font">
-                                                        <h4 class="m-0 fw-700 h2 keep-print-font" id="txtTotalAPagar">Q 0.00</h4>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-left">
-                                                        <strong>Pagado</strong>
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <strong id="txtTotalPagado">Q0.00</strong>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-left keep-print-font">
-                                                        <h4 class="m-0 fw-700 h2 keep-print-font color-primary-700">Vuelto</h4>
-                                                    </td>
-                                                    <td class="text-right keep-print-font">
-                                                        <h4 class="m-0 fw-700 h2 keep-print-font text-danger" id="txtVuelto">Q 0.00</h4>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <button class="btn btn-info btn-lg btn-round form-control" id="btnCobrarVenta">Cobrar</button>
-                                </div>
-                     
-                    </div>
-                   
-                </div>
-            </div>
-        </div>
-            `
-        },
         modalNuevoCliente :()=>{
             return `
             <div class="modal fade" id="ModalNuevoCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -548,7 +461,7 @@ function getView(){
                             <div class="modal-body">
                                     <div class="row">
                                             <div class="col-sm-6 ml-sm-auto">
-                                                <div class="form-group">
+                                                <div class="form-group hidden">
                                                     <label>Entregar en:</label>
                                                     <select class="form-control" id="cmbEntregaTipo">
                                                         <option value="TIENDA">TIENDA</option>
@@ -556,8 +469,8 @@ function getView(){
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Dirección de Entrega:</label>
-                                                    <textarea rows="4" cols="80" class="form-control" id="txtEntregaDireccion" placeholder="Escriba aqui a dirección de entrega..."></textarea>
+                                                    <label>Escriba Whatsapp del Cliente para enviar pedido:</label>
+                                                    <input type="number" class="form-control" id="txtEntregaDireccion">
                                                 </div>
                                                 
                                             </div>
@@ -748,13 +661,17 @@ function getView(){
                                     <label class="text-danger" id="txtSubTotal">Q500</label>
                                 </div>
                                 <br>
-                                <div class="">
-                                    <button type="button" class="btn btn-outline-secondary btn-round" data-dismiss="modal" id="btnCancelarModalProducto">
-                                        <i class="fal fa-ban"></i>Cancelar
-                                    </button>
-                                    <button type="button" class="btn btn-primary btn-round" data-dismiss="modal" id="btnAgregarProducto">
-                                        <i class="fal fa-check"></i>Agregar
-                                    </button>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-outline-secondary btn-round" data-dismiss="modal" id="btnCancelarModalProducto">
+                                            <i class="fal fa-ban"></i>Cancelar
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-primary btn-round" data-dismiss="modal" id="btnAgregarProducto">
+                                            <i class="fal fa-check"></i>Agregar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -773,7 +690,7 @@ function getView(){
                 //+ view.modalBusquedaProductos() 
                 //+ view.modalCantidadProducto()
                 + view.modalBusquedaCliente() 
-                + view.modalCobro() 
+                //+ view.modalCobro() 
                 + view.modalNuevoCliente() 
                 + view.modalTerminar(); 
                 //+ view.modalCantidadCalculadora();
@@ -1593,14 +1510,14 @@ async function fcnCambiarCantidad(id){
 
 async function fcnCargarTotal(idContenedor,idContenedor2){
     let container = document.getElementById(idContenedor);
-    let container2 = document.getElementById(idContenedor2);
+    //let container2 = document.getElementById(idContenedor2);
     
     let btnCobrarTotal = document.getElementById('btnCobrar')
     //btnCobrarTotal.innerText =  'Cobrar : Q 0.00'
     btnCobrarTotal.innerText =  'Terminar'
 
     container.innerHTML = '0'
-    container2.innerHTML = '0'
+    //container2.innerHTML = '0'
 
     try {
         
@@ -1614,7 +1531,7 @@ async function fcnCargarTotal(idContenedor,idContenedor2){
        }).join('\n');
        
        container.innerText = data;
-       container2.innerText = data;
+       //container2.innerText = data;
        btnCobrarTotal.innerHTML = '<h1>Terminar : ' + data + '</h1>';
        //btnCobrarTotal.innerHTML = '<h1>Cobrar : ' + data + '</h1>';
     } catch (error) {

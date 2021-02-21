@@ -1,5 +1,6 @@
 let root = document.getElementById('root');
 let rootMenu = document.getElementById('rootMenu');
+let rootMenuFooter = document.getElementById('rootMenuFooter');
 
 let lbMenuTitulo = document.getElementById('lbMenuTitulo');
 let rootMenuLateral = document.getElementById('rootMenuLateral');

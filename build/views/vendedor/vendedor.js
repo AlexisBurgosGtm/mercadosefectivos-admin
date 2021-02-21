@@ -8,30 +8,9 @@ function getView(){
                         </div>
                         <div class="card-body">
                             <div class="row">
-
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        
-                                        <div class="input-group">               
-                                            <select class="form-control" id="cmbDiaVisita"></select>
-                                            <div class="input-group-append">
-                                                <select class="form-control" id="cmbTipoLista">
-                                                    <option value="CLIENTES">Clientes</option>
-                                                    <option value="MAPA">Mapa</option>
-                                                </select>            
-                                            </div>
-                                        </div>                            
-                                    
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">   
+                                    <select class="form-control" id="cmbDiaVisita"></select>                                          
                                 </div>
-                                <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 text-right">
-                                    <br>
-                                </div>                                        
-                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                    <input type="text" id="txtFiltrarCliente" class="form-control" placeholder="Buscar en la lista...">
-                                </div>
-                                <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 text-right">
-                                    <br>
-                                </div>                                        
-                                
                             </div> 
                         </div>
 
@@ -81,6 +60,9 @@ function getView(){
 
                         <div class="tab-pane fade active show" id="panelNoVisitados" role="tabpanel">
                             <div class="table-responsive">
+                                
+                                <input type="text" id="txtFiltrarCliente" class="form-control border-info" placeholder="Buscar en la lista...">
+
                                 <table class="table table-responsive table-striped table-hover table-bordered" id="tblLista">
                                     <thead class="bg-trans-gradient text-white">
                                         <tr>

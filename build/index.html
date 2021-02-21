@@ -113,6 +113,8 @@
                 <!-- END Left Aside -->
                 <div class="page-content-wrapper">
                     <!-- BEGIN Page Header -->
+                    <!-- hice una modificacion en el css del app bundle, 
+                        cambie la clase page-header bajando el height de 4 a 2 -->
                     <header class="page-header" role="banner">
                         <!-- we need this logo when user switches to nav-function-top -->
                         <div class="page-logo">
@@ -144,6 +146,7 @@
 									<span class="ml-1 mr-1 text-truncate text-truncate-header hidden-xs-down">Me</span>
 									<i class="ni ni-chevron-down hidden-xs-down"></i> -->
                                 </a>
+
                                 <div class="dropdown-menu dropdown-menu-animated dropdown-xl">
                                     <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
                                         <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
@@ -170,13 +173,13 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </header>
                     <!-- END Page Header -->
                     <!-- BEGIN Page Content -->
                     <!-- the #js-page-content id is needed for some plugins to initialize -->
                     <main id="js-page-content" role="main" class="page-content">
-                        
                       <div id="root">
 
                       </div>
@@ -190,15 +193,31 @@
                     
                     <!-- this overlay is activated only when mobile menu is triggered -->
                     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div> <!-- END Page Content -->
+
                     <!-- BEGIN Page Footer -->
-                    <footer class="page-footer" role="contentinfo">
-                        <div class="d-flex align-items-center flex-1 text-muted">
-                            <span class="hidden-md-down fw-700">por Alexis Burgos</a></span>
+                    <footer class="page-footer bg-trans-gradient text-white foot" role="contentinfo">
+                        <!--
+                        <div class="d-flex align-items-center flex-1 text-muted">    
+                        -->
+                        <div class="d-flex align-items-left" id="rootMenuFooter">
+                            <b class="text-white">Mercados Efectivos</b>
+                            <!--
+                            <button class="btn btn-md border-white text-white">
+                                <i class="fal fa-shopping-cart"></i>
+                                Vender
+                            </button>
+                            <button class="btn btn-md border-white text-white">
+                                <i class="fal fa-cog"></i>
+                                Logro
+                            </button>
+                            -->    
+                                
                         </div>
+
                     </footer>
                     <!-- END Page Footer -->
                     <!-- BEGIN Shortcuts -->
-                  
+                    
                 </div>
                 
             </div>

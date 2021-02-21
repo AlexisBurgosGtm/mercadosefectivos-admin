@@ -101,18 +101,34 @@
 
 .foot {
     bottom: 0;
+    position: sticky;
 }
 
 .hidden {
     visibility: hidden;
 }
 
+/* BOTON FLOTANTE ESQUINA IZQUIERDA */
+#fixed-btn3 { 
+  position: fixed;
+  z-index: 1088;
+  left: 21px;
+  bottom: 15px;
+  }
+  
+  .hand {
+      cursor: pointer;
+  }
+  
+  #root {
+    
+  }
 /* BOTON FLOTANTE ESQUINA DERECHA */
 #fixed-btn2 { 
-position: fixed;
-z-index: 1088;
-right: 21px;
-bottom: 15px;
+  position: fixed;
+  z-index: 1088;
+  right: 21px;
+  bottom: 25px;
 }
 
 .btn-circle.btn-xl {
