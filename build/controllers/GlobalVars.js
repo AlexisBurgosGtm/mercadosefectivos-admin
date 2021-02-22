@@ -18,6 +18,7 @@ let GlobalCodSucursal = '';
 
 let GlobalCodUsuario = 99999;
 let GlobalUsuario = 'MERCADOSEFECTIVOS';
+let GlobalPassUsuario = '';
 let GlobalNivelUser = 0;
 let GlobalTipoUsuario ='';
 let GlobalSelectedDia ='';

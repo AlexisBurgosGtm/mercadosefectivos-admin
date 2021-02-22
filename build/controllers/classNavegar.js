@@ -6,6 +6,7 @@ let classNavegar = {
         GlobalCoddoc = '';
         GlobalCodUsuario=99999;
         GlobalUsuario = '';
+        GlobalPassUsuario = '';
         GlobalTipoUsuario ='';
             funciones.loadScript('../views/login/index.js','root')
             .then(()=>{

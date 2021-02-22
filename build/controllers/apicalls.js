@@ -13,63 +13,6 @@ let api = {
         })
         
     },
-    coronavirus :(idContenedor)=>{
-        let container = document.getElementById(idContenedor);
-        container.innerHTML = GlobalLoader;
-        
-        let strdata = '';
-        let tblheader = `<div class="row">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="txtFiltrarCoronavirus" placeholder="Escriba para buscar su país...">
-                            </div>
-                            
-                        </div>
-                    <table class="table table-responsive table-hover table-striped table-bordered" id="tblCovid">
-                        <thead class="bg-trans-gradient text-white">
-                            <tr>
-                                <td>País</td>
-                                <td>Infectados</td>
-                                <td>Muertes</td>
-                                <td>Recuperados</td>
-                                <td>Críticos</td>
-                            </tr>
-                        </thead><tbody>`;
-        let tblfooter = `</tbody></table>`
-
-        axios.get('https://coronavirus-19-api.herokuapp.com/countries')
-        .then((response) => {
-            console.log(response)
-            const data = response.data;
-            
-            data.map((rows)=>{
-                
-                    strdata = strdata + `<tr>
-                                <td>${rows.country}</td>
-                                <td>${rows.cases}</td>
-                                <td>${rows.deaths}</td>
-                                <td>${rows.recovered}</td>
-                                <td>${rows.critical}</td>
-                            </tr>`
-            })
-            
-                  
-        }, (error) => {
-            funciones.AvisoError('Error en la solicitud');
-            strdata = '';
-        })
-        .then(()=>{
-            container.innerHTML = tblheader + strdata + tblfooter;
-
-            let txtFiltrarCoronavirus = document.getElementById('txtFiltrarCoronavirus');
-            txtFiltrarCoronavirus.addEventListener('keyup',()=>{
-                funciones.crearBusquedaTabla('tblCovid','txtFiltrarCoronavirus');
-            });
-        })
-
-        
-        
-        
-    },
     empleadosLogin : (sucursal,user,pass)=>{
         return new Promise((resolve,reject)=>{
             axios.post('/empleados/login', {
@@ -85,6 +28,7 @@ let api = {
                         if(rows.USUARIO==user){
                             GlobalCodUsuario = rows.CODIGO;
                             GlobalUsuario = rows.USUARIO;
+                            GlobalPassUsuario = pass;
                             GlobalTipoUsuario = rows.TIPO;
                             GlobalCoddoc= rows.CODDOC;
                             GlobalCodSucursal = sucursal;
@@ -491,13 +435,13 @@ let api = {
                                     <div class="row">
                                         <div class="col-6">
                                             <button class="btn btn-info btn-sm btn-circle"
-                                            onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                                onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
                                                 +
                                             </button>    
                                         </div>
                                         <div class="col-6">
                                             <button class="btn btn-danger btn-sm btn-circle"
-                                            onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
+                                                onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
                                                 <i class="fal fa-lock"></i>
                                             </button>    
                                         </div>
@@ -2529,24 +2473,22 @@ let api = {
                     total = total + Number(rows.IMPORTE);
                     strdata = strdata + `
                             <tr id='${rows.DOC_ITEM}'>
-                                <td>${rows.DESPROD}
+                                <td colspan="3">${rows.DESPROD}
                                     <br>
                                     <small class="text-danger">${rows.CODPROD}</small>
+                                    <br>
+                                    <b class="text-info">${rows.CODMEDIDA}</b>-<b>Cant: ${rows.CANTIDAD}</b>
                                 </td>
-                                <td>${rows.CODMEDIDA}</td>
-                                <td>${rows.CANTIDAD}</td>
                                 <td>${rows.PRECIO}</td>
-                                <td>${rows.IMPORTE}</td>
-                                <td>
-                                    <button class="btn btn-info btn-md btn-circle" onclick="getModalCantidad('${rows.DOC_ITEM}');">
-                                        +
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger btn-md btn-circle"
-                                     onclick="deleteProductoPedido('${rows.DOC_ITEM}','${GlobalSelectedCoddoc}','${GlobalSelectedCorrelativo}',${rows.IMPORTE},${rows.TOTALCOSTO})">
-                                        x
-                                    </button>
+                                <td>${rows.IMPORTE}
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-danger btn-md btn-circle"
+                                                onclick="deleteProductoPedido('${rows.DOC_ITEM}','${GlobalSelectedCoddoc}','${GlobalSelectedCorrelativo}',${rows.IMPORTE},${rows.TOTALCOSTO})">
+                                                <i class="fal fa-trash"></i>
+                                            </button>              
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             `

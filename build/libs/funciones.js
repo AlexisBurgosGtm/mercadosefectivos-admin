@@ -140,6 +140,25 @@ let funciones = {
             //'tblProductosVentas'
         })
     },
+    solicitarClave: function(){
+      return new Promise((resolve,reject)=>{
+          swal({
+            text: 'Escriba su contraseña de usuario',
+            content: "input",
+            button: {
+              text: "Contraseña",
+              closeModal: true,
+            },
+          })
+          .then(name => {
+            if (!name) throw null;
+                resolve(name);
+          })
+          .catch(()=>{
+            reject('no');
+          })
+      })     
+    },
     setMoneda: function(num,signo) {
         num = num.toString().replace(/\$|\,/g, '');
         if (isNaN(num)) num = "0";

@@ -60,8 +60,6 @@ function getView(){
                             <td>Cant</td>
                             <td>Precio</td>
                             <td>Subtotal</td>
-                            <td></td>
-                            <td></td>
                         </tr>
                     </thead>
                     <tbody id="tblDetallePedido"></tbody>
@@ -75,7 +73,12 @@ function getView(){
                     <label>Total Pedido : </label>
                     <h2 class="text-danger" id="lbTotalDetallePedido"></h2>
                 </div>
-                
+            </div>
+            <div class="row">
+                <button class="btn btn-info btn-lg" id="btnEditarPedido">
+                    <i class="fal fa-edit"></i>
+                    Editar Pedido
+                </button>
             </div>
         </div>
         `
@@ -208,6 +211,13 @@ function addListeners(){
     });
     btnCargarPedidos.click();
 
+    let btnEditarPedido = document.getElementById('btnEditarPedido');
+    btnEditarPedido.addEventListener('click',()=>{
+
+        cargarPedidoEdicion(GlobalSelectedCoddoc,GlobalSelectedCorrelativo);
+        
+    })
+
 };
 
 function inicializarVistaPedidos(){
@@ -222,9 +232,9 @@ function deletePedidoVendedor(fecha,coddoc,correlativo,st){
         funciones.Confirmacion('¿Está seguro que desea Eliminar este Pedido?')
         .then((value)=>{
             if(value==true){
-                funciones.Confirmacion('¿Este pedido no se podrá recuperar, está seguro?')
-                    .then((value)=>{
-                        if(value==true){
+                funciones.solicitarClave()
+                    .then((clave)=>{
+                        if(clave==GlobalPassUsuario){
 
                             api.deletePedidoVendedor(GlobalCodSucursal,GlobalCodUsuario,fecha,coddoc,correlativo)
                             .then(async()=>{
@@ -235,6 +245,8 @@ function deletePedidoVendedor(fecha,coddoc,correlativo,st){
                                 funciones.AvisoError('No se pudo eliminar')
                             })
 
+                        }else{
+                            funciones.AvisoError('Clave incorrecta')
                         }
                     }
                 )        
@@ -263,7 +275,6 @@ function getModalCantidad(idRow){
 
 };
 
-
 function deleteProductoPedido(idRow,coddoc,correlativo,totalprecio,totalcosto){
     funciones.Confirmacion('¿Está seguro que desea Quitar este Producto en este Pedido?')
     .then((value)=>{
@@ -289,7 +300,6 @@ function deleteProductoPedido(idRow,coddoc,correlativo,totalprecio,totalcosto){
         }
     })    
 };
-
 
 function iniciarModalCantidad(){
     let total = document.getElementById('lbCalcTotal');
@@ -340,3 +350,91 @@ function iniciarModalCantidad(){
     });
 
 };
+
+
+function cargarPedidoEdicion(coddoc,correlativo,codclie,nit,nomclie,dirclie){
+    funciones.Confirmacion('¿Está seguro que desea EDITAR este pedido, no se podrá deshacer lo que haga?')
+    .then((value)=>{
+
+        funciones.Aviso(`Serie: ${coddoc} - Número: ${correlativo}`)
+
+        return; 
+        if(value==true){
+
+            loadDetallePedido(coddoc,correlativo)
+            .then(()=>{
+                //document.getElementById('txtNit').value = codclie;
+                //document.getElementById('txtNombre').value = nomclie;
+                //document.getElementById('txtDireccion').value = dirclie;
+                
+                fcnDeletePedidoCargado(coddoc,correlativo)
+                .then(async()=>{
+                    //createNotification('Pedido anterior eliminado con éxito!!')
+                    //await controllerventa.fcnCargarGridTempVentas('tblGridTempVentas');
+                    //await controllerventa.fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+                    //$('#ModalListaPedidos').modal('hide');
+                })
+                .catch(()=>{
+                    funciones.AvisoError('No se pudo eliminar el pedido anterior')
+                })
+                
+
+            })
+            .catch((error)=>{
+                funciones.AvisoError('No se pudo cargar el pedido. Error: ' + error);
+            })
+
+        }
+    })
+    
+}
+
+function loadDetallePedido(coddoc,correlativo){
+    
+    return new Promise((resolve,reject)=>{
+        axios.post('/ventas/pedidosdetalle', {
+            empnit:GlobalEmpnit,
+            coddoc: coddoc,
+            correlativo: correlativo
+        })
+        .then((response) => {
+            console.log(response);
+            const data = response.data;
+            if (data.rowsAffected[1]==0){
+                //funciones.AvisoError('No se cargó el pedido');
+                reject('No se cargó el pedido');
+            }else{
+                //funciones.Aviso('Pedido Cargado con éxito')
+                resolve();
+            }
+            
+        }, (error) => {
+            //funciones.AvisoError('Error en la solicitud');
+            resolve('Error de solicitud');
+        });
+
+    })
+    
+    
+}
+
+function fcnDeletePedidoCargado(coddoc,correlativo){
+    return new Promise((resolve,reject)=>{
+        axios.post('/ventas/eliminarpedidocargado', {
+            empnit:GlobalEmpnit,
+            coddoc: coddoc,
+            correlativo: correlativo
+        })
+        .then((response) => {
+            
+            const data = response.data;
+          
+                resolve();
+          
+        }, (error) => {
+            //funciones.AvisoError('Error en la solicitud');
+            reject();
+        });
+    })
+    
+}
