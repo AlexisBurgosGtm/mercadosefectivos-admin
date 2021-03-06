@@ -458,19 +458,29 @@ function getView(){
                                 </button>
                             </div>
                 
-                            <div class="modal-body">
-                                    <div class="row">            
-                                            <div class="col-sm-6 ml-sm-auto">
-                                                <div class="form-group">
-                                                    <label>Fecha Entrega:</label>
-                                                    <input type="date" class="form-control" id="txtEntregaFecha">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Observaciones</label>
-                                                    <textarea rows="4" cols="80" class="form-control" id="txtEntregaObs" placeholder="Escriba aqui sus observaciones..."></textarea>
-                                                </div>                                                              
-                                            </div>
+                            <div class="modal-body shadow">
+                                    <div class="">            
+                                        
+                                        <div class="form-group">
+                                            <label>Fecha Entrega:</label>
+                                            <input type="date" class="form-control" id="txtEntregaFecha">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Forma de Pago:</label>
+                                            <select id="cmbEntregaConcre" class="form-control">
+                                                <option value="CONTADO">CONTADO</option>
+                                                <option value="CREDITO">CREDITO</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Observaciones</label>
+                                            <textarea rows="4" cols="80" class="form-control" id="txtEntregaObs" placeholder="Escriba aqui sus observaciones..."></textarea>
+                                        </div>                                                              
+                                            
                                     </div>
+
                                     <div class="row">
                                         <label class="text-white" id="lbDocLat">0</label>
                                         <label class="text-white" id="lbDocLong">0</label class="text-white">
@@ -1523,7 +1533,7 @@ async function fcnFinalizarPedido(){
     let obs = document.getElementById('txtEntregaObs').value; 
     let direntrega = "SN"; //document.getElementById('txtEntregaDireccion').value; //CAMPO MATSOLI
     let codbodega = GlobalCodBodega;
-    let cmbTipoEntrega = 'TIENDA'; // document.getElementById('cmbEntregaTipo').value; //campo TRANSPORTE
+    let cmbTipoEntrega = document.getElementById('cmbEntregaConcre').value; //campo TRANSPORTE
 
 
     let txtFecha = new Date(document.getElementById('txtFecha').value);
