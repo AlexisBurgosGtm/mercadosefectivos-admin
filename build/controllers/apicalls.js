@@ -1048,7 +1048,8 @@ let api = {
                         break;
                 }
                 str = str + `
-                        <div class="card">
+                    <div class="row">
+                        <div class="card col-12">
                             <div class="card-header ${classprioridad}">
                                 <label class="text-white">${rows.FECHA.toString().replace('T00:00:00.000Z','')}</label>
                             </div>
@@ -1058,7 +1059,8 @@ let api = {
                             <div class="card-footer text-right">
                                 <label><i>${rows.USUARIO}</i></label>
                             </div>
-                        </div>`        
+                        </div>
+                    </div>`        
             })
             container.innerHTML = str;
 

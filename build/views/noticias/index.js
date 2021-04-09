@@ -7,7 +7,9 @@ function getView(){
     </div>
     <br>
     <div class="row">
-        <div id="tblNoticias" class="card-deck"></div>
+        <div id="tblNoticias">
+        
+        </div>
     </div>
     `
     root.innerHTML = str; //'<div class="row" id="tblCoronavirus"></div>'

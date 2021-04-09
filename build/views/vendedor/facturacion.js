@@ -186,14 +186,14 @@ function getView(){
                     </div>
                 </div>
 
-                <div class="modal fade" id="ModalBusqueda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade modal-with-scroll" id="ModalBusqueda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-right" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <label class="modal-title text-danger h3" id="">Resultados de la Búsqueda</label>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true"><i class="fal fa-times"></i></span>
-                                </button>
+                               </button>
                             </div>
                             <div class="modal-body">
                             <table class="table table-responsive table-striped table-hover">
@@ -211,9 +211,16 @@ function getView(){
                             </div>        
                         </div>
                     </div>
+
+                    <div class="shortcut-menu align-left">
+                        <button class="btn btn-danger btn-sm" data-dismiss="modal">
+                            <i class="fal fa-angle-double-left"></i>Atrás
+                        </button>
+                    </div>
+
                 </div>
 
-                <div class="modal fade" id="ModalCantidadProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade  modal-with-scroll" id="ModalCantidadProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-right" role="document">
                         <div class="modal-content">
                             <br><br><br><br><br>
@@ -256,7 +263,7 @@ function getView(){
                                         <button type="button" class="btn btn-outline-secondary btn-round" data-dismiss="modal" id="btnCancelarModalProducto">
                                             <i class="fal fa-ban"></i>Cancelar
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-round" data-dismiss="modal" id="btnAgregarProducto">
+                                        <button type="button" class="btn btn-primary btn-round" id="btnAgregarProducto">
                                             <i class="fal fa-check"></i>Agregar
                                         </button>
                                     </div>
@@ -282,7 +289,7 @@ function getView(){
         },
         modalBusquedaProductos :()=>{
             return `
-            <div class="modal fade" id="ModalBusqueda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade  modal-with-scroll" id="ModalBusqueda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-right" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -307,16 +314,22 @@ function getView(){
                             </tbody>
                         </table>
                         </div>
-
+                        
                     
                     </div>
                 </div>
+                <div class="shortcut-menu align-left">
+                    <button class="btn btn-danger btn-sm" data-dismiss="modal">
+                        <i class="fal fa-angle-double-left"></i>Atrás
+                    </button>
+                </div>
             </div>
+            
             `
         },
         modalBusquedaCliente :()=>{
             return `
-            <div class="modal fade" id="ModalBusquedaCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade  modal-with-scroll" id="ModalBusquedaCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-left" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -663,7 +676,7 @@ function getView(){
                                         </button>
                                     </div>
                                     <div class="col-6">
-                                        <button type="button" class="btn btn-primary btn-round" data-dismiss="modal" id="btnAgregarProducto">
+                                        <button type="button" class="btn btn-primary btn-round" id="btnAgregarProducto">
                                             <i class="fal fa-check"></i>Agregar
                                         </button>
                                     </div>
@@ -839,19 +852,12 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     
     await classTipoDocumentos.fcnCorrelativoDocumento('PED',cmbCoddoc.value,'txtCorrelativo');
     await fcnCargarGridTempVentas('tblGridTempVentas');
-    await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+    //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
 
-    //para crear clientes nuevos
-    //await fcnGetMunicipios('cmbClienteMunicipio');
-    //await fcnGetDepartamentos('cmbClienteDepartamento');
-    //await classEmpleados.comboboxVendedores('cmbVendedor')
-         //   .then(()=>{
-                cmbVendedor.value = GlobalCodUsuario;
-           // })
+    cmbVendedor.value = GlobalCodUsuario;
 
     fcnCargarComboTipoPrecio();
   
-
     // inicializa la calculadora de cantidad
     iniciarModalCantidad();
 
@@ -860,11 +866,8 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     document.getElementById('txtNombre').value = nombre;
     document.getElementById('txtDireccion').value = direccion;
     
-
     fcnIniciarModalCantidadProductos();
 
-    //establece un recordatorio de 10 minutos con el cliente
-    //funciones.setReminder('Lleva 10 minutos con el cliente actual', 10);
 };
 
 function fcnIniciarModalCantidadProductos(){
@@ -880,8 +883,12 @@ function fcnIniciarModalCantidadProductos(){
         GlobalSelectedCantidad = Number(txtCantidad.value);
         let totalunidades = (Number(GlobalSelectedEquivale) * Number(GlobalSelectedCantidad));
         let totalexento = GlobalSelectedCantidad * GlobalSelectedExento;
-        fcnAgregarProductoVenta(GlobalSelectedCodprod,GlobalSelectedDesprod,GlobalSelectedCodmedida,GlobalSelectedCantidad,GlobalSelectedEquivale,totalunidades,GlobalSelectedCosto,GlobalSelectedPrecio,totalexento);
 
+        
+        
+        fcnAgregarProductoVenta(GlobalSelectedCodprod,GlobalSelectedDesprod,GlobalSelectedCodmedida,GlobalSelectedCantidad,GlobalSelectedEquivale,totalunidades,GlobalSelectedCosto,GlobalSelectedPrecio,totalexento);
+        
+        
     });
 
     txtCantidad.addEventListener('click',()=>{txtCantidad.value =''});
@@ -1082,8 +1089,10 @@ function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,total
 // agrega el producto a temp_ventas
 async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
    
-    
-    document.getElementById('tblResultadoBusqueda').innerHTML = '';
+    document.getElementById('btnAgregarProducto').innerHTML = GlobalLoader;
+    document.getElementById('btnAgregarProducto').disabled = true;
+
+    //document.getElementById('tblResultadoBusqueda').innerHTML = '';
     let cmbTipoPrecio = document.getElementById('cmbTipoPrecio');
         let totalcosto = Number(costo) * Number(cantidad);
         let totalprecio = Number(precio) * Number(cantidad);
@@ -1126,10 +1135,14 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
                     if (res.status==200)
                     {
                         //socket.emit('productos nuevo', document.getElementById('desprod').value || 'sn');
-                        $('#ModalBusqueda').modal('hide')
+                        $('#ModalCantidadProducto').modal('hide') //MARCADOR
+                        funciones.showToast('Agregado: ' + desprod);
+                        
                         await fcnCargarGridTempVentas('tblGridTempVentas');
-                        await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+                        //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
 
+                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
+                        document.getElementById('btnAgregarProducto').disabled = false;
                         let txbusqueda = document.getElementById('txtBusqueda');
                         txbusqueda.value = '';
                         //txbusqueda.focus();
@@ -1137,12 +1150,15 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
                   })
                   .catch(
                       ()=>{
+                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
+                        document.getElementById('btnAgregarProducto').disabled = false;
                         funciones.AvisoError('No se pudo agregar este producto a la venta actual');
                       }
                   )
         
         } catch (error) {
-          
+            document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
+            document.getElementById('btnAgregarProducto').disabled = false;
         }
    
 
@@ -1363,7 +1379,7 @@ async function fcnEliminarItem(id){
                         console.log(id.toString());
                         document.getElementById(id.toString()).remove();
                         funciones.showToast('item eliminado');
-                        /*await*/ fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+                        await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
                     }
                   })
                   .catch(
@@ -1382,11 +1398,21 @@ async function fcnEliminarItem(id){
 };
 
 async function fcnCargarGridTempVentas(idContenedor){
+    
     let tabla = document.getElementById(idContenedor);
-
     tabla.innerHTML = GlobalLoader;
+
+    let varTotalVenta = 0; let varTotalCosto = 0;
+
+    let btnCobrarTotal = document.getElementById('btnCobrar')
+    btnCobrarTotal.innerText =  'Terminar';
+   
+
     let coddoc = document.getElementById('cmbCoddoc').value;
     
+    let containerTotalVenta = document.getElementById('txtTotalVenta');
+    containerTotalVenta.innerHTML = '0';
+
     try {
         
         const response = await fetch('/ventas/tempventas?empnit=' + GlobalEmpnit + '&coddoc=' + coddoc + '&usuario=' + GlobalUsuario +  '&app=' + GlobalSistema)
@@ -1394,12 +1420,13 @@ async function fcnCargarGridTempVentas(idContenedor){
         let idcant = 0;
         let data = json.recordset.map((rows)=>{
             idcant = idcant + 1;
+            varTotalVenta = varTotalVenta + Number(rows.TOTALPRECIO);
+            varTotalCosto = varTotalCosto + Number(rows.TOTALCOSTO);
             return `<tr id="${rows.ID.toString()}">
                         <td class="text-left">
                             ${rows.DESPROD}
                             <br>
                             <small class="text-danger"><b>${rows.CODPROD}</b></small>
-
                         </td>
                         <td class="text-right">${rows.CODMEDIDA}
                             <br>
@@ -1407,12 +1434,9 @@ async function fcnCargarGridTempVentas(idContenedor){
                             <br>
                             <small><b>${funciones.setMoneda(rows.PRECIO,'Q')}</b></small>
                         </td>
-
-
                         <td class="text-center">
                             <button class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" onClick="fcnCambiarCantidad(${rows.ID});">+</button>
                             <b class="text-danger h4" id=${idcant}>${rows.CANTIDAD}</b>
-                            
                         </td>
                         <td class="text-right" id=${'S'+idcant}>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
                         <td>
@@ -1424,57 +1448,23 @@ async function fcnCargarGridTempVentas(idContenedor){
        }).join('\n');
        
        tabla.innerHTML = data;
-      
+       GlobalTotalDocumento = varTotalVenta;
+       GlobalTotalCostoDocumento = varTotalCosto;
+       containerTotalVenta.innerHTML = `${funciones.setMoneda(GlobalTotalDocumento,'Q ')}`;
+       btnCobrarTotal.innerHTML = '<h1>Terminar : ' + funciones.setMoneda(GlobalTotalDocumento,'Q ') + '</h1>';
+       /** 
+       if(containerTotalVenta.innerHTML=='0'){
+        }else{
+            socket.emit('ordenes escribiendo', 'Se está generando una nueva orden',GlobalSelectedForm)
+        } */
     } catch (error) {
         console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
         tabla.innerHTML = 'No se logró cargar la lista...';
+        containerTotalVenta.innerHTML = '0';
+        btnCobrarTotal.innerText =  'Terminar';
     }
 };
 
-// CARGA DE PRODUCTOS TEMP ANTERIOR
-async function fcnCargarGridTempVentas_OLD(idContenedor){
-    let tabla = document.getElementById(idContenedor);
-
-    tabla.innerHTML = GlobalLoader;
-    let coddoc = document.getElementById('cmbCoddoc').value;
-    
-    try {
-        
-        const response = await fetch('/ventas/tempventas?empnit=' + GlobalEmpnit + '&coddoc=' + coddoc + '&usuario=' + GlobalUsuario +  '&app=' + GlobalSistema)
-        const json = await response.json();
-        let idcant = 0;
-        let data = json.recordset.map((rows)=>{
-            idcant = idcant + 1;
-            return `<tr id="${rows.ID.toString()}">
-                        <td class="text-left">
-                            ${rows.DESPROD}
-                            <br>
-                            <small class="text-danger"><b>${rows.CODPROD}</b></small>
-                        </td>
-                        <td class="text-right">${rows.CODMEDIDA}<br>
-                            <small>${rows.EQUIVALE} item</small></td>
-                        <td class="text-center">
-                            <button class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" onClick="fcnCambiarCantidad(${rows.ID});">+</button>
-                            <b class="text-danger h4" id=${idcant}>${rows.CANTIDAD}</b>
-                            
-                        </td>
-                        <td class="text-right">${funciones.setMoneda(rows.PRECIO,'Q')}</td>
-                        <td class="text-right" id=${'S'+idcant}>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger btn-circle text-white" onclick="fcnEliminarItem(${rows.ID});">
-                                x
-                            </button>
-                        <td>
-                    </tr>`
-       }).join('\n');
-       
-       tabla.innerHTML = data;
-      
-    } catch (error) {
-        console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
-        tabla.innerHTML = 'No se logró cargar la lista...';
-    }
-};
 
 async function fcnCambiarCantidad(id){
     
@@ -1484,9 +1474,11 @@ async function fcnCambiarCantidad(id){
 };
 
 async function fcnCargarTotal(idContenedor,idContenedor2){
+        
+    //'txtTotalVenta'
     let container = document.getElementById(idContenedor);
-    //let container2 = document.getElementById(idContenedor2);
     
+        
     let btnCobrarTotal = document.getElementById('btnCobrar')
     //btnCobrarTotal.innerText =  'Cobrar : Q 0.00'
     btnCobrarTotal.innerText =  'Terminar'

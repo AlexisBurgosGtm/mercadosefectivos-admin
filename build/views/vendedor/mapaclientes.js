@@ -38,6 +38,18 @@ function getView(){
                     
                 </div>
             </div>
+            <div class="card col-12">
+                <div class="table-responsive">
+                    <table class="table table-responsive table-hover table-striped table-bordered">
+                        <thead>
+                            <td></td>
+                            <td></td>
+                        </thead>
+                        <tbody  id="tblClientesListado"></tbody>
+                    </table>
+                    
+                </div>
+            </div>
             `
         },
         modalMenuCliente: ()=>{
