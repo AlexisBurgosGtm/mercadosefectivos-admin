@@ -131,7 +131,15 @@
   z-index: 1088;
   left: 21px;
   bottom: 15px;
-  }
+}
+
+.leftbutton { 
+  position: fixed;
+  z-index: 1088;
+  left: 5px;
+  bottom: 40px;
+}
+
   
   .hand {
       cursor: pointer;
@@ -146,6 +154,7 @@
   bottom: 50px;
 }
 
+
 .btn-circle.btn-xl {
     width: 70px;
     height: 70px;
@@ -154,6 +163,7 @@
     font-size: 24px;
     line-height: 1.33;
 }
+
 
 .btn-circle {
     width: 30px;
