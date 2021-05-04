@@ -1465,6 +1465,7 @@ async function fcnCargarGridTempVentas(idContenedor){
     }
 };
 
+
 async function fcnCambiarCantidad(id){
     
     GlobalSelectedId = id;

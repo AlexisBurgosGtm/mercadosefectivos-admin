@@ -2,6 +2,48 @@ const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
 
+//EDICION DEL PEDIDO
+router.post('/loadpedido',async(req,res)=>{
+
+    const {sucursal, usuario, coddoc, correlativo} = req.body;
+
+    let qrydel = `DELETE FROM ME_TEMP_VENTAS 
+            WHERE CODSUCURSAL='${sucursal}' 
+            AND USUARIO='${usuario}'; `
+
+    let qry='';
+    qry = `INSERT INTO ME_TEMP_VENTAS 
+            (EMPNIT,CODPROD,DESPROD,CODMEDIDA,CANTIDAD,EQUIVALE,TOTALUNIDADES,COSTO,PRECIO,TOTALCOSTO,TOTALPRECIO,EXENTO,USUARIO,TIPOPRECIO,CODSUCURSAL) 
+        SELECT EMP_NIT AS EMPNIT, CODPROD, DESCRIPCION AS DESPROD, 
+        CODMEDIDA, CANTIDAD, EQUIVALE, CANTIDADINV AS TOTALUNIDADES, 
+        COSTO, PRECIO, TOTALCOSTO, TOTALPRECIO, 0 AS EXENTO, '${usuario}' AS USUARIO, TIPOPRECIO, '${sucursal}' AS CODSUCURSAL 
+        FROM ME_DOCPRODUCTOS
+        WHERE CODSUCURSAL='${sucursal}' 
+        AND CODDOC='${coddoc}' 
+        AND DOC_NUMERO='${correlativo}'; `
+
+    execute.Query(res,qrydel + qry);
+
+})
+
+
+router.post('/eliminarpedidocargado',async(req,res)=>{
+
+    const {sucursal,coddoc,correlativo} = req.body;
+
+    let qry = `DELETE FROM ME_DOCUMENTOS 
+    WHERE CODSUCURSAL='${sucursal}' 
+    AND CODDOC='${coddoc}' AND DOC_NUMERO='${correlativo}'
+    AND DOC_ESTATUS='O'; `
+    let qryprods = `DELETE FROM ME_DOCPRODUCTOS 
+        WHERE CODSUCURSAL='${sucursal}' AND CODDOC='${coddoc}' 
+        AND DOC_NUMERO='${correlativo}' ;`
+
+    execute.Query(res, qry + qryprods);
+
+})
+
+
 // VENTANA DE VENTAS
 ///////////////////////////////////////
 router.get("/json", async(req,res)=>{
@@ -399,7 +441,7 @@ router.post("/totalventadia", async(req,res)=>{
     let qry = '';
     qry = `SELECT COUNT(DOC_NUMERO) AS PEDIDOS, ISNULL(SUM(DOC_TOTALVENTA),0) AS IMPORTE
             FROM ME_Documentos
-            WHERE (CODSUCURSAL = '${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'A')`
+            WHERE (CODSUCURSAL ='${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'A')`
     
     execute.Query(res,qry);
 });
@@ -409,7 +451,7 @@ router.post("/listapedidos", async(req,res)=>{
     const {sucursal,codven,fecha}  = req.body;
     
     let qry = '';
-    qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, ISNULL(DOC_TOTALVENTA,0) AS IMPORTE, DOC_FECHA AS FECHA, LAT, LONG, DOC_OBS AS OBS, DOC_MATSOLI AS DIRENTREGA, DOC_ESTATUS AS ST
+    qry = `SELECT CODDOC, DOC_NUMERO AS CORRELATIVO, NITCLIE AS CODCLIE, DOC_NOMREF AS NOMCLIE, DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, ISNULL(DOC_TOTALVENTA,0) AS IMPORTE, DOC_FECHA AS FECHA, LAT, LONG, DOC_OBS AS OBS, DOC_MATSOLI AS DIRENTREGA, DOC_ESTATUS AS ST
             FROM ME_Documentos
             WHERE (CODSUCURSAL = '${sucursal}') AND (DOC_FECHA = '${fecha}') AND (CODVEN = ${codven}) AND (DOC_ESTATUS<>'A')`
 

@@ -43,6 +43,8 @@ let GlobalTipoCobro = 'TERMINAR';
 
 let GlobalSelectedCodven = 0;
 
+
+
 let GlobalSelectedCodCliente;
 let GlobalSelectedNomCliente;
 let GlobalSelectedDirCliente;
@@ -69,6 +71,8 @@ let GlobalSelectedApp = '';
 let GlobalSistema = 'ISC';
 
 let GlobalVentaMinima = 79.99;
+
+let GlobalLoaderMini = `<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>`;
 
 let GlobalLoader = `
                 <div>

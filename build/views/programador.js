@@ -9,7 +9,7 @@ function getView(){
                 <div class="card">
                     <div class="table-responsive">
                         <table class="table table-responsive table-hover table-striped">
-                            <thead>
+                            <thead class="bg-trans-gradient text-white">
                                 <tr>
                                     <td>Vendedor</td>
                                     <td>Coddoc</td>
