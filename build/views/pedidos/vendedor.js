@@ -271,6 +271,7 @@ function getDetallePedido(fecha,coddoc,correlativo,codclie,nomclie,dirclie){
     lbMenuTitulo.innerText = `Pedido: ${coddoc}-${correlativo}`;
     api.digitadorDetallePedido(fecha,coddoc,correlativo,'tblDetallePedido','lbTotalDetallePedido')
     $("#modalMenu").modal('show');
+    
 };
 
 function getModalCantidad(idRow){
@@ -356,7 +357,6 @@ function iniciarModalCantidad(){
     });
 
 };
-
 
 function cargarPedidoEdicion(coddoc,correlativo){
 

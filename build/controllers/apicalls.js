@@ -433,18 +433,24 @@ let api = {
                                     ${funciones.setMoneda(rows.IMPORTE,'Q')}
                                     <br><br><br>
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <button class="btn btn-info btn-sm btn-circle"
                                                 onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CODCLIE}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
                                                 +
                                             </button>    
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <button class="btn btn-danger btn-sm btn-circle"
                                                 onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
                                                 <i class="fal fa-lock"></i>
                                             </button>    
                                         </div>
+                                        <div class="col-4">
+                                            <button class="btn btn-success btn-sm btn-circle"
+                                                onclick="funciones.enviarPedidoWhatsapp('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                                w
+                                            </button>    
+                                        <v/div>
                                     </div>
                                 </td>
                             </tr>`
@@ -2502,6 +2508,43 @@ let api = {
             strdata = '';
             container.innerHTML = '';
             lbTotal.innerText = 'Q0.00';
+        });
+           
+    },
+    digitadorDetallePedidoWhatsapp: async(fecha,coddoc,correlativo,numero)=>{
+
+
+        
+        let strEncabezado = `DISTRIBUIDORA MERCADOS EFECTIVOS \n Recordatorio de Pedido \n --------------------------------- \n`;
+
+        let strdata = '';
+
+        let footer = '';
+        let msg = '';
+
+        GlobalSelectedCoddoc = coddoc;
+        GlobalSelectedCorrelativo = correlativo;
+
+        axios.post('/digitacion/detallepedido', {
+            sucursal: GlobalCodSucursal,
+            fecha:fecha,
+            coddoc:coddoc,
+            correlativo:correlativo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.IMPORTE);
+                    strdata += '* ' + rows.DESPROD + "-"  + rows.CODMEDIDA + " Cant: " + rows.CANTIDAD.toString() + " - " + funciones.setMoneda(rows.IMPORTE,'Q').toString() + "\n";
+            })
+            footer = `--------------------------------- \n Total a Pagar: ${funciones.setMoneda(total,'Q')}`
+            msg = strEncabezado + strdata + footer;
+            msg = encodeURIComponent(msg);
+            window.open('https://api.whatsapp.com/send?phone='+numero+'&text='+msg);
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
         });
            
     },

@@ -1,4 +1,19 @@
 let funciones = {
+  enviarPedidoWhatsapp: function(fecha,coddoc,correlativo){
+    swal({
+      text: 'Escriba el número a donde se enviará:',
+      content: "input",
+      button: {
+        text: "Whatsapp",
+        closeModal: true,
+      },
+    })
+    .then(numero => {
+      if (!numero) throw null;
+        let stn = '502' + numero.toString();
+        api.digitadorDetallePedidoWhatsapp(fecha,coddoc,correlativo,stn);
+    })
+  },
     GetDataNit: async (idNit,idCliente,idDireccion)=>{
 
       return new Promise((resolve, reject) => {

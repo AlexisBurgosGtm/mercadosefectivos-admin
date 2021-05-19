@@ -90,3 +90,4 @@ let GlobalLoader = `
 
 
 
+let nowhatsapp = '50257255092';
