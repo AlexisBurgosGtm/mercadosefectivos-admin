@@ -433,21 +433,27 @@ let api = {
                                     ${funciones.setMoneda(rows.IMPORTE,'Q')}
                                     <br><br><br>
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-3">
                                             <button class="btn btn-info btn-sm btn-circle"
                                                 onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CODCLIE}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
                                                 +
                                             </button>    
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-3">
                                             <button class="btn btn-danger btn-sm btn-circle"
                                                 onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
                                                 <i class="fal fa-lock"></i>
                                             </button>    
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-3">
                                             <button class="btn btn-success btn-sm btn-circle"
                                                 onclick="funciones.enviarPedidoWhatsapp('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                                w
+                                            </button>    
+                                        <v/div>
+                                        <div class="col-3">
+                                            <button class="btn btn-outline-success btn-sm btn-circle"
+                                                onclick="funciones.enviarPedidoWhatsapp2('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
                                                 w
                                             </button>    
                                         <v/div>
