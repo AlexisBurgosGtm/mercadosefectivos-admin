@@ -1,5 +1,5 @@
 let funciones = {
-  enviarPedidoWhatsapp: function(fecha,coddoc,correlativo){
+    enviarPedidoWhatsapp2: function(fecha,coddoc,correlativo){
     swal({
       text: 'Escriba el número a donde se enviará:',
       content: "input",
@@ -13,7 +13,110 @@ let funciones = {
         let stn = '502' + numero.toString();
         api.digitadorDetallePedidoWhatsapp(fecha,coddoc,correlativo,stn);
     })
-  },
+    },
+    enviarPedidoWhatsapp:(fecha,coddoc,correlativo)=>{
+
+    var apiwha = (navigator.contacts || navigator.mozContacts);
+      
+    if (apiwha && !!apiwha.select) { // new Chrome API
+      apiwha.select(['name', 'email', 'tel'], {multiple: false})
+        .then(function (contacts) {
+          //console.log('Found ' + contacts.length + ' contacts.');
+          if (contacts.length) {
+            let numero = contacts[0].tel.toString()
+            numero = numero.replace('+502','');
+            let stn = '502' + numero.toString();
+            stn = stn.replace(' ','');
+            api.digitadorDetallePedidoWhatsapp(fecha,coddoc,correlativo,stn);
+          }
+        })
+        .catch(function (err) {
+          console.log('Fetching contacts failed: ' + err.name);
+          funciones.AvisoError('Fetching contacts failed 1 : ' +  err.toString())
+        });
+        
+    } else if (apiwha && !!apiwha.find) { // old Firefox OS API
+      var criteria = {
+        sortBy: 'familyName',
+        sortOrder: 'ascending'
+      };
+  
+      apiwha.find(criteria)
+        .then(function (contacts) {
+          //console.log('Found ' + contacts.length + ' contacts.');
+          if (contacts.length) {
+            let numero = contacts[0].tel.toString()
+            numero = numero.replace('+502','');
+            let stn = '502' + numero.toString();
+            stn = stn.replace(' ','');
+            api.digitadorDetallePedidoWhatsapp(fecha,coddoc,correlativo,stn);
+          }
+        })
+        .catch(function (err) {
+          console.log('Fetching contacts failed: ' + err.name);
+          funciones.AvisoError('Fetching contacts failed 2 : ' + err.toString())
+        });
+        
+    } else {
+      console.log('Contacts API not supported.');
+    }
+    },
+    readContacts:(idResult)=>{
+
+    let container = document.getElementById(idResult);
+
+    var api = (navigator.contacts || navigator.mozContacts);
+      
+    if (api && !!api.select) { // new Chrome API
+      api.select(['name', 'email', 'tel'], {multiple: false})
+        .then(function (contacts) {
+          console.log('Found ' + contacts.length + ' contacts.');
+          if (contacts.length) {
+            
+            let numero = contacts[0].tel.toString()
+            numero = numero.replace('+502','');
+            let stn = '502' + numero.toString();
+            stn = stn.replace(' ','');
+            funciones.Aviso(stn);
+            container.innerHTML = JSON.stringify(contacts);
+            
+          }
+        })
+        .catch(function (err) {
+          console.log('Fetching contacts failed: ' + err.name);
+          funciones.AvisoError('Fetching contacts failed: ' + err.name)
+        });
+        
+    } else if (api && !!api.find) { // old Firefox OS API
+      var criteria = {
+        sortBy: 'familyName',
+        sortOrder: 'ascending'
+      };
+  
+      api.find(criteria)
+        .then(function (contacts) {
+          console.log('Found ' + contacts.length + ' contacts.');
+          container.innerHTML = JSON.stringify(contacts);
+          if (contacts.length) {
+            let numero = contacts[0].tel.toString()
+            numero = numero.replace('+502','');
+            let stn = '502' + numero.toString();
+            stn = stn.replace(' ','');
+            funciones.Aviso(stn);
+            container.innerHTML = JSON.stringify(contacts);
+            
+          }
+        })
+        .catch(function (err) {
+          console.log('Fetching contacts failed: ' + err.name);
+          funciones.AvisoError('Fetching contacts failed: ' + err.name)
+        });
+        
+    } else {
+      console.log('Contacts API not supported.');
+      container.innerHTML = 'Contacts API not supported.'
+    }
+    },
     GetDataNit: async (idNit,idCliente,idDireccion)=>{
 
       return new Promise((resolve, reject) => {

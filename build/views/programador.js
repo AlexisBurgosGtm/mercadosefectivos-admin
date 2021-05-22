@@ -6,6 +6,11 @@ function getView(){
                     <br>
                     <button class="btn btn-danger btn-md" id="btnQry">Run</button>
                 </div>
+                <div class="row">
+                    <button class="btn btn-success" id="btnContactos" onclick="funciones.readContacts('rootQry')">
+                        Contactos
+                    </button>
+                </div>
                 <div class="card">
                     <div class="table-responsive">
                         <table class="table table-responsive table-hover table-striped">
