@@ -428,36 +428,36 @@ let api = {
                                         <small class="text-secondary">${rows.DIRCLIE + ', ' + rows.DESMUNI}</small>
                                     <br>
                                         <small class="text-white bg-secondary">${rows.OBS}</small>
-                                </td>
-                                <td>
-                                    ${funciones.setMoneda(rows.IMPORTE,'Q')}
-                                    <br><br><br>
+                                    <br>
                                     <div class="row">
                                         <div class="col-3">
                                             <button class="btn btn-info btn-sm btn-circle"
                                                 onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CODCLIE}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.ST}');">
-                                                +
+                                                <i class="fal fa-edit"></i>
                                             </button>    
                                         </div>
                                         <div class="col-3">
                                             <button class="btn btn-danger btn-sm btn-circle"
                                                 onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
-                                                <i class="fal fa-lock"></i>
+                                                <i class="fal fa-trash"></i>
                                             </button>    
                                         </div>
                                         <div class="col-3">
                                             <button class="btn btn-success btn-sm btn-circle"
                                                 onclick="funciones.enviarPedidoWhatsapp('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
-                                                w
+                                                <i class="fal fa-address-book"></i>
                                             </button>    
-                                        <v/div>
+                                        </div>
                                         <div class="col-3">
                                             <button class="btn btn-outline-success btn-sm btn-circle"
                                                 onclick="funciones.enviarPedidoWhatsapp2('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}');">
                                                 w
                                             </button>    
-                                        <v/div>
+                                        </div>
                                     </div>
+                                </td>
+                                <td>
+                                    <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
                                 </td>
                             </tr>`
             })
