@@ -63,6 +63,7 @@ let GlobalSelectedExistencia = 0;
 
 let GlobalSelectedCodEmbarque ='';
 let GlobalSelectedStatus=0;
+let GlobalSelectedSt = 'O';
 let GlobalSelectedCoddoc = '';
 let GlobalSelectedCorrelativo = '';
 

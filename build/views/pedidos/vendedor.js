@@ -214,7 +214,7 @@ function addListeners(){
     let btnEditarPedido = document.getElementById('btnEditarPedido');
     btnEditarPedido.addEventListener('click',()=>{
         
-        cargarPedidoEdicion(GlobalSelectedCoddoc,GlobalSelectedCorrelativo);
+        cargarPedidoEdicion(GlobalSelectedCoddoc,GlobalSelectedCorrelativo,GlobalSelectedSt);
         
     })
 
@@ -260,7 +260,9 @@ function deletePedidoVendedor(fecha,coddoc,correlativo,st){
 
 };
 
-function getDetallePedido(fecha,coddoc,correlativo,codclie,nomclie,dirclie){
+function getDetallePedido(fecha,coddoc,correlativo,codclie,nomclie,dirclie,st){
+
+    GlobalSelectedSt = st;
     GlobalSelectedFecha = fecha;
     GlobalSelectedCoddoc = coddoc;
     GlobalSelectedCorrelativo = correlativo;
@@ -358,48 +360,55 @@ function iniciarModalCantidad(){
 
 };
 
-function cargarPedidoEdicion(coddoc,correlativo){
+function cargarPedidoEdicion(coddoc,correlativo,st){
+    if(st=='O'){
 
-    funciones.Confirmacion('¿Está seguro que desea EDITAR este pedido, no se podrá deshacer lo que haga?')
-    .then((value)=>{
-        if(value==true){
-            $("#modalMenu").modal('hide');
-            funciones.solicitarClave()
-                    .then((clave)=>{
-                        if(clave==GlobalPassUsuario){
-
-                            document.getElementById('btnEditarPedido').innerHTML = GlobalLoaderMini;
-                            document.getElementById('btnEditarPedido').disabled = true;
-
-                            loadDetallePedido(coddoc,correlativo)
-                            .then(()=>{
-                                funciones.showToast('Pedido cargado...');
-                                
-                                fcnDeletePedidoCargado(coddoc,correlativo)
+        funciones.Confirmacion('¿Está seguro que desea EDITAR este pedido, no se podrá deshacer lo que haga?')
+        .then((value)=>{
+            if(value==true){
+                $("#modalMenu").modal('hide');
+                funciones.solicitarClave()
+                        .then((clave)=>{
+                            if(clave==GlobalPassUsuario){
+    
+                                document.getElementById('btnEditarPedido').innerHTML = GlobalLoaderMini;
+                                document.getElementById('btnEditarPedido').disabled = true;
+    
+                                loadDetallePedido(coddoc,correlativo)
                                 .then(()=>{
-                                    funciones.showToast('Pedido anterior eliminado con éxito!!');
+                                    funciones.showToast('Pedido cargado...');
                                     
-
-                                    classNavegar.ventas(GlobalSelectedCodCliente,GlobalSelectedNomCliente,GlobalSelectedDirCliente);
+                                    fcnDeletePedidoCargado(coddoc,correlativo)
+                                    .then(()=>{
+                                        funciones.showToast('Pedido anterior eliminado con éxito!!');
+                                        
+    
+                                        classNavegar.ventas(GlobalSelectedCodCliente,GlobalSelectedNomCliente,GlobalSelectedDirCliente);
+                                    })
+                                    .catch(()=>{
+                                        document.getElementById('btnEditarPedido').innerHTML = `<i class="fal fa-edit"></i>Editar Pedido`;
+                                        document.getElementById('btnEditarPedido').disabled = false;
+                                        funciones.AvisoError('No se pudo eliminar el pedido anterior');
+                                    })
+    
                                 })
-                                .catch(()=>{
+                                .catch((error)=>{
                                     document.getElementById('btnEditarPedido').innerHTML = `<i class="fal fa-edit"></i>Editar Pedido`;
                                     document.getElementById('btnEditarPedido').disabled = false;
-                                    funciones.AvisoError('No se pudo eliminar el pedido anterior');
+                                    funciones.AvisoError('No se pudo cargar el pedido. Error: ' + error);
                                 })
+    
+                            }
+                        })
+    
+            }
+        })
 
-                            })
-                            .catch((error)=>{
-                                document.getElementById('btnEditarPedido').innerHTML = `<i class="fal fa-edit"></i>Editar Pedido`;
-                                document.getElementById('btnEditarPedido').disabled = false;
-                                funciones.AvisoError('No se pudo cargar el pedido. Error: ' + error);
-                            })
+    }else{
+        funciones.AvisoError('No se puede EDITAR un pedido que ya fue confirmado en digitación');
+    }
 
-                        }
-                    })
-
-        }
-    })
+    
     
 };
 

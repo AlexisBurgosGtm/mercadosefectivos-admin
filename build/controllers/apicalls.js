@@ -2445,7 +2445,7 @@ let api = {
                                 </td>
                                 
                                 <td>
-                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}')">
+                                    <button class="btn btn-info btn-sm btn-circle" onclick="getDetallePedido('${f}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}')">
                                         +
                                     </button>
                                 </td>

@@ -54,6 +54,7 @@ router.get("/json", async(req,res)=>{
     execute.Query(res,qry);
 
 })
+
 // VENTAS BUSCAR PRODUCTO POR DESCRIPCION
 router.get("/buscarproducto", async(req,res)=>{
     
@@ -137,6 +138,8 @@ router.get("/tempVentas", async(req,res)=>{
             ME_TEMP_VENTAS.CODMEDIDA, 
             ME_TEMP_VENTAS.CANTIDAD, 
             ME_TEMP_VENTAS.EQUIVALE,
+            ME_TEMP_VENTAS.COSTO,
+            ME_TEMP_VENTAS.TOTALCOSTO,  
             ME_TEMP_VENTAS.PRECIO, 
             ME_TEMP_VENTAS.TOTALPRECIO
                 FROM ME_TEMP_VENTAS 
