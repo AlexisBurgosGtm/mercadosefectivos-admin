@@ -435,7 +435,7 @@ let api = {
                                     <div class="row">
                                         <div class="col-3">
                                             <button class="btn btn-info btn-sm btn-circle"
-                                                onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CODCLIE}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
+                                                onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CODCLIE}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.ST}');">
                                                 +
                                             </button>    
                                         </div>
