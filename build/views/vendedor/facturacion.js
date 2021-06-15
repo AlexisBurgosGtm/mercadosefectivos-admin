@@ -1089,6 +1089,11 @@ function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,total
 // agrega el producto a temp_ventas
 async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
    
+    if(Number(GlobalSelectedExistencia)<=Number(totalunidades)){
+        funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
+        return;
+    };
+
     document.getElementById('btnAgregarProducto').innerHTML = GlobalLoader;
     document.getElementById('btnAgregarProducto').disabled = true;
 
@@ -1515,7 +1520,8 @@ async function fcnFinalizarPedido(){
 
     if(Number(GlobalTotalDocumento)<Number(GlobalVentaMinima)){
         funciones.AvisoError('Pedido menor al mínimo de venta');
-        funciones.hablar('Advertencia. Este pedido es menor al mínimo de venta permitido')
+        funciones.hablar('Advertencia. Este pedido es menor al mínimo de venta permitido');
+        socket.emit('avisos','venta menor al minimo', `El vendedor ${GlobalUsuario} ha intentado ingresar un pedido de ${funciones.setMoneda(GlobalTotalDocumento,'Q')}`);
     };
 
     let codcliente = GlobalSelectedCodCliente;

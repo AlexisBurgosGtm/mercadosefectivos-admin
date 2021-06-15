@@ -101,6 +101,8 @@ let api = {
                         <td>${rows.NOMCLIE}
                             <br>
                             <small>Cod: ${rows.CODIGO} - St:${stNomStatus}</small>
+                            <br>
+                            <small>Tel:${rows.TELEFONO}</small>
                         </td>
                         <td>${rows.DIRCLIE}
                             <br>
@@ -130,6 +132,8 @@ let api = {
                                 <td>${rows.NOMCLIE}
                                     <br>
                                     <small>Cod: ${rows.CODIGO} - St:SN</small>
+                                    <br>
+                                    <small>Tel:${rows.TELEFONO}</small>
                                 </td>
                                 <td>${rows.DIRCLIE}
                                     <br>
@@ -197,7 +201,7 @@ let api = {
                 if(f==funciones.getFecha()){}else{
                     L.marker([rows.LAT, rows.LONG])
                     .addTo(map)
-                    .bindPopup(`${rows.NOMCLIE} <br><small>${rows.DIRCLIE}</small>`, {closeOnClick: true, autoClose: true})   
+                    .bindPopup(`${rows.NOMCLIE} <br><small>${rows.DIRCLIE}-Tel:${rows.TELEFONO}</small>`, {closeOnClick: true, autoClose: true})   
                     .on('click', function(e){
                         //console.log(e.sourceTarget._leaflet_id);
                         GlobalMarkerId = Number(e.sourceTarget._leaflet_id);
@@ -241,6 +245,8 @@ let api = {
                         <td>${rows.NOMCLIE}
                             <br>
                             <small>Cod: ${rows.CODIGO}</small>
+                            <br>
+                            <small>Tel: ${rows.TELEFONO}</small>
                         </td>
                         <td>${rows.DIRCLIE}
                             <br>

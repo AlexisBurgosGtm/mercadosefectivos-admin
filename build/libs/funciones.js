@@ -1285,8 +1285,13 @@ let funciones = {
             break;
       };
       return str;
+    },
+    getHora:()=>{
+      let hoy = new Date();
+      let hora = hoy.getHours();
+      let minuto = hoy.getMinutes();
+      return `${hora.toString()}:${minuto.toString()}`;
     }
-
 };
 
 //export default funciones;
