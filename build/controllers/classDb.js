@@ -17,7 +17,7 @@ window.onload = function () {
     initiateDb();
 };
 //nombre de la base de datos
-const DbName = "mercadosefectivosv2.1";
+const DbName = "mercadosefectivosv2.6";
 
 function initiateDb() {
     
@@ -68,35 +68,47 @@ function getTbl() {
         ]
     }
         //TABLA CENSO
-    var TblCenso = {
-            Name: "censo",
+    var tblProductos = {
+            Name: "productos",
             Columns: [
-                {Name: "Id",PrimaryKey: true,AutoIncrement: true},
-                { Name: "empnit"},
-                { Name: "codven"},
-                { Name: "codruta"},
-                { Name: "negocio", DataType: "string" },
-                { Name: "nomcliente"},
-                { Name: "dircliente"},
-                { Name: "codmun" },
-                { Name: "coddep" },
-                { Name: "telefono"},
-                { Name: "latitud"},
-                { Name: "longitud"},
-                { Name: "obs", DataType: "string" },
-                { Name: "concre", DataType: "string" },
-                { Name: "giro", DataType: "string" },
-                { Name: "token", DataType: "string" },
+                { Name: "CODSUCURSAL"},
+                { Name: "CODPROD"},
+                { Name: "DESPROD"},
+                { Name: "CODMEDIDA"},
+                { Name: "EQUIVALE"},
+                { Name: "COSTO"},
+                { Name: "PRECIO"},
+                { Name: "DESMARCA"},  
+                { Name: "EXENTO"},
+                { Name: "EXISTENCIA"}
            ]
     }
 
     var DataBase = {
         Name: DbName,
-        Tables: [tblUsuario,TblTemp,TblCenso]
+        Tables: [tblUsuario,TblTemp,tblProductos]
     }
 
     return DataBase;
 };
 
 
+/**
+ * 
+ * var tblProductos = {
+            Name: "productos",
+            Columns: [
+                { Name: "CODSUCURSAL", DataType: "string" },
+                { Name: "CODPROD", DataType: "string" },
+                { Name: "DESPROD", DataType: "string" },
+                { Name: "CODMEDIDA", DataType: "string" },
+                { Name: "EQUIVALE", DataType: "number" },
+                { Name: "COSTO", DataType: "number"},
+                { Name: "PRECIO", DataType: "number"},
+                { Name: "DESMARCA", DataType: "string" },  
+                { Name: "EXENTO", DataType: "number"  },
+                { Name: "EXISTENCIA", DataType: "number" }
+           ]
+    }
+ */
 

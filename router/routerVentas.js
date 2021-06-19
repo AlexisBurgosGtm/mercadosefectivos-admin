@@ -104,6 +104,31 @@ router.get("/buscarproducto", async(req,res)=>{
     execute.Query(res,qry);
 
 })
+
+
+// VENTAS BUSCAR PRODUCTO POR DESCRIPCION
+router.get("/buscarproductotodos", async(req,res)=>{
+    
+    const {sucursal} = req.query;
+    // app= sucusal
+    // K= CAMBIO DE PRODUCTO
+
+    let qry ='';
+
+     
+    qry = `SELECT ME_Productos.CODSUCURSAL, ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, 
+                ME_Precios.EQUIVALE, ME_Precios.COSTO, ME_PRECIOS.PRECIO AS PRECIO, 
+                ME_Marcas.DESMARCA, 0 AS EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
+            FROM ME_Productos LEFT OUTER JOIN
+                ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA LEFT OUTER JOIN
+                ME_Precios ON ME_Productos.CODSUCURSAL = ME_Precios.CODSUCURSAL AND ME_Productos.CODPROD = ME_Precios.CODPROD
+            WHERE (ME_Productos.CODSUCURSAL = '${sucursal}') 
+            ORDER BY ME_Precios.CODPROD, ME_Precios.CODMEDIDA` 
+            
+    execute.Query(res,qry);
+
+})
+
 // obtiene el total de temp ventas según sea el usuario
 router.get("/tempVentastotal", async(req,res)=>{
     let empnit = req.query.empnit;

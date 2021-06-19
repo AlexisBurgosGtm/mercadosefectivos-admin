@@ -41,5 +41,13 @@ btnCerrarModalMenuLateral.addEventListener('click',()=>{
   $('#modalMenu').modal('hide');
 })
 
+
+function setLog(msg,idcontainer){
+
+  document.getElementById(idcontainer).innerHTML = msg;
+
+};
+
+
 classNavegar.login();
 

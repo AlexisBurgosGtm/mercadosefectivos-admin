@@ -70,9 +70,9 @@ let classNavegar = {
                                 <i class="fal fa-chart-pie"></i>
                                 Mes
                             </button>
-                            <button class="btn btn-sm text-white"  id="btnMenu2VendedorNoticias">
-                                <i class="fal fa-bell"></i>
-                                Noticias
+                            <button class="btn btn-sm text-white"  id="btnMenu2VendedorSync">
+                                <i class="fal fa-sync"></i>
+                                Sync
                             </button>
         `
         let strMenu =   `
@@ -155,9 +155,9 @@ let classNavegar = {
                     btnMenuVendedorNoticias.addEventListener('click',()=>{
                         classNavegar.noticias();
                     });
-                    let btnMenu2VendedorNoticias = document.getElementById('btnMenu2VendedorNoticias');
-                    btnMenu2VendedorNoticias.addEventListener('click',()=>{
-                        classNavegar.noticias();
+                    let btnMenu2VendedorSync = document.getElementById('btnMenu2VendedorSync');
+                    btnMenu2VendedorSync.addEventListener('click',()=>{
+                        $('#modalSync').modal('show');
                     });
                     //actualiza la ubicación del empleado
                     await classEmpleados.updateMyLocation();

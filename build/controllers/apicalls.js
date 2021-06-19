@@ -3197,13 +3197,14 @@ let api = {
         });
 
     },
-    usuariosEliminar:(id,codigo)=>{
+    usuariosEliminar:(id,codigo,tipo)=>{
         
         return new Promise((resolve,reject)=>{
             axios.post('/usuarios/eliminar',{
                 sucursal:GlobalCodSucursal,
                 id:id,
-                codven:codigo
+                codven:codigo,
+                tipo:tipo
             })
             .then((response) => {
                 let data = response.data;

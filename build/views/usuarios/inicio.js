@@ -110,7 +110,8 @@ function addListeners(tipo){
         funciones.Confirmacion('¿Está seguro que Desea ELIMINAR este Usuario?')
         .then((value)=>{
             if(value==true){
-                api.usuariosEliminar(GlobalSelectedId,GlobalSelectedCodCliente)
+                let tipo = document.getElementById('cmbTipoUsuario').value;
+                api.usuariosEliminar(GlobalSelectedId,GlobalSelectedCodCliente,tipo)
                 .then(()=>{
                     funciones.Aviso('Usuario Eliminado Exitosamente!!');
                     $("#modalMenu").modal('hide');

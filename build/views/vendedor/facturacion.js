@@ -972,38 +972,43 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
     axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
     
     .then((response) => {
-        const data = response.data;        
-        data.recordset.map((rows)=>{
-            let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
-            if(Number(rows.EXISTENCIA<=0)){strC='bg-danger text-white'}else{strC='bg-success text-white'};
-            let totalexento = 0;
-            if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
-            
-            str += `<tr id="${rows.CODPROD}" onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});" class="border-bottom">
-            <td >
-                ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
-                <br>
-                <small class="text-danger"><b>${rows.CODPROD}</b></small>
-                <br>
-                <b class"bg-danger text-white">${rows.CODMEDIDA}</b>
-                <small>(${rows.EQUIVALE})</small>
-            </td>
-            <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}
-                <br>
-                <small class="${strC}">E:${funciones.setMoneda(exist,'')}</small>
-            </td>
-            
-            <td>
-                <button class="btn btn-sm btn-success btn-circle text-white" 
-                onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});">
-                    +
-                </button>
-            <td>
-            
-        </tr>`
-        })
-        tabla.innerHTML= str;
-        
+        const data = response.data;
+        console.log('productos encontrados: ');
+        console.log(data);
+        if(data.rowsAffected[0]==0){
+            tabla.innerHTML= 'No existe nada relacionado a: ' + filtro + ', o no hay productos cargados'
+        }else{       
+            data.recordset.map((rows)=>{
+                let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
+                if(Number(rows.EXISTENCIA<=0)){strC='bg-danger text-white'}else{strC='bg-success text-white'};
+                let totalexento = 0;
+                if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
+                
+                str += `<tr id="${rows.CODPROD}" onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});" class="border-bottom">
+                <td >
+                    ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
+                    <br>
+                    <small class="text-danger"><b>${rows.CODPROD}</b></small>
+                    <br>
+                    <b class"bg-danger text-white">${rows.CODMEDIDA}</b>
+                    <small>(${rows.EQUIVALE})</small>
+                </td>
+                <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}
+                    <br>
+                    <small class="${strC}">E:${funciones.setMoneda(exist,'')}</small>
+                </td>
+                
+                <td>
+                    <button class="btn btn-sm btn-success btn-circle text-white" 
+                    onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});">
+                        +
+                    </button>
+                <td>
+                
+            </tr>`
+            })
+            tabla.innerHTML= str;
+        }
     }, (error) => {
         console.log(error);
     });
