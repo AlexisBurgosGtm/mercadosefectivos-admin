@@ -133,6 +133,67 @@ function deleteItemVenta(id){
     })            
 };
 
+function selectTempventas(usuario) {
+
+    return new Promise(async(resolve,reject)=>{
+        var response = await connection.select({
+            from: "tempventa",
+            where: {
+                    USUARIO: usuario
+                },
+            order: { by: 'ID', type: 'asc' }
+        });
+        resolve(response)
+    });
+};
+
+function selectDataRowVenta(id,nuevacantidad) {
+    let costo = 0; let precio = 0; let equivale =0; let exento=0; let cantidad= nuevacantidad;
+    return new Promise(async(resolve,reject)=>{
+        var response = await connection.select({
+            from: "tempventa",
+            where: {
+                    ID: id
+                }
+        });
+        response.map((rows)=>{
+            costo = rows.COSTO;
+            precio = rows.PRECIO;
+            equivale = rows.EQUIVALE;
+            exento = rows.EXENTO;
+        });
+        let totalcosto = Number(costo) * Number(cantidad);
+        let totalprecio = Number(precio) * Number(cantidad);
+        let totalexento = Number(exento) * Number(cantidad);
+        let totalunidades = Number(equivale) * Number(cantidad);
+        //actualiza la fila
+        let updatedrow = await connection.update({
+            in: "tempventa",
+            set: {
+                CANTIDAD:Number(nuevacantidad),
+                TOTALUNIDADES:totalunidades,
+                TOTALCOSTO:totalcosto,
+                TOTALPRECIO:totalprecio,
+                EXENTO:totalexento
+            },
+            where: {
+                ID: id
+            }
+        })
+        if(updatedrow>0){
+            resolve();
+        }else{
+            reject();
+        }
+
+    });
+};
+
+
+
+
+
+
 
 function xinsertTempVentas(datos){
     return new Promise(async(resolve,reject)=>{
@@ -149,16 +210,3 @@ function xinsertTempVentas(datos){
 
 };
 
-function selectTempventas(usuario) {
-
-    return new Promise(async(resolve,reject)=>{
-        var response = await connection.select({
-            from: "tempventa",
-            where: {
-                    USUARIO: usuario
-                },
-            order: { by: 'ID', type: 'desc' }
-        });
-        resolve(response)
-    });
-};

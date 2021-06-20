@@ -523,105 +523,6 @@ function getView(){
                     </div>
                 </div>`
         },
-        modalCantidadCalculadora :()=>{
-            return `
-            <div class="modal fade" id="ModalCantidad" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <label class="modal-title text-danger h3" id="">Nueva Cantidad</label>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true"><i class="fal fa-times"></i></span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-
-                            <div class="row">
-                                <div class="col-2">
-                                    <h1 class="text-danger fw-700">Cant:</h1>
-                                </div>
-                                <div class="col-8 text-center">
-                                    <h1 class="text-danger fw-700" id="lbCalcTotal">0</h1>
-                                </div>
-                                <div class="col-2"></div>
-                            </div>
-                            
-                            <br>
-
-                            <div class="row">
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc1">1</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc2">2</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc3">3</button>
-                                </div>
-                            </div>
-                            
-                            <br>
-
-                            <div class="row">
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc4">4</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc5">5</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc6">6</button>
-                                </div>
-                            </div>
-                            
-                            <br>
-
-                            <div class="row">
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc7">7</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc8">8</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc9">9</button>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-4">
-                            
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-xl btn-circle btn-info" id="btnCalc0">0</button>
-                                </div>
-                                <div class="col-4">
-                            
-                                </div>
-                            </div>
-
-                            <br><br><br>
-
-                            <div class="row">
-                                <div class="col-4">
-                                    <button class="btn btn-danger btn-lg" data-dismiss="modal">Cancelar</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-primary btn-lg" id="btnCalcLimpiar">Limpiar</button>
-                                </div>
-                                <div class="col-4">
-                                    <button class="btn btn-success btn-lg" data-dismiss="modal" id="btnCalcAceptar">Aceptar</button>
-                                </div>
-                            </div>
-                        
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-            `
-        },
         modalCantidadProducto:()=>{
             return `
             <div class="modal fade" id="ModalCantidadProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -685,6 +586,55 @@ function getView(){
                 </div>
             </div>
             `
+        },
+        modalCambiarCantidadProducto :()=>{
+            return `
+                <div class="modal fade" id="modalCambiarCantidadProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <label class="modal-title text-info h3" id="">Cambiar cantidad de producto</label>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                </button>
+                            </div>
+                
+                            <div class="modal-body shadow">
+                                    <div class="">            
+                                        
+                                        <div class="form-group">
+                                            <label>Nueva cantidad:</label>
+                                            <input type="number" class="form-control border-info shadow col-10" id="txtCantNuevaCant">
+                                        </div>                                                             
+                                            
+                                    </div>
+                                    
+                                    <br>
+            
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <button class="btn btn-secondary btn-lg  btn-pills btn-block waves-effect waves-themed" data-dismiss="modal" id="">
+                                                <i class="fal fa-times mr-1"></i>
+                                                Cancelar
+                                            </button>                                
+                                        </div>
+            
+                                        <div class="col-1"></div>
+            
+                                        <div class="col-5">
+                                            <button class="btn btn-success btn-lg btn-pills btn-block waves-effect waves-themed" id="btnCantGuardar">
+                                                <i class="fal fa-check mr-1"></i>Aceptar
+                                            </button>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                            
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>`
         }
     }
 
@@ -703,7 +653,7 @@ function getView(){
     let containerModalesVentas = document.getElementById('containerModalesVentas');
     containerModalesVentas.innerHTML = view.modalBusquedaProductos() 
                                         + view.modalCantidadProducto()
-                                        + view.modalCantidadCalculadora();
+                                        + view.modalCambiarCantidadProducto();
 
 };
 
@@ -856,14 +806,33 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     fcnCargarComboTipoPrecio();
   
     // inicializa la calculadora de cantidad
-    iniciarModalCantidad();
+    //iniciarModalCantidad();
+    addEventsModalCambioCantidad();
 
     //carga los datos del cliente
     document.getElementById('txtNit').value = nit;
     document.getElementById('txtNombre').value = nombre;
     document.getElementById('txtDireccion').value = direccion;
     
+    //inicia los eventos de la ventana Cantidad al agregar productos
     fcnIniciarModalCantidadProductos();
+
+};
+
+function addEventsModalCambioCantidad(){
+ 
+
+    document.getElementById('btnCantGuardar').addEventListener('click',()=>{
+        let nuevacantidad = Number(document.getElementById('txtCantNuevaCant').value);
+        if(nuevacantidad>0){
+            fcnUpdateTempRow(GlobalSelectedId,nuevacantidad)
+            .then(()=>{
+                $('#modalCambiarCantidadProducto').modal('hide');
+            })
+        }else{
+            funciones.AvisoError('Escriba una cantidad válida')
+        }  
+    }) 
 
 };
 
@@ -916,45 +885,7 @@ function fcnIniciarModalCantidadProductos(){
 
 };
 
-function iniciarModalCantidad(){
-    let total = document.getElementById('lbCalcTotal');
-    total.innerText = "";
-    let btnCalcAceptar = document.getElementById('btnCalcAceptar');
-    let btnCalcLimpiar = document.getElementById('btnCalcLimpiar');
-    let b0 = document.getElementById('btnCalc0');
-    let b1 = document.getElementById('btnCalc1');
-    let b2 = document.getElementById('btnCalc2');
-    let b3 = document.getElementById('btnCalc3');
-    let b4 = document.getElementById('btnCalc4');
-    let b5 = document.getElementById('btnCalc5');
-    let b6 = document.getElementById('btnCalc6');
-    let b7 = document.getElementById('btnCalc7');
-    let b8 = document.getElementById('btnCalc8');
-    let b9 = document.getElementById('btnCalc9');
 
-    b0.addEventListener('click',()=>{total.innerText = total.innerText + "0"})
-    b1.addEventListener('click',()=>{total.innerText = total.innerText + "1"})
-    b2.addEventListener('click',()=>{total.innerText = total.innerText + "2"})
-    b3.addEventListener('click',()=>{total.innerText = total.innerText + "3"})
-    b4.addEventListener('click',()=>{total.innerText = total.innerText + "4"})
-    b5.addEventListener('click',()=>{total.innerText = total.innerText + "5"})
-    b6.addEventListener('click',()=>{total.innerText = total.innerText + "6"})
-    b7.addEventListener('click',()=>{total.innerText = total.innerText + "7"})
-    b8.addEventListener('click',()=>{total.innerText = total.innerText + "8"})
-    b9.addEventListener('click',()=>{total.innerText = total.innerText + "9"})
-    btnCalcLimpiar.addEventListener('click',()=>{total.innerText = ""})
-
-    btnCalcAceptar.addEventListener('click',async ()=>{
-        let n = Number(total.innerText);
-        fcnUpdateTempRow(GlobalSelectedId,n)
-        .then(async()=>{
-            //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');      
-            await fcnCargarGridTempVentas('tblGridTempVentas');
-        })
-        total.innerText = "";
-    })
-
-};
 
 
 function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
@@ -1221,8 +1152,33 @@ async function fcnCargarGridTempVentas(idContenedor){
     }
 };
 
+async function fcnUpdateTempRow(id,cantidad){
+    
+    return new Promise((resolve, reject) => {
+            //OBTIENE LOS DATOS DE LA ROW    
+            selectDataRowVenta(id,cantidad)
+            .then(()=>{
+                fcnCargarGridTempVentas('tblGridTempVentas');
+                resolve();
+            })
+            .catch(()=>{
+                funciones.AvisoError('No se logró Eliminar la lista de productos agregados');
+                reject();
+            })
+
+        });
+};
+
+async function fcnCambiarCantidad(id){
+    
+    GlobalSelectedId = id;
+    //$('#ModalCantidad').modal('show');
+    $('#modalCambiarCantidadProducto').modal('show');
+    
+};
 
 
+//CLIENTE
 async function fcnBuscarCliente(idNit,idNombre,idDireccion){
     
     let nit = document.getElementById(idNit);
@@ -1250,7 +1206,6 @@ async function fcnBuscarCliente(idNit,idNombre,idDireccion){
         console.log(error);
     });
 };
-
 
 async function fcnBusquedaCliente(idFiltro,idTablaResultado){
     
@@ -1361,54 +1316,7 @@ async function fcnGuardarNuevoCliente(form){
 };
 
 
-
-
-async function fcnCambiarCantidad(id){
-    
-    GlobalSelectedId = id;
-    $('#ModalCantidad').modal('show');
-    
-};
-
-async function fcnCargarTotal(idContenedor,idContenedor2){
-        
-    //'txtTotalVenta'
-    let container = document.getElementById(idContenedor);
-    
-        
-    let btnCobrarTotal = document.getElementById('btnCobrar')
-    //btnCobrarTotal.innerText =  'Cobrar : Q 0.00'
-    btnCobrarTotal.innerText =  'Terminar'
-
-    container.innerHTML = '0'
-    //container2.innerHTML = '0'
-
-    try {
-        
-        const response = await fetch('/ventas/tempventastotal?empnit=' + GlobalEmpnit + '&usuario=' + GlobalUsuario  + '&app=' + GlobalSistema)
-        const json = await response.json();
-       
-        let data = json.recordset.map((rows)=>{
-            GlobalTotalDocumento = Number(rows.TOTALPRECIO);
-            GlobalTotalCostoDocumento = Number(rows.TOTALCOSTO);
-            return `${funciones.setMoneda(rows.TOTALPRECIO,'Q ')}`
-       }).join('\n');
-       
-       container.innerText = data;
-       //container2.innerText = data;
-       btnCobrarTotal.innerHTML = '<h1>Terminar : ' + data + '</h1>';
-       //btnCobrarTotal.innerHTML = '<h1>Cobrar : ' + data + '</h1>';
-    } catch (error) {
-        //console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
-
-    }
-
-    if(container.innerHTML=='0'){
-    }else{
-        socket.emit('ordenes escribiendo', 'Se está generando una nueva orden',GlobalSelectedForm)
-    }
-};
-
+//FINALIZAR PEDIDO
 async function fcnFinalizarPedido(){
 
     if(Number(GlobalTotalDocumento)<Number(GlobalVentaMinima)){
@@ -1543,63 +1451,7 @@ async function fcnNuevoPedido(){
     
 };
 
-async function fcnUpdateTempRow(id,cantidad){
-    
-    let costo = 0; let precio = 0; let equivale = 0; let exento = 0;
-    
-    return new Promise((resolve, reject) => {
-    //inicia la promesa    
-            axios.post('/ventas/tempVentasRow', {
-                id:id,
-                app: GlobalSistema
-            })
-            .then((response) => {
-                const data = response.data;
-                
-                data.recordset.map((rows)=>{
-                    costo = rows.COSTO;
-                    precio = rows.PRECIO;
-                    equivale = rows.EQUIVALE;
-                    exento = rows.EXENTO;
-                })
-                let totalcosto = Number(costo) * Number(cantidad);
-                let totalprecio = Number(precio) * Number(cantidad);
-                let totalexento = Number(exento) * Number(cantidad);
-                let totalunidades = Number(equivale) * Number(cantidad);
-                    axios.put('/ventas/tempVentasRow', {
-                        app: GlobalSistema,
-                        id:id,
-                        totalcosto:totalcosto,
-                        totalprecio:totalprecio,
-                        cantidad:cantidad,
-                        totalunidades: totalunidades,
-                        exento:totalexento
-                    })
-                    .then(async(re) => {
-                        const data2 = re.data;
-                        if (data2.rowsAffected[0]==0){
-                            funciones.AvisoError('No se logró Eliminar la lista de productos agregados');
-                            reject();
-                        }else{
-                            await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-                            resolve();
-                        }
-                    }, (error) => {
-                        console.log(error);
-                    });  
-            }, (error) => {
-                console.log(error);
-                reject();
-            });  
-    
-    //finaliza la promesa
-            
-        }, (error) => {
-            console.log(error);
-            reject();
-        });
-    
-};
+
 
 async function fcnGetMunicipios(idContainer){
     let container = document.getElementById(idContainer);
@@ -1653,256 +1505,4 @@ async function fcnCargarComboTipoPrecio(){
    
 };
 
-//METODOS ANTERIORES
 
-async function fcnBusquedaProducto_online(idFiltro,idTablaResultado,idTipoPrecio){
-    
-    let cmbTipoPrecio = document.getElementById(idTipoPrecio);
-
-    let filtro = document.getElementById(idFiltro).value;
-    let tabla = document.getElementById(idTablaResultado);
-    tabla.innerHTML = GlobalLoader;
-
-
-    let str = ""; 
-    axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
-    
-    .then((response) => {
-        const data = response.data;
-        console.log('productos encontrados: ');
-        console.log(data);
-        if(data.rowsAffected[0]==0){
-            tabla.innerHTML= 'No existe nada relacionado a: ' + filtro + ', o no hay productos cargados'
-        }else{       
-            data.recordset.map((rows)=>{
-                let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
-                if(Number(rows.EXISTENCIA<=0)){strC='bg-danger text-white'}else{strC='bg-success text-white'};
-                let totalexento = 0;
-                if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
-                
-                str += `<tr id="${rows.CODPROD}" onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});" class="border-bottom">
-                <td >
-                    ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
-                    <br>
-                    <small class="text-danger"><b>${rows.CODPROD}</b></small>
-                    <br>
-                    <b class"bg-danger text-white">${rows.CODMEDIDA}</b>
-                    <small>(${rows.EQUIVALE})</small>
-                </td>
-                <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}
-                    <br>
-                    <small class="${strC}">E:${funciones.setMoneda(exist,'')}</small>
-                </td>
-                
-                <td>
-                    <button class="btn btn-sm btn-success btn-circle text-white" 
-                    onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});">
-                        +
-                    </button>
-                <td>
-                
-            </tr>`
-            })
-            tabla.innerHTML= str;
-        }
-    }, (error) => {
-        console.log(error);
-    });
-
-};
-
-// agrega el producto a temp_ventas
-async function fcnAgregarProductoVenta_online(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
-   
-    if(Number(GlobalSelectedExistencia)<=Number(totalunidades)){
-        funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
-        return;
-    };
-
-    document.getElementById('btnAgregarProducto').innerHTML = GlobalLoader;
-    document.getElementById('btnAgregarProducto').disabled = true;
-
-    //document.getElementById('tblResultadoBusqueda').innerHTML = '';
-    let cmbTipoPrecio = document.getElementById('cmbTipoPrecio');
-        let totalcosto = Number(costo) * Number(cantidad);
-        let totalprecio = Number(precio) * Number(cantidad);
-        console.log('intenta agregar la fila')
-        let coddoc = document.getElementById('cmbCoddoc').value;
-        try {        
-            
-                var data =JSON.stringify({
-                    empnit:GlobalEmpnit,
-                    token:GlobalToken,
-                    coddoc:coddoc,
-                    codprod:codprod,
-                    desprod:desprod,
-                    codmedida:codmedida,
-                    cantidad:cantidad,
-                    equivale:equivale,
-                    totalunidades:totalunidades,
-                    costo:costo,
-                    precio:precio,
-                    totalcosto:totalcosto,
-                    totalprecio:totalprecio,
-                    exento:exento,
-                    usuario:GlobalUsuario,
-                    app:GlobalSistema,
-                    tipoprecio:cmbTipoPrecio.value
-                });
-
-                var peticion = new Request('/ventas/tempventas', {
-                    method: 'POST',
-                    headers: new Headers({
-                       'Content-Type': 'application/json'
-                    }),
-                    body: data
-                  });
-            
-                  await fetch(peticion)
-                  
-                  .then(async function(res) {
-                    console.log('Estado: ', res.status);
-                    if (res.status==200)
-                    {
-                        //socket.emit('productos nuevo', document.getElementById('desprod').value || 'sn');
-                        $('#ModalCantidadProducto').modal('hide') //MARCADOR
-                        funciones.showToast('Agregado: ' + desprod);
-                        
-                        await fcnCargarGridTempVentas('tblGridTempVentas');
-                        //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-
-                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
-                        document.getElementById('btnAgregarProducto').disabled = false;
-                        let txbusqueda = document.getElementById('txtBusqueda');
-                        txbusqueda.value = '';
-                        //txbusqueda.focus();
-                    }
-                  })
-                  .catch(
-                      ()=>{
-                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
-                        document.getElementById('btnAgregarProducto').disabled = false;
-                        funciones.AvisoError('No se pudo agregar este producto a la venta actual');
-                      }
-                  )
-        
-        } catch (error) {
-            document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
-            document.getElementById('btnAgregarProducto').disabled = false;
-        }
-   
-
-};
-
-async function fcnCargarGridTempVentas_ONLINE(idContenedor){
-    
-    let tabla = document.getElementById(idContenedor);
-    tabla.innerHTML = GlobalLoader;
-
-    let varTotalVenta = 0; let varTotalCosto = 0;
-
-    let btnCobrarTotal = document.getElementById('btnCobrar')
-    btnCobrarTotal.innerText =  'Terminar';
-   
-
-    let coddoc = document.getElementById('cmbCoddoc').value;
-    
-    let containerTotalVenta = document.getElementById('txtTotalVenta');
-    containerTotalVenta.innerHTML = '0';
-
-    try {
-        
-        const response = await fetch('/ventas/tempventas?empnit=' + GlobalEmpnit + '&coddoc=' + coddoc + '&usuario=' + GlobalUsuario +  '&app=' + GlobalSistema)
-        const json = await response.json();
-        let idcant = 0;
-        let data = json.recordset.map((rows)=>{
-            idcant = idcant + 1;
-            varTotalVenta = varTotalVenta + Number(rows.TOTALPRECIO);
-            varTotalCosto = varTotalCosto + Number(rows.TOTALCOSTO);
-            return `<tr id="${rows.ID.toString()}">
-                        <td class="text-left">
-                            ${rows.DESPROD}
-                            <br>
-                            <small class="text-danger"><b>${rows.CODPROD}</b></small>
-                        </td>
-                        <td class="text-right">${rows.CODMEDIDA}
-                            <br>
-                            <small>${rows.EQUIVALE} item</small>
-                            <br>
-                            <small><b>${funciones.setMoneda(rows.PRECIO,'Q')}</b></small>
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" onClick="fcnCambiarCantidad(${rows.ID});">+</button>
-                            <b class="text-danger h4" id=${idcant}>${rows.CANTIDAD}</b>
-                        </td>
-                        <td class="text-right" id=${'S'+idcant}>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger btn-circle text-white" onclick="fcnEliminarItem(${rows.ID});">
-                                x
-                            </button>
-                        <td>
-                    </tr>`
-       }).join('\n');
-       
-       tabla.innerHTML = data;
-       GlobalTotalDocumento = varTotalVenta;
-       GlobalTotalCostoDocumento = varTotalCosto;
-       containerTotalVenta.innerHTML = `${funciones.setMoneda(GlobalTotalDocumento,'Q ')}`;
-       btnCobrarTotal.innerHTML = '<h1>Terminar : ' + funciones.setMoneda(GlobalTotalDocumento,'Q ') + '</h1>';
-       /** 
-       if(containerTotalVenta.innerHTML=='0'){
-        }else{
-            socket.emit('ordenes escribiendo', 'Se está generando una nueva orden',GlobalSelectedForm)
-        } */
-    } catch (error) {
-        console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
-        tabla.innerHTML = 'No se logró cargar la lista...';
-        containerTotalVenta.innerHTML = '0';
-        btnCobrarTotal.innerText =  'Terminar';
-    }
-};
-
-async function fcnEliminarItem_ONLINE(id){
-    funciones.Confirmacion('¿Está seguro que desea quitar este item?')
-    .then(async(value)=>{
-        if(value==true){
-    
-            try {        
-                var data =JSON.stringify({
-                    id:id
-                });
-    
-                var peticion = new Request('/ventas/tempventas', {
-                    method: 'DELETE',
-                    headers: new Headers({
-                       'Content-Type': 'application/json'
-                    }),
-                    body: data
-                  });
-            
-                  await fetch(peticion)
-                  
-                  .then(async function(res) {
-                    console.log('Estado: ', res.status);
-                    if (res.status==200)
-                    {
-                        console.log(id.toString());
-                        document.getElementById(id.toString()).remove();
-                        funciones.showToast('item eliminado');
-                        await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-                    }
-                  })
-                  .catch(
-                      ()=>{
-                        funciones.AvisoError('No se pudo remover este producto a la venta actual');
-                      }
-                  )
-        
-            } catch (error) {
-    
-            };
-    
-        }        
-    })
-    
-};
