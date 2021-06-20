@@ -26,6 +26,7 @@ var tblTempventas = {
         ID:{ primaryKey: true, autoIncrement: true },
         CODSUCURSAL:{dataType: "string"},
         EMPNIT:{dataType: "string"},
+        CODDOC:{dataType: "string"},
         CODPROD:{dataType: "string"},
         DESPROD:{dataType: "string"},
         CODMEDIDA:{dataType: "string"},

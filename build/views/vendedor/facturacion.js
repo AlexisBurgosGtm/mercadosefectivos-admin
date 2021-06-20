@@ -114,13 +114,10 @@ function getView(){
                         </div>
                         <div class="table-responsive">
                             <table class="table table-hover table-striped"><!--mt-5-->
-                                <thead>
+                                <thead class="bg-trans-gradient text-white">
                                     <tr>
-                                        <th class="border-top-0 table-scale-border-bottom fw-700">Producto</th>
-                                        <th class="text-right border-top-0 table-scale-border-bottom fw-700">Medida</th>
-                                        <th class="text-center border-top-0 table-scale-border-bottom fw-700">Cant.</th>
-                                        <th class="text-right border-top-0 table-scale-border-bottom fw-700">Subtotal</th>
-                                        <th class="text-center border-top-0 table-scale-border-bottom fw-700"></th>
+                                        <th class="">Producto</th>
+                                        <th class="">Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tblGridTempVentas"></tbody>
@@ -959,61 +956,6 @@ function iniciarModalCantidad(){
 
 };
 
-async function fcnBusquedaProducto_online(idFiltro,idTablaResultado,idTipoPrecio){
-    
-    let cmbTipoPrecio = document.getElementById(idTipoPrecio);
-
-    let filtro = document.getElementById(idFiltro).value;
-    let tabla = document.getElementById(idTablaResultado);
-    tabla.innerHTML = GlobalLoader;
-
-
-    let str = ""; 
-    axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
-    
-    .then((response) => {
-        const data = response.data;
-        console.log('productos encontrados: ');
-        console.log(data);
-        if(data.rowsAffected[0]==0){
-            tabla.innerHTML= 'No existe nada relacionado a: ' + filtro + ', o no hay productos cargados'
-        }else{       
-            data.recordset.map((rows)=>{
-                let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
-                if(Number(rows.EXISTENCIA<=0)){strC='bg-danger text-white'}else{strC='bg-success text-white'};
-                let totalexento = 0;
-                if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
-                
-                str += `<tr id="${rows.CODPROD}" onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});" class="border-bottom">
-                <td >
-                    ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
-                    <br>
-                    <small class="text-danger"><b>${rows.CODPROD}</b></small>
-                    <br>
-                    <b class"bg-danger text-white">${rows.CODMEDIDA}</b>
-                    <small>(${rows.EQUIVALE})</small>
-                </td>
-                <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}
-                    <br>
-                    <small class="${strC}">E:${funciones.setMoneda(exist,'')}</small>
-                </td>
-                
-                <td>
-                    <button class="btn btn-sm btn-success btn-circle text-white" 
-                    onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});">
-                        +
-                    </button>
-                <td>
-                
-            </tr>`
-            })
-            tabla.innerHTML= str;
-        }
-    }, (error) => {
-        console.log(error);
-    });
-
-};
 
 function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
     
@@ -1030,9 +972,8 @@ function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
     selectProducto(filtro)
     .then((response) => {
         const data = response;
-       
-        console.log(data);
-            let pre = 0;
+        //con esta variable determino el tipo de precio a usar            
+        let pre = 0;
             
             data.map((rows)=>{
                 let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
@@ -1093,50 +1034,6 @@ function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
 
 };
 
-async function fcnBusquedaProducto2(idFiltro,idTablaResultado,idTipoPrecio){
-    
-    let cmbTipoPrecio = document.getElementById(idTipoPrecio);
-
-    let filtro = document.getElementById(idFiltro).value;
-    let tabla = document.getElementById(idTablaResultado);
-    tabla.innerHTML = GlobalLoader;
-
-
-    let str = ""; 
-    axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
-    
-    .then((response) => {
-        const data = response.data;        
-        data.recordset.map((rows)=>{
-            let totalexento = 0;
-            if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
-            str += `<tr id="${rows.CODPROD}">
-            <td>
-                ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
-                <br>
-                <small class="text-danger"><b>${rows.CODPROD}</b></small>
-            </td>
-            <td><b class"bg-danger text-white">${rows.CODMEDIDA}</b>
-                <br>
-                <small>${rows.EQUIVALE} item</small></td>
-            <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}</td>
-            
-            <td>
-                <button class="btn btn-sm btn-success btn-circle text-white" 
-                onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${rows.EXISTENCIA});">
-                    +
-                </button>
-            <td>
-            <td>${rows.DESMARCA}</td>
-        </tr>`
-        })
-        tabla.innerHTML= str;
-        
-    }, (error) => {
-        console.log(error);
-    });
-
-};
 
 //gestiona la apertura de la cantidad
 function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento,existencia){
@@ -1169,6 +1066,8 @@ function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,total
 
 };
 
+//GRID TEMP VENTAS
+
 // agrega el producto a temp_ventas
 async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
    
@@ -1187,54 +1086,38 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
         console.log('intenta agregar la fila')
         let coddoc = document.getElementById('cmbCoddoc').value;
         try {        
-            
-                var data =JSON.stringify({
-                    empnit:GlobalEmpnit,
-                    token:GlobalToken,
-                    coddoc:coddoc,
-                    codprod:codprod,
-                    desprod:desprod,
-                    codmedida:codmedida,
-                    cantidad:cantidad,
-                    equivale:equivale,
-                    totalunidades:totalunidades,
-                    costo:costo,
-                    precio:precio,
-                    totalcosto:totalcosto,
-                    totalprecio:totalprecio,
-                    exento:exento,
-                    usuario:GlobalUsuario,
-                    app:GlobalSistema,
-                    tipoprecio:cmbTipoPrecio.value
-                });
+                var data = {
+                    EMPNIT:GlobalEmpnit,  
+                    CODSUCURSAL:GlobalCodSucursal,
+                    CODDOC:coddoc,     
+                    CODPROD:codprod,
+                    DESPROD:desprod,
+                    CODMEDIDA:codmedida,
+                    CANTIDAD:cantidad,
+                    EQUIVALE:equivale,
+                    TOTALUNIDADES:totalunidades,
+                    COSTO:costo,
+                    PRECIO:precio,
+                    TOTALCOSTO:totalcosto,
+                    TOTALPRECIO:totalprecio,
+                    EXENTO:exento,
+                    USUARIO:GlobalUsuario,
+                    TIPOPRECIO:cmbTipoPrecio.value
+                };
 
-                var peticion = new Request('/ventas/tempventas', {
-                    method: 'POST',
-                    headers: new Headers({
-                       'Content-Type': 'application/json'
-                    }),
-                    body: data
-                  });
-            
-                  await fetch(peticion)
-                  
-                  .then(async function(res) {
-                    console.log('Estado: ', res.status);
-                    if (res.status==200)
-                    {
-                        //socket.emit('productos nuevo', document.getElementById('desprod').value || 'sn');
+                insertTempVentas(data)
+                .then(()=>{                    
+      
                         $('#ModalCantidadProducto').modal('hide') //MARCADOR
                         funciones.showToast('Agregado: ' + desprod);
                         
-                        await fcnCargarGridTempVentas('tblGridTempVentas');
-                        //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-
+                        fcnCargarGridTempVentas('tblGridTempVentas');
+                        
                         document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
                         document.getElementById('btnAgregarProducto').disabled = false;
                         let txbusqueda = document.getElementById('txtBusqueda');
                         txbusqueda.value = '';
-                        //txbusqueda.focus();
-                    }
+                        
                   })
                   .catch(
                       ()=>{
@@ -1252,88 +1135,93 @@ async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equiva
 
 };
 
-// agrega el producto a temp_ventas
-async function fcnAgregarProductoVenta_online(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
-   
-    if(Number(GlobalSelectedExistencia)<=Number(totalunidades)){
-        funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
-        return;
-    };
-
-    document.getElementById('btnAgregarProducto').innerHTML = GlobalLoader;
-    document.getElementById('btnAgregarProducto').disabled = true;
-
-    //document.getElementById('tblResultadoBusqueda').innerHTML = '';
-    let cmbTipoPrecio = document.getElementById('cmbTipoPrecio');
-        let totalcosto = Number(costo) * Number(cantidad);
-        let totalprecio = Number(precio) * Number(cantidad);
-        console.log('intenta agregar la fila')
-        let coddoc = document.getElementById('cmbCoddoc').value;
-        try {        
-            
-                var data =JSON.stringify({
-                    empnit:GlobalEmpnit,
-                    token:GlobalToken,
-                    coddoc:coddoc,
-                    codprod:codprod,
-                    desprod:desprod,
-                    codmedida:codmedida,
-                    cantidad:cantidad,
-                    equivale:equivale,
-                    totalunidades:totalunidades,
-                    costo:costo,
-                    precio:precio,
-                    totalcosto:totalcosto,
-                    totalprecio:totalprecio,
-                    exento:exento,
-                    usuario:GlobalUsuario,
-                    app:GlobalSistema,
-                    tipoprecio:cmbTipoPrecio.value
-                });
-
-                var peticion = new Request('/ventas/tempventas', {
-                    method: 'POST',
-                    headers: new Headers({
-                       'Content-Type': 'application/json'
-                    }),
-                    body: data
-                  });
-            
-                  await fetch(peticion)
-                  
-                  .then(async function(res) {
-                    console.log('Estado: ', res.status);
-                    if (res.status==200)
-                    {
-                        //socket.emit('productos nuevo', document.getElementById('desprod').value || 'sn');
-                        $('#ModalCantidadProducto').modal('hide') //MARCADOR
-                        funciones.showToast('Agregado: ' + desprod);
-                        
-                        await fcnCargarGridTempVentas('tblGridTempVentas');
-                        //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-
-                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
-                        document.getElementById('btnAgregarProducto').disabled = false;
-                        let txbusqueda = document.getElementById('txtBusqueda');
-                        txbusqueda.value = '';
-                        //txbusqueda.focus();
-                    }
+function fcnEliminarItem(id){
+    funciones.Confirmacion('¿Está seguro que desea quitar este item?')
+    .then((value)=>{
+        if(value==true){
+                deleteItemVenta(id)
+                  .then(()=>{                       
+                        //document.getElementById(id.toString()).remove();
+                        funciones.showToast('item eliminado');
+                        fcnCargarGridTempVentas('tblGridTempVentas');
                   })
                   .catch(
                       ()=>{
-                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
-                        document.getElementById('btnAgregarProducto').disabled = false;
-                        funciones.AvisoError('No se pudo agregar este producto a la venta actual');
+                        funciones.AvisoError('No se pudo remover este producto a la venta actual');
                       }
                   )
-        
-        } catch (error) {
-            document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
-            document.getElementById('btnAgregarProducto').disabled = false;
-        }
-   
-
+        }        
+    })
+    
 };
+
+async function fcnCargarGridTempVentas(idContenedor){
+    
+    let tabla = document.getElementById(idContenedor);
+    tabla.innerHTML = GlobalLoader;
+
+    let varTotalVenta = 0; let varTotalCosto = 0;
+
+    let btnCobrarTotal = document.getElementById('btnCobrar')
+    btnCobrarTotal.innerText =  'Terminar';
+   
+    let coddoc = document.getElementById('cmbCoddoc').value;
+    
+    let containerTotalVenta = document.getElementById('txtTotalVenta');
+    containerTotalVenta.innerHTML = '0';
+
+    try {
+        selectTempventas(GlobalUsuario)
+        .then((response)=>{
+            let idcant = 0;
+            let data = response.map((rows)=>{
+                idcant = idcant + 1;
+                varTotalVenta = varTotalVenta + Number(rows.TOTALPRECIO);
+                varTotalCosto = varTotalCosto + Number(rows.TOTALCOSTO);
+                return `<tr id="${rows.ID.toString()}" class="border-bottom" ondblclick="funciones.hablar('${rows.DESPROD}')">
+                            <td class="text-left">
+                                ${rows.DESPROD}
+                                <br>
+                                <small class="text-danger"><b>${rows.CODPROD} (${rows.EQUIVALE} item)</b></small>
+                                <br>
+                                    <small>
+                                        Cant:<b class="text-danger h4" id=${idcant}>${rows.CANTIDAD}</b>  ${rows.CODMEDIDA}  ||  Precio:<b>${funciones.setMoneda(rows.PRECIO,'Q')}</b>
+                                    </small>
+                                <br>
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4 " align="right">
+                                        <button class="btn btn-secondary btn-sm btn-circle" onClick="fcnCambiarCantidad(${rows.ID});">
+                                            <i class="fal fa-edit"></i>
+                                        </button>    
+                                    </div>
+                                    <div class="col-4 text-right" align="right">
+                                        <button class="btn btn-sm btn-danger btn-circle" onclick="fcnEliminarItem(${rows.ID});">
+                                            <i class="fal fa-trash"></i>
+                                        </button>    
+                                    </div>
+                                </div>
+                            </td>
+                                                        
+                            <td class="text-right" id=${'S'+idcant}>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                            
+                        </tr>`
+           }).join('\n');
+           tabla.innerHTML = data;
+           GlobalTotalDocumento = varTotalVenta;
+           GlobalTotalCostoDocumento = varTotalCosto;
+           containerTotalVenta.innerHTML = `${funciones.setMoneda(GlobalTotalDocumento,'Q ')}`;
+           btnCobrarTotal.innerHTML = '<h1>Terminar : ' + funciones.setMoneda(GlobalTotalDocumento,'Q ') + '</h1>';
+        })
+    } catch (error) {
+        console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
+        tabla.innerHTML = 'No se logró cargar la lista...';
+        containerTotalVenta.innerHTML = '0';
+        btnCobrarTotal.innerText =  'Terminar';
+    }
+};
+
+
 
 async function fcnBuscarCliente(idNit,idNombre,idDireccion){
     
@@ -1363,57 +1251,6 @@ async function fcnBuscarCliente(idNit,idNombre,idDireccion){
     });
 };
 
-async function fcnBuscarClienteOLD(idNit,idNombre,idDireccion){
-    
-    let nit = document.getElementById(idNit);
-    let nombre = document.getElementById(idNombre);
-    let direccion = document.getElementById(idDireccion);
-
-    axios.get('/ventas/buscarcliente?empnit=' + GlobalEmpnit + '&nit=' + nit.value  + '&app=' + GlobalSistema)
-    .then((response) => {
-        const data = response.data;
-        
-        if (data.rowsAffected[0]==0){
-            funciones.GetDataNit(idNit,txtClienteNombre,txtClienteDireccion)
-            //funciones.GetDataNit(idNit,idNombre,idDireccion)
-            .then((json)=>{
-                console.log('resulta de json: ' + json);
-                if(json.resultado==true){
-                    document.getElementById('txtClienteNit').value = nit.value;
-                    document.getElementById('txtClienteNombre').value = json.descripcion;
-                    document.getElementById('txtClienteDireccion').value = json.direcciones.direccion;
-
-                    document.getElementById('txtNombre').value = json.descripcion;
-                    document.getElementById('txtDireccion').value = json.direcciones.direccion;
-
-                    $('#ModalNuevoCliente').modal('show');
-                }else{
-                    document.getElementById('txtClienteNit').value = nit.value;
-                    document.getElementById('txtNombre').value = '';
-                    document.getElementById('txtDireccion').value = '';
-                    $('#ModalNuevoCliente').modal('show');
-                };
-
-            })
-            .catch(()=>{
-                $('#ModalNuevoCliente').modal('show');
-                document.getElementById('txtClienteNit').value = nit.value;
-                document.getElementById('txtNombre').value = '';
-                document.getElementById('txtDireccion').value = '';
-
-                document.getElementById('txtClienteNombre').focus();
-            })
-        }else{
-            data.recordset.map((rows)=>{
-                nombre.value = rows.NOMCLIENTE;
-                direccion.value = rows.DIRCLIENTE;
-            })
-        }
-                
-    }, (error) => {
-        console.log(error);
-    });
-};
 
 async function fcnBusquedaCliente(idFiltro,idTablaResultado){
     
@@ -1523,118 +1360,8 @@ async function fcnGuardarNuevoCliente(form){
 
 };
 
-async function fcnEliminarItem(id){
-    funciones.Confirmacion('¿Está seguro que desea quitar este item?')
-    .then(async(value)=>{
-        if(value==true){
-    
-            try {        
-                var data =JSON.stringify({
-                    id:id
-                });
-    
-                var peticion = new Request('/ventas/tempventas', {
-                    method: 'DELETE',
-                    headers: new Headers({
-                       'Content-Type': 'application/json'
-                    }),
-                    body: data
-                  });
-            
-                  await fetch(peticion)
-                  
-                  .then(async function(res) {
-                    console.log('Estado: ', res.status);
-                    if (res.status==200)
-                    {
-                        console.log(id.toString());
-                        document.getElementById(id.toString()).remove();
-                        funciones.showToast('item eliminado');
-                        await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
-                    }
-                  })
-                  .catch(
-                      ()=>{
-                        funciones.AvisoError('No se pudo remover este producto a la venta actual');
-                      }
-                  )
-        
-            } catch (error) {
-    
-            };
-    
-        }        
-    })
-    
-};
 
-async function fcnCargarGridTempVentas(idContenedor){
-    
-    let tabla = document.getElementById(idContenedor);
-    tabla.innerHTML = GlobalLoader;
 
-    let varTotalVenta = 0; let varTotalCosto = 0;
-
-    let btnCobrarTotal = document.getElementById('btnCobrar')
-    btnCobrarTotal.innerText =  'Terminar';
-   
-
-    let coddoc = document.getElementById('cmbCoddoc').value;
-    
-    let containerTotalVenta = document.getElementById('txtTotalVenta');
-    containerTotalVenta.innerHTML = '0';
-
-    try {
-        
-        const response = await fetch('/ventas/tempventas?empnit=' + GlobalEmpnit + '&coddoc=' + coddoc + '&usuario=' + GlobalUsuario +  '&app=' + GlobalSistema)
-        const json = await response.json();
-        let idcant = 0;
-        let data = json.recordset.map((rows)=>{
-            idcant = idcant + 1;
-            varTotalVenta = varTotalVenta + Number(rows.TOTALPRECIO);
-            varTotalCosto = varTotalCosto + Number(rows.TOTALCOSTO);
-            return `<tr id="${rows.ID.toString()}">
-                        <td class="text-left">
-                            ${rows.DESPROD}
-                            <br>
-                            <small class="text-danger"><b>${rows.CODPROD}</b></small>
-                        </td>
-                        <td class="text-right">${rows.CODMEDIDA}
-                            <br>
-                            <small>${rows.EQUIVALE} item</small>
-                            <br>
-                            <small><b>${funciones.setMoneda(rows.PRECIO,'Q')}</b></small>
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" onClick="fcnCambiarCantidad(${rows.ID});">+</button>
-                            <b class="text-danger h4" id=${idcant}>${rows.CANTIDAD}</b>
-                        </td>
-                        <td class="text-right" id=${'S'+idcant}>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger btn-circle text-white" onclick="fcnEliminarItem(${rows.ID});">
-                                x
-                            </button>
-                        <td>
-                    </tr>`
-       }).join('\n');
-       
-       tabla.innerHTML = data;
-       GlobalTotalDocumento = varTotalVenta;
-       GlobalTotalCostoDocumento = varTotalCosto;
-       containerTotalVenta.innerHTML = `${funciones.setMoneda(GlobalTotalDocumento,'Q ')}`;
-       btnCobrarTotal.innerHTML = '<h1>Terminar : ' + funciones.setMoneda(GlobalTotalDocumento,'Q ') + '</h1>';
-       /** 
-       if(containerTotalVenta.innerHTML=='0'){
-        }else{
-            socket.emit('ordenes escribiendo', 'Se está generando una nueva orden',GlobalSelectedForm)
-        } */
-    } catch (error) {
-        console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
-        tabla.innerHTML = 'No se logró cargar la lista...';
-        containerTotalVenta.innerHTML = '0';
-        btnCobrarTotal.innerText =  'Terminar';
-    }
-};
 
 async function fcnCambiarCantidad(id){
     
@@ -1924,4 +1651,258 @@ async function fcnCargarComboTipoPrecio(){
                      <option value="A">MAYORISTA A</option>`;
    }
    
+};
+
+//METODOS ANTERIORES
+
+async function fcnBusquedaProducto_online(idFiltro,idTablaResultado,idTipoPrecio){
+    
+    let cmbTipoPrecio = document.getElementById(idTipoPrecio);
+
+    let filtro = document.getElementById(idFiltro).value;
+    let tabla = document.getElementById(idTablaResultado);
+    tabla.innerHTML = GlobalLoader;
+
+
+    let str = ""; 
+    axios.get('/ventas/buscarproducto?empnit=' + GlobalEmpnit + '&filtro=' + filtro + '&app=' + GlobalSistema + '&tipoprecio=' + cmbTipoPrecio.value)
+    
+    .then((response) => {
+        const data = response.data;
+        console.log('productos encontrados: ');
+        console.log(data);
+        if(data.rowsAffected[0]==0){
+            tabla.innerHTML= 'No existe nada relacionado a: ' + filtro + ', o no hay productos cargados'
+        }else{       
+            data.recordset.map((rows)=>{
+                let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
+                if(Number(rows.EXISTENCIA<=0)){strC='bg-danger text-white'}else{strC='bg-success text-white'};
+                let totalexento = 0;
+                if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
+                
+                str += `<tr id="${rows.CODPROD}" onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});" class="border-bottom">
+                <td >
+                    ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
+                    <br>
+                    <small class="text-danger"><b>${rows.CODPROD}</b></small>
+                    <br>
+                    <b class"bg-danger text-white">${rows.CODMEDIDA}</b>
+                    <small>(${rows.EQUIVALE})</small>
+                </td>
+                <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}
+                    <br>
+                    <small class="${strC}">E:${funciones.setMoneda(exist,'')}</small>
+                </td>
+                
+                <td>
+                    <button class="btn btn-sm btn-success btn-circle text-white" 
+                    onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});">
+                        +
+                    </button>
+                <td>
+                
+            </tr>`
+            })
+            tabla.innerHTML= str;
+        }
+    }, (error) => {
+        console.log(error);
+    });
+
+};
+
+// agrega el producto a temp_ventas
+async function fcnAgregarProductoVenta_online(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
+   
+    if(Number(GlobalSelectedExistencia)<=Number(totalunidades)){
+        funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
+        return;
+    };
+
+    document.getElementById('btnAgregarProducto').innerHTML = GlobalLoader;
+    document.getElementById('btnAgregarProducto').disabled = true;
+
+    //document.getElementById('tblResultadoBusqueda').innerHTML = '';
+    let cmbTipoPrecio = document.getElementById('cmbTipoPrecio');
+        let totalcosto = Number(costo) * Number(cantidad);
+        let totalprecio = Number(precio) * Number(cantidad);
+        console.log('intenta agregar la fila')
+        let coddoc = document.getElementById('cmbCoddoc').value;
+        try {        
+            
+                var data =JSON.stringify({
+                    empnit:GlobalEmpnit,
+                    token:GlobalToken,
+                    coddoc:coddoc,
+                    codprod:codprod,
+                    desprod:desprod,
+                    codmedida:codmedida,
+                    cantidad:cantidad,
+                    equivale:equivale,
+                    totalunidades:totalunidades,
+                    costo:costo,
+                    precio:precio,
+                    totalcosto:totalcosto,
+                    totalprecio:totalprecio,
+                    exento:exento,
+                    usuario:GlobalUsuario,
+                    app:GlobalSistema,
+                    tipoprecio:cmbTipoPrecio.value
+                });
+
+                var peticion = new Request('/ventas/tempventas', {
+                    method: 'POST',
+                    headers: new Headers({
+                       'Content-Type': 'application/json'
+                    }),
+                    body: data
+                  });
+            
+                  await fetch(peticion)
+                  
+                  .then(async function(res) {
+                    console.log('Estado: ', res.status);
+                    if (res.status==200)
+                    {
+                        //socket.emit('productos nuevo', document.getElementById('desprod').value || 'sn');
+                        $('#ModalCantidadProducto').modal('hide') //MARCADOR
+                        funciones.showToast('Agregado: ' + desprod);
+                        
+                        await fcnCargarGridTempVentas('tblGridTempVentas');
+                        //await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+
+                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
+                        document.getElementById('btnAgregarProducto').disabled = false;
+                        let txbusqueda = document.getElementById('txtBusqueda');
+                        txbusqueda.value = '';
+                        //txbusqueda.focus();
+                    }
+                  })
+                  .catch(
+                      ()=>{
+                        document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
+                        document.getElementById('btnAgregarProducto').disabled = false;
+                        funciones.AvisoError('No se pudo agregar este producto a la venta actual');
+                      }
+                  )
+        
+        } catch (error) {
+            document.getElementById('btnAgregarProducto').innerHTML  = `<i class="fal fa-check"></i>Agregar`;
+            document.getElementById('btnAgregarProducto').disabled = false;
+        }
+   
+
+};
+
+async function fcnCargarGridTempVentas_ONLINE(idContenedor){
+    
+    let tabla = document.getElementById(idContenedor);
+    tabla.innerHTML = GlobalLoader;
+
+    let varTotalVenta = 0; let varTotalCosto = 0;
+
+    let btnCobrarTotal = document.getElementById('btnCobrar')
+    btnCobrarTotal.innerText =  'Terminar';
+   
+
+    let coddoc = document.getElementById('cmbCoddoc').value;
+    
+    let containerTotalVenta = document.getElementById('txtTotalVenta');
+    containerTotalVenta.innerHTML = '0';
+
+    try {
+        
+        const response = await fetch('/ventas/tempventas?empnit=' + GlobalEmpnit + '&coddoc=' + coddoc + '&usuario=' + GlobalUsuario +  '&app=' + GlobalSistema)
+        const json = await response.json();
+        let idcant = 0;
+        let data = json.recordset.map((rows)=>{
+            idcant = idcant + 1;
+            varTotalVenta = varTotalVenta + Number(rows.TOTALPRECIO);
+            varTotalCosto = varTotalCosto + Number(rows.TOTALCOSTO);
+            return `<tr id="${rows.ID.toString()}">
+                        <td class="text-left">
+                            ${rows.DESPROD}
+                            <br>
+                            <small class="text-danger"><b>${rows.CODPROD}</b></small>
+                        </td>
+                        <td class="text-right">${rows.CODMEDIDA}
+                            <br>
+                            <small>${rows.EQUIVALE} item</small>
+                            <br>
+                            <small><b>${funciones.setMoneda(rows.PRECIO,'Q')}</b></small>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-outline-secondary btn-xs btn-icon rounded-circle" onClick="fcnCambiarCantidad(${rows.ID});">+</button>
+                            <b class="text-danger h4" id=${idcant}>${rows.CANTIDAD}</b>
+                        </td>
+                        <td class="text-right" id=${'S'+idcant}>${funciones.setMoneda(rows.TOTALPRECIO,'Q')}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger btn-circle text-white" onclick="fcnEliminarItem(${rows.ID});">
+                                x
+                            </button>
+                        <td>
+                    </tr>`
+       }).join('\n');
+       
+       tabla.innerHTML = data;
+       GlobalTotalDocumento = varTotalVenta;
+       GlobalTotalCostoDocumento = varTotalCosto;
+       containerTotalVenta.innerHTML = `${funciones.setMoneda(GlobalTotalDocumento,'Q ')}`;
+       btnCobrarTotal.innerHTML = '<h1>Terminar : ' + funciones.setMoneda(GlobalTotalDocumento,'Q ') + '</h1>';
+       /** 
+       if(containerTotalVenta.innerHTML=='0'){
+        }else{
+            socket.emit('ordenes escribiendo', 'Se está generando una nueva orden',GlobalSelectedForm)
+        } */
+    } catch (error) {
+        console.log('NO SE LOGRO CARGAR LA LISTA ' + error);
+        tabla.innerHTML = 'No se logró cargar la lista...';
+        containerTotalVenta.innerHTML = '0';
+        btnCobrarTotal.innerText =  'Terminar';
+    }
+};
+
+async function fcnEliminarItem_ONLINE(id){
+    funciones.Confirmacion('¿Está seguro que desea quitar este item?')
+    .then(async(value)=>{
+        if(value==true){
+    
+            try {        
+                var data =JSON.stringify({
+                    id:id
+                });
+    
+                var peticion = new Request('/ventas/tempventas', {
+                    method: 'DELETE',
+                    headers: new Headers({
+                       'Content-Type': 'application/json'
+                    }),
+                    body: data
+                  });
+            
+                  await fetch(peticion)
+                  
+                  .then(async function(res) {
+                    console.log('Estado: ', res.status);
+                    if (res.status==200)
+                    {
+                        console.log(id.toString());
+                        document.getElementById(id.toString()).remove();
+                        funciones.showToast('item eliminado');
+                        await fcnCargarTotal('txtTotalVenta','txtTotalVentaCobro');
+                    }
+                  })
+                  .catch(
+                      ()=>{
+                        funciones.AvisoError('No se pudo remover este producto a la venta actual');
+                      }
+                  )
+        
+            } catch (error) {
+    
+            };
+    
+        }        
+    })
+    
 };

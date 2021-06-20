@@ -92,6 +92,7 @@ function selectProducto(filtro) {
     return new Promise(async(resolve,reject)=>{
         var response = await connection.select({
             from: "productos",
+            limit: 40,
             where: {
                 DESPROD: {
                     like: '%' + filtro + '%'
@@ -104,6 +105,60 @@ function selectProducto(filtro) {
 };
 
 
-function insertTempVentas(){
+function insertTempVentas(datos){
+    return new Promise((resolve,reject)=>{
+        connection.insert({
+            into: "tempventa",
+            values: [datos], //you can insert multiple values at a time
+        })
+        .then(()=>{
+            resolve();
+        })
+        .catch(()=>{
+            reject();
+        })
+    }) 
 
+};
+
+function deleteItemVenta(id){
+    return new Promise(async(resolve,reject)=>{
+        var rowsDeleted = await connection.remove({
+            from: "tempventa",
+            where: {
+                ID: id
+            }
+        });
+        if(rowsDeleted>0){resolve()}else{reject()}
+    })            
+};
+
+
+function xinsertTempVentas(datos){
+    return new Promise(async(resolve,reject)=>{
+        var noOfRowsInserted = await connection.insert({
+            into: "tempventa",
+            values: [datos], //you can insert multiple values at a time
+        });
+        if (noOfRowsInserted > 0) {
+            resolve();
+        }else{
+            reject();
+        }
+    }) 
+
+};
+
+function selectTempventas(usuario) {
+
+    return new Promise(async(resolve,reject)=>{
+        var response = await connection.select({
+            from: "tempventa",
+            where: {
+                    USUARIO: usuario
+                },
+            order: { by: 'ID', type: 'desc' }
+        });
+        resolve(response)
+    });
 };
