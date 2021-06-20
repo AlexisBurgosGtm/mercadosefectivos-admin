@@ -20,8 +20,8 @@ function downloadProductos (){
     //setLog(`<label>Productos agregados: 0</label>`,'rootWait')
     //funciones.showToast('Descargando productos')
     //descargando productos
-     axios.get('/ventas/buscarproductotodos?sucursal=' + GlobalCodSucursal)
     
+     axios.get('/ventas/buscarproductotodos?sucursal=' + GlobalCodSucursal)  
     .then(async(response) => {
         const data = response.data;
         let contador = 1;       
@@ -42,6 +42,9 @@ function downloadProductos (){
                     EQUIVALE:rows.EQUIVALE,
                     COSTO:rows.COSTO,
                     PRECIO:rows.PRECIO,
+                    PRECIOA:rows.PRECIOA,
+                    PRECIOB:rows.PRECIOB,
+                    PRECIOC:rows.PRECIOC,
                     DESMARCA:rows.DESMARCA,
                     EXENTO:rows.EXENTO,
                     EXISTENCIA:rows.EXISTENCIA
@@ -98,4 +101,9 @@ function selectProducto(filtro) {
         });
         resolve(response)
     });
+};
+
+
+function insertTempVentas(){
+
 };

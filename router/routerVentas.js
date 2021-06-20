@@ -117,7 +117,13 @@ router.get("/buscarproductotodos", async(req,res)=>{
 
      
     qry = `SELECT ME_Productos.CODSUCURSAL, ME_Productos.CODPROD, ME_Productos.DESPROD, ME_Precios.CODMEDIDA, 
-                ME_Precios.EQUIVALE, ME_Precios.COSTO, ME_PRECIOS.PRECIO AS PRECIO, 
+                ME_Precios.EQUIVALE, 
+                ME_Precios.COSTO, 
+                ME_PRECIOS.PRECIO AS PRECIO,
+                ME_PRECIOS.OFERTA AS PRECIOA,
+                ME_PRECIOS.ESCALA AS PRECIOB,
+                ME_PRECIOS.MAYORISTA AS PRECIOC,
+                0.01 AS CAMBIO, 
                 ME_Marcas.DESMARCA, 0 AS EXENTO, ISNULL(ME_PRODUCTOS.EXISTENCIA,0) AS EXISTENCIA
             FROM ME_Productos LEFT OUTER JOIN
                 ME_Marcas ON ME_Productos.CODSUCURSAL = ME_Marcas.CODSUCURSAL AND ME_Productos.CODMARCA = ME_Marcas.CODMARCA LEFT OUTER JOIN

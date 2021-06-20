@@ -1,4 +1,4 @@
-const DbName = "mercadosefectivosv2.6";
+const DbName = "mercadosefectivosv2.8";
 
 var tblProductos = {
     name: 'productos',
@@ -11,15 +11,40 @@ var tblProductos = {
         EQUIVALE:{dataType: "number"},
         COSTO:{dataType: "number"},
         PRECIO:{dataType: "number"},
+        PRECIOA:{dataType: "number"},
+        PRECIOB:{dataType: "number"},
+        PRECIOC:{dataType: "number"},
         DESMARCA:{dataType: "string"},
         EXENTO:{dataType: "number"},
         EXISTENCIA:{dataType: "number"}
     }
 };
 
+var tblTempventas = {
+    name: 'tempventa',
+    columns: {
+        ID:{ primaryKey: true, autoIncrement: true },
+        CODSUCURSAL:{dataType: "string"},
+        EMPNIT:{dataType: "string"},
+        CODPROD:{dataType: "string"},
+        DESPROD:{dataType: "string"},
+        CODMEDIDA:{dataType: "string"},
+        EQUIVALE:{dataType: "number"},
+        CANTIDAD:{dataType: "number"},
+        TOTALUNIDADES:{dataType: "number"},
+        COSTO:{dataType: "number"},
+        PRECIO:{dataType: "number"},
+        TOTALCOSTO:{dataType: "number"},
+        TOTALPRECIO:{dataType: "number"},       
+        EXENTO:{dataType: "number"},
+        USUARIO:{dataType: "string"},
+        TIPOPRECIO:{dataType: "string"}
+    }
+}
+
 var database = {
     name: DbName,
-    tables: [tblProductos]
+    tables: [tblProductos,tblTempventas]
 };
  
 // initiate jsstore connection
