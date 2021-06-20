@@ -1,5 +1,5 @@
 
-var CACHE = 'mercadosefectivos2v1';
+var CACHE = 'mercadosefectivosv2.9';
 const staticAssets = [  
   './css/vendors.bundle.css',
   './css/app.bundle.css',
@@ -17,11 +17,13 @@ const staticAssets = [
   './libs/sweetalert.min.js',
   './libs/axios.min.js',
   './libs/leaflet/leaflet.js',
-  './libs/JsStore.min.js',
+  './libs/jsstore/jsstore.min.js',
+  './libs/jsstore/jsstore.worker.min.js',
   './libs/funciones.js',
   './controllers/classNavegar.js',
   './controllers/GlobalVars.js',
   './controllers/classDb.js',
+  './controllers/dbcalls.js',
   './models/classEmpleados.js',
   './models/classTipoDocumentos.js',
   './controllers/apicalls.js',

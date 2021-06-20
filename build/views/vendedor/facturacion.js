@@ -959,7 +959,7 @@ function iniciarModalCantidad(){
 
 };
 
-async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
+async function fcnBusquedaProducto_online(idFiltro,idTablaResultado,idTipoPrecio){
     
     let cmbTipoPrecio = document.getElementById(idTipoPrecio);
 
@@ -1012,6 +1012,63 @@ async function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
     }, (error) => {
         console.log(error);
     });
+
+};
+
+function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
+    
+    let cmbTipoPrecio = document.getElementById(idTipoPrecio);
+
+    let filtro = document.getElementById(idFiltro).value;
+    let tabla = document.getElementById(idTablaResultado);
+    tabla.innerHTML = GlobalLoader;
+
+
+    let str = ""; 
+
+    selectProducto(filtro)
+    .then((response) => {
+        const data = response;
+       
+        console.log(data);
+          
+            data.map((rows)=>{
+                let exist = Number(rows.EXISTENCIA)/Number(rows.EQUIVALE); let strC = '';
+                if(Number(rows.EXISTENCIA<=0)){strC='bg-danger text-white'}else{strC='bg-success text-white'};
+                let totalexento = 0;
+                if (rows.EXENTO==1){totalexento=Number(rows.PRECIO)}
+                
+                str += `<tr id="${rows.CODPROD}" onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});" class="border-bottom">
+                <td >
+                    ${funciones.quitarCaracteres(rows.DESPROD,'"'," pulg",true)}
+                    <br>
+                    <small class="text-danger"><b>${rows.CODPROD}</b></small>
+                    <br>
+                    <b class"bg-danger text-white">${rows.CODMEDIDA}</b>
+                    <small>(${rows.EQUIVALE})</small>
+                </td>
+                <td>${funciones.setMoneda(rows.PRECIO || 0,'Q ')}
+                    <br>
+                    <small class="${strC}">E:${funciones.setMoneda(exist,'')}</small>
+                </td>
+                
+                <td>
+                    <button class="btn btn-sm btn-success btn-circle text-white" 
+                    onclick="getDataMedidaProducto('${rows.CODPROD}','${funciones.quitarCaracteres(rows.DESPROD,'"'," plg",true)}','${rows.CODMEDIDA}',1,${rows.EQUIVALE},${rows.EQUIVALE},${rows.COSTO},${rows.PRECIO},${totalexento},${Number(rows.EXISTENCIA)});">
+                        +
+                    </button>
+                <td>
+                
+            </tr>`
+            })
+            tabla.innerHTML= str;
+        
+    }, (error) => {
+        console.log(error);
+    })
+    .catch((error)=>{
+        funciones.AvisoError(error);
+    })
 
 };
 
