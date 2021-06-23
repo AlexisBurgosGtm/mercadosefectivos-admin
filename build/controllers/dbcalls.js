@@ -227,7 +227,7 @@ function deleteTempVenta(usuario){
 
 
 
-function xinsertTempVentas(datos){
+function backup_insertTempVentas(datos){
     return new Promise(async(resolve,reject)=>{
         var noOfRowsInserted = await connection.insert({
             into: "tempventa",

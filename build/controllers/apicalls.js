@@ -121,8 +121,8 @@ let api = {
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-primary btn-sm btn-circle" onclick="setRecordatorioVisita('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
-                                <i class="fal fa-bell"></i>
+                            <button class="btn btn-primary btn-sm btn-circle" onclick="funciones.gotoGoogleMaps('${rows.LAT}','${rows.LONG}');">
+                                <i class="fal fa-map"></i>
                             </button>
                         </td>
                     </tr>` 
@@ -153,8 +153,8 @@ let api = {
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm btn-circle" onclick="setRecordatorioVisita('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
-                                        <i class="fal fa-bell"></i>
+                                    <button class="btn btn-primary btn-sm btn-circle" onclick="funciones.gotoGoogleMaps('${rows.LAT}','${rows.LONG}');">
+                                        <i class="fal fa-map"></i>
                                     </button>
                                 </td>   
                             </tr>`
@@ -266,8 +266,8 @@ let api = {
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-primary btn-sm btn-circle" onclick="setRecordatorioVisita('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}');">
-                                <i class="fal fa-bell"></i>
+                            <button class="btn btn-primary btn-sm btn-circle" onclick="funciones.gotoGoogleMaps('${rows.LAT}','${rows.LONG}');">
+                                <i class="fal fa-map"></i>
                             </button>
                         </td>
                     </tr>`    

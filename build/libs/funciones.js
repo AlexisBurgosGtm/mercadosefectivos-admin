@@ -1301,6 +1301,9 @@ let funciones = {
       let hora = hoy.getHours();
       let minuto = hoy.getMinutes();
       return `${hora.toString()}:${minuto.toString()}`;
+    },
+    gotoGoogleMaps:(lat,long)=>{
+      window.open(`https://www.google.com/maps?q=${lat},${long}`);
     }
 };
 
