@@ -1318,7 +1318,7 @@ async function fcnGuardarNuevoCliente(form){
 
 //FINALIZAR PEDIDO
 async function fcnFinalizarPedido(){
-
+    
     if(Number(GlobalTotalDocumento)<Number(GlobalVentaMinima)){
         funciones.AvisoError('Pedido menor al mínimo de venta');
         funciones.hablar('Advertencia. Este pedido es menor al mínimo de venta permitido');
@@ -1361,66 +1361,89 @@ async function fcnFinalizarPedido(){
     funciones.Confirmacion('¿Está seguro que desea Finalizar este Pedido')
     .then((value)=>{
         if(value==true){
+            setLog(`<label class="text-danger">Creando el pedido a enviar...</label>`,'rootWait');
+            $('#modalWait').modal('show');
+            
+            //document.getElementById('btnFinalizarPedido').innerHTML = GlobalLoader;
+           
+            gettempDocproductos(GlobalUsuario)
+            .then((response)=>{
+                
+                setLog(`<label class="text-info">Pedido creado, enviado pedido...</label>`,'rootWait');
+                //,,obs,usuario,codven
+                axios.post('/ventas/insertventa', {
+                    jsondocproductos:JSON.stringify(response),
+                    codsucursal:GlobalCodSucursal,
+                    empnit: GlobalEmpnit,
+                    coddoc:coddoc,
+                    correl: correlativo,
+                    anio:anio,
+                    mes:mes,
+                    dia:dia,
+                    fecha:fecha,
+                    fechaentrega:fechaentrega,
+                    formaentrega:cmbTipoEntrega,
+                    codbodega:codbodega,
+                    codcliente: codcliente,
+                    nomclie:ClienteNombre,
+                    totalcosto:GlobalTotalCostoDocumento,
+                    totalprecio:GlobalTotalDocumento,
+                    nitclie:nit,
+                    dirclie:dirclie,
+                    obs:obs,
+                    direntrega:direntrega,
+                    usuario:GlobalUsuario,
+                    codven:cmbVendedor.value,
+                    lat:latdoc,
+                    long:longdoc
+                })
+                .then(async(response) => {
+                    const data = response.data;
+                    if (data.rowsAffected[0]==0){
+                        //document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
+                        $('#modalWait').modal('hide');
+                        funciones.AvisoError('No se logró Guardar este pedido');
+                    }else{
+    
+                        funciones.Aviso('Pedido Generado Exitosamente !!!')
+                        $('#modalWait').modal('hide');
+                        //document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
+    
+                        document.getElementById('btnEntregaCancelar').click();
+                        //$('#ModalCobro').modal('hide');
+            
+                        //socket.emit('ordenes nueva',`Nueva Orden a nombre de ${ClienteNombre} por valor de ${GlobalTotalDocumento} quetzales`, GlobalSelectedForm);
+                        socket.emit('ventas nueva',GlobalCodSucursal, GlobalSelectedForm);
+                        
+                        //actualiza la ubicación del empleado
+                        await classEmpleados.updateMyLocation();
+                        
+                        //actualiza la última venta del cliente
+                        api.updateClientesLastSale(nit,'VENTA');
+                        //elimina el temp ventas asociado al empleado
+                        //fcnEliminarTempVentas(GlobalUsuario);
+                        deleteTempVenta(GlobalUsuario)
 
-            document.getElementById('btnFinalizarPedido').innerHTML = GlobalLoader;
-            //,,obs,usuario,codven
-            axios.post('/ventas/documentos', {
-                app: GlobalSistema,
-                empnit: GlobalEmpnit,
-                coddoc:coddoc,
-                correlativo: correlativo,
-                anio:anio,
-                mes:mes,
-                dia:dia,
-                fecha:fecha,
-                fechaentrega:fechaentrega,
-                formaentrega:cmbTipoEntrega,
-                codbodega:codbodega,
-                codcliente: codcliente,
-                nomclie:ClienteNombre,
-                totalcosto:GlobalTotalCostoDocumento,
-                totalprecio:GlobalTotalDocumento,
-                nitclie:nit,
-                dirclie:dirclie,
-                obs:obs,
-                direntrega:direntrega,
-                usuario:GlobalUsuario,
-                codven:cmbVendedor.value,
-                lat:latdoc,
-                long:longdoc
+                        //prepara todo para un nuevo pedido
+                        fcnNuevoPedido();
+                    }
+                }, (error) => {
+                    console.log(error);
+                    $('#modalWait').modal('hide');
+                    funciones.AvisoError('Ha ocurrido un error y no se pudo guardar');
+                    //document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
+                });        
+
             })
-            .then(async(response) => {
-                const data = response.data;
-                if (data.rowsAffected[0]==0){
-                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
-                    funciones.AvisoError('No se logró Guardar este pedido');
-                }else{
+            .catch((error)=>{
+                $('#modalWait').modal('hide');
+                funciones.AvisoError('No pude crear la tabla de productos del pedido ' + error);
+                //document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
+            })
 
-                    funciones.Aviso('Pedido Generado Exitosamente !!!')
-                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
-
-                    document.getElementById('btnEntregaCancelar').click();
-                    //$('#ModalCobro').modal('hide');
-        
-                    //socket.emit('ordenes nueva',`Nueva Orden a nombre de ${ClienteNombre} por valor de ${GlobalTotalDocumento} quetzales`, GlobalSelectedForm);
-                    socket.emit('ventas nueva',GlobalCodSucursal, GlobalSelectedForm);
-                    
-                    //actualiza la ubicación del empleado
-                    await classEmpleados.updateMyLocation();
-                    
-                    //actualiza la última venta del cliente
-                    api.updateClientesLastSale(nit,'VENTA');
-                    //elimina el temp ventas asociado al empleado
-                    fcnEliminarTempVentas(GlobalUsuario);
-                    //prepara todo para un nuevo pedido
-                    fcnNuevoPedido();
-                }
-            }, (error) => {
-                console.log(error);
-                funciones.AvisoError('Ha ocurrido un error y no se pudo guardar');
-                document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-check mr-1"></i>Finalizar';
-            });           
+             
          
+
         }
     })
 };

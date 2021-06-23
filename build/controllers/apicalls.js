@@ -3236,5 +3236,20 @@ let api = {
                 reject();
             });
         });
+    },
+    updateCorrelativo:(correlativo)=>{
+        return new Promise((resolve,reject)=>{
+            axios.post('/ventas/updatecorrelativo',{
+                sucursal:GlobalCodSucursal,
+                coddoc:GlobalCoddoc,
+                correlativo:correlativo
+            })
+            .then((response) => {   
+                console.log(response)            
+                resolve();             
+            }, (error) => {
+                reject();
+            });
+        });
     }
 }

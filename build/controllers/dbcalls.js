@@ -190,8 +190,40 @@ function selectDataRowVenta(id,nuevacantidad) {
 };
 
 
+function gettempDocproductos(usuario){
+    
+    return new Promise(async(resolve,reject)=>{
+        var response = await connection.select({
+            from: "tempventa",
+            where: {
+                    USUARIO: usuario
+                },
+            order: { by: 'ID', type: 'asc' }
+        })
+        if(Number(response.length)>0){
+            resolve(response);
+        }else{
+            reject('No hay productos agregados');
+        }
+    })
+    
 
 
+    
+
+}
+
+function deleteTempVenta(usuario){
+    return new Promise(async(resolve,reject)=>{
+        var rowsDeleted = await connection.remove({
+            from: "tempventa",
+            where: {
+                USUARIO: usuario
+            }
+        });
+        if(rowsDeleted>0){resolve()}else{reject()}
+    })            
+};
 
 
 
