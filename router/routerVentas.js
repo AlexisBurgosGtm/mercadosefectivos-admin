@@ -6,6 +6,24 @@ const router = express.Router();
 router.post('/loadpedido',async(req,res)=>{
 
     const {sucursal, usuario, coddoc, correlativo} = req.body;
+    
+    let qry='';
+    qry = `SELECT EMP_NIT AS EMPNIT, CODPROD, DESCRIPCION AS DESPROD, 
+        CODMEDIDA, CANTIDAD, EQUIVALE, CANTIDADINV AS TOTALUNIDADES, 
+        COSTO, PRECIO, TOTALCOSTO, TOTALPRECIO, 0 AS EXENTO, 
+        '${usuario}' AS USUARIO, TIPOPRECIO, '${sucursal}' AS CODSUCURSAL 
+        FROM ME_DOCPRODUCTOS
+        WHERE CODSUCURSAL='${sucursal}' 
+        AND CODDOC='${coddoc}' 
+        AND DOC_NUMERO='${correlativo}'; `
+
+    execute.Query(res, qry);
+
+})
+
+router.post('/loadpedido_original',async(req,res)=>{
+
+    const {sucursal, usuario, coddoc, correlativo} = req.body;
 
     let qrydel = `DELETE FROM ME_TEMP_VENTAS 
             WHERE CODSUCURSAL='${sucursal}' 
