@@ -221,7 +221,7 @@ function deleteTempVenta(usuario){
                 USUARIO: usuario
             }
         });
-        if(rowsDeleted>0){resolve()}else{reject()}
+        if(rowsDeleted>0){resolve()}else{resolve()}
     })            
 };
 
