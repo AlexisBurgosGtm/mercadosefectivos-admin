@@ -94,9 +94,12 @@ function selectProducto(filtro) {
             from: "productos",
             limit: 40,
             where: {
-                DESPROD: {
-                    like: '%' + filtro + '%'
-                },
+                CODPROD: filtro,
+                or: {
+                    DESPROD: {
+                        like: '%' + filtro + '%'
+                    }   
+                }
             }
            
         });
