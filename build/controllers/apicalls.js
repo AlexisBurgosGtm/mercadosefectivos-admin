@@ -2499,8 +2499,8 @@ let api = {
                                     <br>
                                     <b class="text-info">${rows.CODMEDIDA}</b>-<b>Cant: ${rows.CANTIDAD}</b>
                                 </td>
-                                <td>${rows.PRECIO}</td>
-                                <td>${rows.IMPORTE}
+                                <td>${funciones.setMoneda(rows.PRECIO,"")}</td>
+                                <td>${funciones.setMoneda(rows.IMPORTE,"")}
                                     <div class="row">
                                         <div class="col-6">
                                             <button class="btn btn-danger btn-md btn-circle"

@@ -1122,7 +1122,7 @@ async function fcnCargarGridTempVentas(idContenedor){
                                 <div class="row">
                                     <div class="col-4"></div>
                                     <div class="col-4 " align="right">
-                                        <button class="btn btn-secondary btn-sm btn-circle" onClick="fcnCambiarCantidad(${rows.ID});">
+                                        <button class="btn btn-secondary btn-sm btn-circle" onClick="fcnCambiarCantidad(${rows.ID},${rows.CANTIDAD});">
                                             <i class="fal fa-edit"></i>
                                         </button>    
                                     </div>
@@ -1169,10 +1169,11 @@ async function fcnUpdateTempRow(id,cantidad){
         });
 };
 
-async function fcnCambiarCantidad(id){
+async function fcnCambiarCantidad(id,cantidad){
     
     GlobalSelectedId = id;
     //$('#ModalCantidad').modal('show');
+    document.getElementById('txtCantNuevaCant').value = cantidad;
     $('#modalCambiarCantidadProducto').modal('show');
     
 };
