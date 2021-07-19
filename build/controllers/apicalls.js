@@ -3319,13 +3319,16 @@ let api = {
         .then((response) => {
             const data = response.data.recordset;
             data.map((rows)=>{
+                let datos = []; datos.push(rows);  
+                let dat = JSON.stringify(datos);
+
                 let classHabilitado = '';
                 if(rows.HABILITADO=='SI'){classHabilitado=''}else{classHabilitado='bg-warning'}
                     strdata = strdata + `
                     <tr class='${classHabilitado}'>
                         <td>${rows.DESPROD}
                             <br>
-                            <small>Cod:<b>${rows.CODPROD}</b> - uxc:</small>
+                            <small>Cod:<b>${rows.CODPROD}</b></small>
                         </td>
                         <td>${rows.UXC}</td>
                         <td>${funciones.setMoneda(rows.COSTO,'Q')}</td>
@@ -3333,7 +3336,7 @@ let api = {
                             <br>
                             <div class="row">
                                 <div class="col-4">
-                                    <button class="btn btn-sm btn-info btn-circle">
+                                    <button class="btn btn-sm btn-info btn-circle" onclick='getEditProducto(${dat})'>
                                         <i class="fal fa-edit"></i>
                                     </button>
                                 </div>
@@ -3358,6 +3361,23 @@ let api = {
             funciones.AvisoError('Error en la solicitud');
             strdata = '';
             container.innerHTML = '';
+        });
+    },
+    productos_insert:(datos)=>{
+
+        return new Promise((resolve,reject)=>{
+            axios.post('/productos/nuevo',{
+                sucursal:GlobalCodSucursal,
+                nitclie:nitclie,
+                fecha:funciones.getFecha(),
+                visita:visita
+            })
+            .then((response) => {               
+                socket.emit('clientes ultimaventa',GlobalCodSucursal, GlobalSelectedForm);
+                resolve();             
+            }, (error) => {
+                reject();
+            });
         });
     },
 }

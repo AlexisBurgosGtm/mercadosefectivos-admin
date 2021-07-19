@@ -19,9 +19,64 @@ router.post('/productos', async(req,res)=>{
 
 })
 
+router.post('/nuevo', async(req,res)=>{
+    
+    const {token,codprod,codprod2,desprod,desprod2,desprod3,uxc,costo,codmarca,codclaseuno,codclasedos,codclasetres,color,tipo,exento} = req.body;
+    
+    let qry = `
+        INSERT INTO ME_PRODUCTOS_SYNC 
+            (TOKEN,CODPROD,CODPROD2, DESPROD, DESPROD2, DESPROD3,UXC, COSTO,HABILITADO,CODMARCA,CODCLASEUNO,CODCLASEDOS,CODCLASETRES,NF,EXENTO,TIPOPROD) 
+            VALUES ('${token}','${codprod}','${codprod2}','${desprod}','${desprod2}','${desprod3}',${uxc},${costo},'SI',${codmarca},${codclaseuno},${codclasedos},${codclasetres},${color},${exento},'${tipo}');
+         
+    `
+    execute.Query(res,qry);
+
+})
+
+
+
+
+
+//********************* MARCAS  */
+router.post('/listamarcas', async(req,res)=>{
+    
+    const {token} = req.body;
+    let qry = `SELECT CODMARCA, DESMARCA FROM ME_MARCAS_SYNC WHERE TOKEN='${token}' ORDER BY DESMARCA`;
+
+    execute.Query(res,qry);
+})
+
+
+
+
+//************** PROVEEDORES */
+router.post('/listaproveedores', async(req,res)=>{
+    
+    const {token} = req.body;
+    let qry = `SELECT CODPROV AS CODIGO, EMPRESA AS DESCRIPCION, RAZONSOCIAL, DIRECCION, TELEMPRESA, NIT FROM ME_PROVEEDORES_SYNC WHERE TOKEN='${token}' ORDER BY EMPRESA`;
+
+    execute.Query(res,qry);
+})
+
+
 
 
 //***************************************************** */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // OBTIENE LISTADO DE PRECIOS

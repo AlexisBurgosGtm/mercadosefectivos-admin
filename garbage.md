@@ -1,4 +1,8 @@
 
+ let datos = []; datos.push(rows);  
+                let dat = JSON.stringify(datos);
+                
+
 https://github.com/AlexisBurgosGtm/mercados-pruebas.git
 
 

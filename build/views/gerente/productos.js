@@ -59,7 +59,7 @@ function getView(){
             <div id="modalNuevo" class="modal fade default-example-modal-bottom" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-right">
                 <div class="modal-content">
-                    <div class="modal-header bg-trans-gradient text-white">
+                    <div class="modal-header bg-success text-white">
                         <h5 id="" class="text-center">Datos del Producto</h5>
                     </div>                    
                     <div class="modal-body">
@@ -94,15 +94,26 @@ function getView(){
                             <input type="text" class="form-control" id="txtDesprod3">
                         </div>
 
-                                            
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label class="negrita">Uns x Caja</label>
                                     <input type="number" class="form-control" id="txtUxc" value=1>
                                 </div>
                             </div>
-                            <div class="col-3">
+
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label class="negrita">Costo Unitario</label>
+                                    <input type="number" class="form-control" id="txtCosto" value=0.01>
+                                </div>
+                            </div>
+
+                        </div>
+                                            
+                        <div class="row">
+                            
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label class="negrita">Exento de IVA</label>
                                     <select class="form-control" id="cmbExento">
@@ -111,7 +122,7 @@ function getView(){
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label class="negrita">Tipo Alerta</label>
                                     <select class="form-control" id="cmbColor">
@@ -124,7 +135,7 @@ function getView(){
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label class="negrita">Tipo Producto</label>
                                     <select class="form-control" id="cmbTipo">
@@ -406,5 +417,41 @@ function inicializarVistaGerenteProductos(){
 
     getView();
     addListeners();
+
+};
+
+
+function insertProductoNuevo(){
+
+
+    document.getElementById('txtCodprod').value
+    document.getElementById('txtCodprod2').value
+    document.getElementById('txtDesprod').value
+    document.getElementById('txtDesprod2').value
+    document.getElementById('txtDesprod3').value
+    document.getElementById('txtUxc').value
+    document.getElementById('txtCosto').value
+
+    document.getElementById('cmbExento').value
+    document.getElementById('cmbColor').value
+    document.getElementById('cmbTipo').value
+    document.getElementById('cmbMarca').value
+    document.getElementById('cmbClaseUno').value
+    document.getElementById('cmbClaseDos').value
+    document.getElementById('cmbClaseTres').value
+
+    
+
+}
+
+function getEditProducto(datos){
+   
+
+    $('#modalEditar').modal('show')
+  
+    document.getElementById('txtCodprodE').value = datos[0].CODPROD;
+    document.getElementById('txtDesprodE').value = datos[0].DESPROD;
+    document.getElementById('txtUxcE').value = datos[0].UXC;
+    document.getElementById('txtCostoE').value = datos[0].COSTO;
 
 };
