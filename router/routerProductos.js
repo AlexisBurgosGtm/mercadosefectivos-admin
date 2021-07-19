@@ -4,6 +4,26 @@ const router = express.Router();
 
 // PPUBLICO= PRECIO, PMAYOREOA=OFERTA,PMAYOREOB=ESCALA, PMAYOREOC=MAYORISTA
 
+
+//************NUEVOS PROCEDIMIENTOS *************************** */
+
+router.post('/productos', async(req,res)=>{
+    
+    const {token} = req.body;
+    let qry = `
+        SELECT CODPROD, DESPROD, DESPROD2, DESPROD3,UXC, COSTO,HABILITADO, 'MARCAS VARIAS' AS DESMARCA
+         FROM ME_PRODUCTOS_SYNC
+         ORDER BY CODPROD
+    `
+    execute.Query(res,qry);
+
+})
+
+
+
+//***************************************************** */
+
+
 // OBTIENE LISTADO DE PRECIOS
 router.post('/listaprecios',async(req,res)=>{
     const {sucursal} = req.body;

@@ -30,6 +30,8 @@
 
         <link rel="stylesheet" href="./libs/leaflet/leaflet.css">
         <link rel="stylesheet" href="./libs/noty/noty.min.css">
+        <link rel="stylesheet" href="./css/dataTables.bootstrap4.min.css">
+
 
         
 	<!-- service worker -->
@@ -521,7 +523,7 @@
                                     </button>
                                 </div>                                           
                                 <div class="col-4">
-                                    <button class="btn btn-info btn-xl" style="width: 50; height: 50;" id="btnDownloadClientes">
+                                    <button class="btn btn-info btn-xl" enabled="false" style="width: 50; height: 50;" id="btnDownloadClientes">
                                         <i class="fal fa-user"></i>
                                         Bajar  <br>
                                         Clientes
@@ -607,6 +609,9 @@
         <script src="./controllers/socketHandler.js"></script>
 
         <script src="./controllers/dbcalls.js"></script>
+        <script src="./js/dataTables.bootstrap4.min.js"></script>
+        <script src="./JS/jquery.dataTables.min.js"></script>
+
      
     </body>
 

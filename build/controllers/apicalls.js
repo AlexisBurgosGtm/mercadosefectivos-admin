@@ -3307,5 +3307,57 @@ let api = {
                 reject();
             });
         });
-    }
+    },
+    productosListado: (idContenedor)=>{
+        
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+            
+        let strdata = '';
+        
+        axios.post('/productos/productos',{token:GlobalCodSucursal})
+        .then((response) => {
+            const data = response.data.recordset;
+            data.map((rows)=>{
+                let classHabilitado = '';
+                if(rows.HABILITADO=='SI'){classHabilitado=''}else{classHabilitado='bg-warning'}
+                    strdata = strdata + `
+                    <tr class='${classHabilitado}'>
+                        <td>${rows.DESPROD}
+                            <br>
+                            <small>Cod:<b>${rows.CODPROD}</b> - uxc:</small>
+                        </td>
+                        <td>${rows.UXC}</td>
+                        <td>${funciones.setMoneda(rows.COSTO,'Q')}</td>
+                        <td>${rows.DESMARCA}
+                            <br>
+                            <div class="row">
+                                <div class="col-4">
+                                    <button class="btn btn-sm btn-info btn-circle">
+                                        <i class="fal fa-edit"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-sm btn-danger btn-circle">
+                                        <i class="fal fa-lock"></i>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-sm btn-warning btn-circle">
+                                        <i class="fal fa-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    `
+            })
+            container.innerHTML = strdata;
+            
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+        });
+    },
 }

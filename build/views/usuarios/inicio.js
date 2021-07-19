@@ -18,7 +18,7 @@ function getView(){
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-responsive table-hover table-striped">
+                    <table class="table table-responsive table-hover table-striped" id="tblUsuariosL">
                         <thead class="bg-trans-gradient text-white">
                             <tr>
                                 <td>Usuario</td>
@@ -142,6 +142,9 @@ function addListeners(tipo){
         api.usuariosGetListado(cmbTipoUsuario.value,'tblListado');
     });
 
+
+    //$('#tblUsuariosL').DataTable();
+    
 };
     
 function inicializarVistaUsuarios(tipo){

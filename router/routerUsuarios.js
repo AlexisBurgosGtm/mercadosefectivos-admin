@@ -12,7 +12,9 @@ router.post("/listado", async(req,res)=>{
     if(tipo=='GERENTE'){
         qry = `SELECT ID,CODUSUARIO as CODIGO,NOMBRE AS USUARIO,PASS AS CLAVE,TELEFONO,CODDOC FROM ME_USUARIOS WHERE CODSUCURSAL='${sucursal}' `;     
     }else{
-        qry = `SELECT ID,CODUSUARIO as CODIGO,NOMBRE AS USUARIO,PASS AS CLAVE,TELEFONO,CODDOC FROM ME_USUARIOS WHERE CODSUCURSAL='${sucursal}'AND TIPO='${tipo}'`;     
+        qry = `SELECT ID,CODUSUARIO as CODIGO,NOMBRE AS USUARIO,PASS AS CLAVE,TELEFONO,CODDOC 
+                FROM ME_USUARIOS WHERE CODSUCURSAL='${sucursal}'AND TIPO='${tipo}'
+                ORDER BY CODDOC`;     
     }
         
     execute.Query(res,qry);
