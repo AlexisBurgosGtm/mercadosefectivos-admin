@@ -162,6 +162,8 @@ function newUser() {
     lbMenuTitulo.innerText = 'Datos del Nuevo Usuario ';
     
     document.getElementById('txtUsuarioCodigo').value = '';
+    document.getElementById('txtUsuarioCodigo').disabled = false;
+    
     document.getElementById('txtUsuarioUsuario').value = '';
     document.getElementById('txtUsuarioClave').value = '';
     document.getElementById('txtUsuarioCoddoc').value = '';
@@ -227,6 +229,8 @@ function editUser(ID,CODIGO,USUARIO,CLAVE,CODDOC,TELEFONO) {
     lbMenuTitulo.innerText = 'Edición del Usuario ' + USUARIO;
     
     document.getElementById('txtUsuarioCodigo').value = CODIGO;
+    document.getElementById('txtUsuarioCodigo').disabled = true;
+
     document.getElementById('txtUsuarioUsuario').value = USUARIO;
     document.getElementById('txtUsuarioClave').value = CLAVE;
     document.getElementById('txtUsuarioCoddoc').value = CODDOC;
